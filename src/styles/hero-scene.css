@@ -10,7 +10,8 @@
 .hero-copy .hero-badge { border-color: rgba(255,232,167,.5); color: #fff0bc; background: rgba(31,20,66,.5); backdrop-filter: blur(12px); }
 .hero-heading { max-width: 720px; margin-block: 28px; color: #fff9e6; text-shadow: 0 5px 28px rgba(7,5,22,.58); }
 .hero-heading em { color: #ffe28c; }
-.hero-description { max-width: 52ch; color: rgba(255,250,231,.88); text-shadow: 0 2px 14px rgba(7,5,22,.7); }
+.hero-description { max-width: 52ch; color: rgba(255,250,231,.94); text-shadow: 0 2px 14px rgba(7,5,22,.7); }
+.hero-disclaimer { width: fit-content; margin-top: 16px; padding: 6px 10px; border-left: 2px solid #f3c65e; color: rgba(255,245,213,.78); font-size: 12px; line-height: 1.6; letter-spacing: .02em; }
 .hero-secondary { color: #fff0bd; }
 .hero-secondary:hover { color: white; }
 .hero-actions .button { border-color: #ffe08a; background: #d79324; color: #21122d; box-shadow: 0 10px 32px rgba(255,184,47,.28); }
@@ -21,6 +22,9 @@
 .hero-journey-section { position: relative; background: var(--ivory); padding-block: clamp(72px, 8vw, 128px); }
 .hero-journey-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(420px, 1fr); gap: clamp(48px, 8vw, 128px); align-items: center; }
 .hero-journey-layout .hero-product { min-width: 0; }
+.prototype-status { display: grid; gap: 5px; margin-top: 26px; padding: 15px 17px; border: 1px solid #c9dbc9; border-radius: 12px; background: rgba(237,244,236,.72); color: var(--muted); font-size: 13px; line-height: 1.6; }
+.prototype-status strong { color: var(--forest); }
+.prototype-status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 7px; border-radius: 50%; background: #d29a26; box-shadow: 0 0 0 4px #f4e5b7; }
 
 @keyframes hero-art-drift {
   from { transform: scale(1.02) translate3d(-.4%, .2%, 0); }
@@ -31,6 +35,7 @@
   .hero { min-height: 820px; }
   .hero-cinematic-content { min-height: 820px; align-items: flex-start; padding-top: 78px; }
   .hero-copy { max-width: 100%; }
+  .hero-description { max-width: 34ch; font-size: 17px; }
   .hero-art-vignette { background: linear-gradient(180deg, rgba(9,7,27,.72), rgba(11,8,28,.15) 42%, rgba(7,7,24,.86) 100%); }
   .hero-reference-art { object-position: 58% center; }
   .trust-strip { display: none; }

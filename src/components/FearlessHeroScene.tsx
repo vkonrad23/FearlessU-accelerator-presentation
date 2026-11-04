@@ -136,7 +136,7 @@ export function FearlessHeroScene() {
 
   return (
     <div ref={hostRef} className="fearless-scene" aria-hidden="true">
-      <img className="hero-reference-art" src={`${import.meta.env.BASE_URL}fearlessu-reference-hero.png`} alt="" />
+      <img className="hero-reference-art" src={`${import.meta.env.BASE_URL}fearlessu-reference-hero.png`} alt="" loading="eager" decoding="async" fetchPriority="high" />
       <div className="hero-art-vignette" />
       <div className="hero-art-label">Cinematic concept · FearlessU</div>
     </div>

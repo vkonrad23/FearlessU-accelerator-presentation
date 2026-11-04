@@ -15,7 +15,8 @@ export function Hero() {
         <div className="hero-copy">
           <p className="hero-badge">Interactive prototype · CBT-informed</p>
           <h1 id="hero-title" className="hero-heading"><span className="hero-title-line">Beyond fear.</span>{' '}<span className="hero-title-line"><em>Beyond limits.</em></span></h1>
-          <p className="hero-description">FearlessU explores CBT-informed support through small, optional practice steps and reflection. Try the approach at a pace you choose.</p>
+          <p className="hero-description">FearlessU is an early-stage AI-powered mental wellness platform exploring personalized, CBT-informed tools to help people understand fears, challenge unhelpful thoughts, and build emotional resilience.</p>
+          <p className="hero-disclaimer">Experimental prototype · Not clinically validated · Not medical advice</p>
           <div className="hero-actions">
             <a className="button" href="#journey-preview">Explore the fear journey <ArrowUpRight size={19} aria-hidden="true" /></a>
             <a className="hero-secondary" href="#how-it-works">How it works <ArrowRight size={18} aria-hidden="true" /></a>
@@ -38,8 +39,12 @@ export function HeroJourneySection() {
       <div className="container hero-journey-layout">
         <div>
           <p className="eyebrow">A guided first step</p>
-          <h2 id="journey-preview-title" className="section-heading">Your next step,<br /><em>chosen at your pace.</em></h2>
-          <p className="section-description">Explore the working prototype below. It uses local rules to demonstrate how a small reflection can become an optional, bounded practice step.</p>
+          <h2 id="journey-preview-title" className="section-heading">Experience the<br /><em>FearlessU Journey.</em></h2>
+          <p className="section-description">Explore the working prototype below. It uses transparent local rules to demonstrate how a small reflection can become an optional, bounded practice step.</p>
+          <div className="prototype-status" aria-label="Prototype status">
+            <span><span className="prototype-status-dot" aria-hidden="true" /><strong>Current stage:</strong> interactive research prototype</span>
+            <span>Inputs stay in this session and are not sent to a live AI model.</span>
+          </div>
         </div>
         <div className="hero-product"><ProductDemo /></div>
       </div>
