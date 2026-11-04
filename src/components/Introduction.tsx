@@ -1,6 +1,7 @@
 import { ArrowDown, ArrowRight, ArrowUpRight, BookOpen, ChartNoAxesCombined, FlaskConical, Heart, LockKeyhole, Map, Route, ShieldCheck, SlidersHorizontal, Users } from 'lucide-react';
 import { capabilities, problemCards, processSteps, trustPrinciples } from '../data/content';
 import { ProductDemo } from './JourneyExperience';
+import { FearlessHeroScene } from './FearlessHeroScene';
 
 const trustIcons = { book: BookOpen, heart: Heart, shield: ShieldCheck, lock: LockKeyhole };
 const capabilityIcons = { map: Map, route: Route, sliders: SlidersHorizontal, chart: ChartNoAxesCombined, people: Users, research: FlaskConical };
@@ -8,6 +9,8 @@ const capabilityIcons = { map: Map, route: Route, sliders: SlidersHorizontal, ch
 export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
+      <FearlessHeroScene />
+      <div className="hero-scene-wash" aria-hidden="true" />
       <div className="container hero-grid">
         <div className="hero-copy">
           <p className="hero-badge">Interactive prototype · CBT-informed</p>

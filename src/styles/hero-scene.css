@@ -1,0 +1,18 @@
+.fearless-scene { position: absolute; z-index: 0; inset: 0; min-height: 760px; pointer-events: none; opacity: .9; }
+.fearless-scene canvas { display: block; width: 100%; height: 100%; }
+.hero-scene-wash { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: linear-gradient(90deg, var(--ivory) 0%, rgba(247,248,242,.96) 24%, rgba(247,248,242,.45) 52%, rgba(247,248,242,.14) 100%), linear-gradient(0deg, var(--ivory) 0%, transparent 35%, rgba(247,248,242,.54) 100%); }
+.hero-grid, .trust-strip { position: relative; z-index: 1; }
+.hero-product { filter: drop-shadow(0 28px 44px rgba(6,63,50,.12)); }
+
+@media (max-width: 767px) {
+  .fearless-scene { min-height: 860px; opacity: .62; }
+  .hero-scene-wash { background: linear-gradient(180deg, rgba(247,248,242,.82) 0%, rgba(247,248,242,.94) 47%, var(--ivory) 75%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fearless-scene { opacity: .38; }
+}
+
+@media print {
+  .fearless-scene, .hero-scene-wash { display: none; }
+}

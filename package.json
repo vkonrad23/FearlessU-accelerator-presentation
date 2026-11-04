@@ -12,10 +12,12 @@
   "dependencies": {
     "lucide-react": "1.61.0",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "three": "0.181.2"
   },
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
+    "@types/three": "0.181.0",
     "@types/node": "26.6.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
