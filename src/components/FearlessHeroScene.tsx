@@ -66,14 +66,6 @@ export function FearlessHeroScene() {
     const trail = makeEnergyTrail();
     scene.add(trail);
 
-    const portalGlow = new THREE.Mesh(
-      new THREE.RingGeometry(1.05, 1.13, 96),
-      new THREE.MeshBasicMaterial({ color: 0xffe6a8, transparent: true, opacity: 0.78, blending: THREE.AdditiveBlending }),
-    );
-    portalGlow.position.set(-0.15, 0.35, -1.1);
-    portalGlow.scale.set(1.5, 1.55, 1);
-    scene.add(portalGlow);
-
     const resize = () => {
       const width = host.clientWidth;
       const height = host.clientHeight;
@@ -108,8 +100,6 @@ export function FearlessHeroScene() {
         particles.rotation.z = elapsed * 0.008;
         particles.position.y = Math.sin(elapsed * 0.35) * 0.04;
         trail.material.opacity = 0.6 + Math.sin(elapsed * 1.5) * 0.2;
-        portalGlow.rotation.z = elapsed * 0.08;
-        portalGlow.scale.setScalar(1.5 + Math.sin(elapsed * 1.4) * 0.025);
       }
       renderer.render(scene, camera);
       frame = window.requestAnimationFrame(animate);
