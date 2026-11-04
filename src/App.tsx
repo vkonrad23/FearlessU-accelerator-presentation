@@ -3,7 +3,7 @@ import { usePageMotion } from './hooks/useMotion';
 import { navigateToSection, useSectionNavigation } from './hooks/useSectionNavigation';
 import { Header } from './components/Header';
 import { PresentationControls } from './components/PresentationControls';
-import { Hero, HowItWorks, ProblemSection, SolutionSection } from './components/Introduction';
+import { Hero, HeroJourneySection, HowItWorks, ProblemSection, SolutionSection } from './components/Introduction';
 import { JourneyDemo, SampleJourney } from './components/JourneyExperience';
 import { AISystem, EvidenceRoadmap, SafetySection } from './components/SafetyEvidence';
 import { AcceleratorFit, ApplicationSnapshot, BusinessOverview, CompetitiveLandscape, DevelopmentRoadmap, TeamSection } from './components/BusinessSections';
@@ -24,6 +24,7 @@ export default function App() {
       <Header />
       <main id="main" tabIndex={-1}>
         <Hero />
+        <HeroJourneySection />
         <ProblemSection />
         <SolutionSection />
         <HowItWorks />

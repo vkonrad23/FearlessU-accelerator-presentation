@@ -10,19 +10,16 @@ export function Hero() {
   return (
     <section className="hero" aria-labelledby="hero-title">
       <FearlessHeroScene />
-      <div className="hero-scene-wash" aria-hidden="true" />
-      <div className="container hero-grid">
+      <div className="hero-cinematic-shade" aria-hidden="true" />
+      <div className="container hero-cinematic-content">
         <div className="hero-copy">
           <p className="hero-badge">Interactive prototype · CBT-informed</p>
           <h1 id="hero-title" className="hero-heading"><span className="hero-title-line">Beyond fear.</span>{' '}<span className="hero-title-line"><em>Beyond limits.</em></span></h1>
           <p className="hero-description">FearlessU explores CBT-informed support through small, optional practice steps and reflection. Try the approach at a pace you choose.</p>
           <div className="hero-actions">
-            <a className="button" href="#journey">Explore the fear journey <ArrowUpRight size={19} aria-hidden="true" /></a>
+            <a className="button" href="#journey-preview">Explore the fear journey <ArrowUpRight size={19} aria-hidden="true" /></a>
             <a className="hero-secondary" href="#how-it-works">How it works <ArrowRight size={18} aria-hidden="true" /></a>
           </div>
-        </div>
-        <div className="hero-product">
-          <ProductDemo />
         </div>
       </div>
       <div className="container trust-strip">
@@ -30,6 +27,21 @@ export function Hero() {
           const Icon = trustIcons[item.icon];
           return <div className="trust-item" key={item.title}><Icon size={22} strokeWidth={1.6} aria-hidden="true" /><div><strong>{item.title}</strong><span>{item.detail}</span></div></div>;
         })}
+      </div>
+    </section>
+  );
+}
+
+export function HeroJourneySection() {
+  return (
+    <section id="journey-preview" className="hero-journey-section" aria-labelledby="journey-preview-title">
+      <div className="container hero-journey-layout">
+        <div>
+          <p className="eyebrow">A guided first step</p>
+          <h2 id="journey-preview-title" className="section-heading">Your next step,<br /><em>chosen at your pace.</em></h2>
+          <p className="section-description">Explore the working prototype below. It uses local rules to demonstrate how a small reflection can become an optional, bounded practice step.</p>
+        </div>
+        <div className="hero-product"><ProductDemo /></div>
       </div>
     </section>
   );

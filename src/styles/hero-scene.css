@@ -1,18 +1,50 @@
-.fearless-scene { position: absolute; z-index: 0; inset: 0; min-height: 760px; pointer-events: none; opacity: .9; }
-.fearless-scene canvas { display: block; width: 100%; height: 100%; }
-.hero-scene-wash { position: absolute; z-index: 0; inset: 0; pointer-events: none; background: linear-gradient(90deg, var(--ivory) 0%, rgba(247,248,242,.96) 24%, rgba(247,248,242,.45) 52%, rgba(247,248,242,.14) 100%), linear-gradient(0deg, var(--ivory) 0%, transparent 35%, rgba(247,248,242,.54) 100%); }
-.hero-grid, .trust-strip { position: relative; z-index: 1; }
-.hero-product { filter: drop-shadow(0 28px 44px rgba(6,63,50,.12)); }
+.hero { position: relative; min-height: min(940px, calc(100svh - 88px)); overflow: hidden; background: #160f2c; color: white; }
+.fearless-scene { position: absolute; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; background: #160f2c; }
+.fearless-scene canvas { position: absolute; z-index: 2; inset: 0; display: block; width: 100%; height: 100%; }
+.hero-reference-art { position: absolute; z-index: 0; inset: -2%; width: 104%; height: 104%; object-fit: cover; object-position: center; animation: hero-art-drift 18s ease-in-out infinite alternate; }
+.hero-art-vignette { position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, rgba(10,7,27,.82) 0%, rgba(12,9,30,.4) 31%, rgba(12,9,30,.06) 64%, rgba(7,8,22,.12) 100%), linear-gradient(0deg, rgba(7,7,24,.82) 0%, transparent 28%, rgba(8,7,25,.25) 100%); }
+.hero-art-label { position: absolute; z-index: 3; right: 28px; bottom: 22px; color: rgba(255,244,208,.72); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.hero-cinematic-shade { position: absolute; z-index: 1; inset: 0; pointer-events: none; background: radial-gradient(circle at 54% 46%, transparent 0 18%, rgba(6,7,24,.1) 54%, rgba(5,5,20,.36) 100%); }
+.hero-cinematic-content { position: relative; z-index: 4; display: flex; min-height: min(940px, calc(100svh - 88px)); align-items: center; padding-block: 96px 142px; }
+.hero-copy { max-width: 650px; }
+.hero-copy .hero-badge { border-color: rgba(255,232,167,.5); color: #fff0bc; background: rgba(31,20,66,.5); backdrop-filter: blur(12px); }
+.hero-heading { max-width: 720px; margin-block: 28px; color: #fff9e6; text-shadow: 0 5px 28px rgba(7,5,22,.58); }
+.hero-heading em { color: #ffe28c; }
+.hero-description { max-width: 52ch; color: rgba(255,250,231,.88); text-shadow: 0 2px 14px rgba(7,5,22,.7); }
+.hero-secondary { color: #fff0bd; }
+.hero-secondary:hover { color: white; }
+.hero-actions .button { border-color: #ffe08a; background: #d79324; color: #21122d; box-shadow: 0 10px 32px rgba(255,184,47,.28); }
+.hero-actions .button:hover { border-color: #fff0b0; background: #f0ad37; }
+.trust-strip { position: absolute; z-index: 5; right: 0; bottom: 0; left: 0; border-top-color: rgba(255,239,185,.25); color: #fff5d5; }
+.trust-item { color: #fff5d5; }
+.trust-item span { color: rgba(255,245,213,.72); }
+.hero-journey-section { position: relative; background: var(--ivory); padding-block: clamp(72px, 8vw, 128px); }
+.hero-journey-layout { display: grid; grid-template-columns: minmax(0, .8fr) minmax(420px, 1fr); gap: clamp(48px, 8vw, 128px); align-items: center; }
+.hero-journey-layout .hero-product { min-width: 0; }
+
+@keyframes hero-art-drift {
+  from { transform: scale(1.02) translate3d(-.4%, .2%, 0); }
+  to { transform: scale(1.07) translate3d(.4%, -.2%, 0); }
+}
 
 @media (max-width: 767px) {
-  .fearless-scene { min-height: 860px; opacity: .62; }
-  .hero-scene-wash { background: linear-gradient(180deg, rgba(247,248,242,.82) 0%, rgba(247,248,242,.94) 47%, var(--ivory) 75%); }
+  .hero { min-height: 820px; }
+  .hero-cinematic-content { min-height: 820px; align-items: flex-start; padding-top: 78px; }
+  .hero-copy { max-width: 100%; }
+  .hero-art-vignette { background: linear-gradient(180deg, rgba(9,7,27,.72), rgba(11,8,28,.15) 42%, rgba(7,7,24,.86) 100%); }
+  .hero-reference-art { object-position: 58% center; }
+  .trust-strip { display: none; }
+  .hero-art-label { right: 16px; bottom: 16px; font-size: 9px; }
+  .hero-journey-layout { display: block; }
+  .hero-journey-layout > div:first-child { margin-bottom: 36px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fearless-scene { opacity: .38; }
+  .hero-reference-art { animation: none; }
 }
 
 @media print {
-  .fearless-scene, .hero-scene-wash { display: none; }
+  .fearless-scene, .hero-cinematic-shade { display: none; }
+  .hero { min-height: auto; color: var(--ink); background: var(--ivory); }
+  .hero-heading, .hero-description { color: var(--forest); text-shadow: none; }
 }
