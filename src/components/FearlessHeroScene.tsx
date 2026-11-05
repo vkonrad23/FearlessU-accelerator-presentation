@@ -126,11 +126,16 @@ export function FearlessHeroScene() {
       host.style.setProperty('--pointer-x', `${targetX}px`);
       host.style.setProperty('--pointer-y', `${targetY}px`);
     };
-    const onVisibilityChange = () => { active = !document.hidden; };
-    const intersectionObserver = new IntersectionObserver(([entry]) => { active = entry.isIntersecting && !document.hidden; }, { threshold: 0.05 });
+    const setActive = (nextActive: boolean) => {
+      active = nextActive;
+      host.classList.toggle('is-motion-paused', !active);
+    };
+    const onVisibilityChange = () => { setActive(!document.hidden && host.getBoundingClientRect().bottom > 0 && host.getBoundingClientRect().top < window.innerHeight); };
+    const intersectionObserver = new IntersectionObserver(([entry]) => { setActive(entry.isIntersecting && !document.hidden); }, { threshold: 0.05 });
     intersectionObserver.observe(host);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     document.addEventListener('visibilitychange', onVisibilityChange);
+    setActive(!document.hidden);
     const clock = new THREE.Clock();
     const animate = () => {
       const elapsed = clock.getElapsedTime();
