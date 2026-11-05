@@ -1,157 +1,134 @@
-# FearlessU accelerator presentation
+# FearlessU, a cinematic journey
 
-A responsive, interactive presentation for **FearlessU**, an early-stage mental health AI startup exploring personalized CBT-informed support and responsible research into new intervention ideas. Built with React, TypeScript, Vite, Tailwind CSS, and Lucide React icons. The editorial layout uses forest green, warm ivory, sage, and restrained gold, with system fonts and original SVG assets. This is an accelerator application prototype, with deterministic demonstrations and clearly labeled illustrative data.
+A scroll-driven, five-scene marketing website for an **early-stage mental wellness concept**. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
 
-The React project at the repository root is the current deliverable. `FearlessU_Presentation_Website/` preserves the original standalone HTML website and its earlier, narrower positioning for reference. Use the root React project for the current research vision.
+**The original artwork is preserved.** `public/fearlessu-reference-hero.png` remains unchanged. Its optimized WebP is rendered as a depth-displaced, parallax image plane, with real 3D particles and glass. This is a 2.5D treatment of the supplied illustration, not a claim to have reconstructed every object in the artwork. Scrolling blends it into a continuous, procedural valley, staircase, and sunrise.
 
 ## Run locally
 
-Install **Node.js 22.12 or newer** and npm. Development was tested with Node.js 24.
-
-Extract `fearlessu-accelerator-website.zip`, open a terminal in the extracted project directory containing `package.json`, and run:
+Use Node.js **22.19+**, preferably Node 24, and npm.
 
 ```sh
-npm install
+npm ci
 npm run dev
 ```
 
-Use the address printed by Vite. Stop the development server with `Ctrl+C`.
-
-In VS Code on Windows, open the project folder containing `package.json`, choose **Terminal → New Terminal**, and run the same commands in PowerShell. Open Vite's printed Local address in a regular browser and keep the terminal running while using the site.
-
-Create and inspect the production build:
+Open `http://127.0.0.1:3000`. For the production export, stop the dev server first:
 
 ```sh
 npm run build
+npm test
+npm run check:budget
 npm run preview
 ```
 
-`npm run build` checks TypeScript and generates `dist/`. The preview command serves that build locally. Deploy the contents of `dist/` to a static website host; no application server is required for this demo. Opening the source `index.html` directly does not run the React project.
+`build` runs ESLint, strict TypeScript checking, and Next.js static export. Static generation uses one worker to limit peak memory on development machines. Deploy `out/`, not the old `dist/`. No application server or API key is needed. Do not open the legacy root `index.html` directly.
 
-In a managed cloud environment with an unwritable home npm cache, use:
+With the production preview running, use a second terminal:
 
 ```sh
-npm install --cache /tmp/fearlessu-npm-cache
+npm run audit:desktop
 ```
 
-For repeatable dependency installation from the included lockfile, use `npm ci` (with the same cache option if needed).
+This launches an isolated Lighthouse browser, writes `artifacts/lighthouse-desktop.json`, and checks desktop performance ≥85 and CLS 0. Audit artifacts and screenshots are intentionally ignored by Git.
 
-## Project structure
+## Scenes
+
+1. **The beginning:** the original illustration, “Beyond fear. Beyond limits.”, clear prototype limits, and four trust principles.
+2. **The possibilities:** six keyboard-accessible feature tabs, mirrored by a floating 3D card ring.
+3. **Your own pace:** four scroll stops, using the existing process-step copy and illuminated stair landings.
+4. **Care comes first:** cooler lighting, slower ambient movement, clear AI/data boundaries, and crisis signposting.
+5. **A new perspective:** mountain sunrise and an optional local educational preview.
+
+The 3.5-second intro runs once per browser-tab session, after the base scene is ready. It never blocks reading or navigation. Scrolling, pausing, hiding the scene, or enabling reduced motion ends it immediately.
+
+## Structure and configuration
 
 ```text
-src/
-  components/          Page sections and interactive product demonstrations
-  data/                Editable presentation content and demo templates
-  hooks/               Shared reveal, content, and section-navigation behavior
-  styles/              Motion, hero entrance, navigation, and presentation styles
-  App.tsx              Page composition
-  main.tsx             React entry point
-  index.css            Visual system, responsive styles, and print styles
-public/                Static assets
-index.html             Page title, description, and social metadata
-vite.config.ts         React and Tailwind build configuration
-dist/                  Generated production website
-FearlessU_Presentation_Website/
-                       Preserved original static website
+src/app/                    App Router, local fonts, metadata, responsive CSS
+src/components/journey/     Semantic HTML, navigation, sections, local preview
+src/components/world/       Canvas, camera, terrain, stairs, artwork, cards,
+                            particles, effects, optional model loader
+src/config/scene.ts          Palette, camera keyframes, motion, lighting,
+                            effects, image depth, quality, and model budgets
+src/lib/                    Deterministic scene math and model-path validation
+src/store/                  Small transient scene store
+src/data/                   Preserved copy and local demonstration rules
+tests/                      Scene, safety-boundary, model-path, contrast tests
+scripts/                    Bundle and Lighthouse gates
+public/models/              Optional model contract, no model required
+public/draco/               Instructions for a local decoder
 ```
 
-Edit shared copy and illustrative datasets in `src/data/`, and section-specific presentation or behavior in `src/components/`. The single-page presentation uses section anchors rather than a routing service. Update the root `index.html` metadata before public deployment, including a real deployment URL for social preview metadata when available.
+Start visual tuning in **`src/config/scene.ts`**. The layout receives its CSS palette from that file. Responsive typography and panel layout live in `src/app/globals.css`. Camera stops are paired with semantic section positions, rather than a fixed assumed page height.
 
-## Interactive features
+Legacy presentation components, data, `src/App.tsx`, `src/main.tsx`, `vite.config.ts`, and `FearlessU_Presentation_Website/` remain as reference material. They are not entry points for the current Next.js site. Vite is no longer installed.
 
-- Sticky navigation, active section feedback, a mobile menu, visible keyboard focus, and reduced-motion support.
-- An optional **Present** control in the footer's **For investors** group opens a chapter guide for the accelerator walkthrough, starting at the overview. Previous/Next and a chapter selector move through the existing page, including dedicated research and responsible-design stops. Exit returns to the visible footer trigger; ordinary scrolling and the interactive prototype remain available.
-- Three example scenarios: speaking in a small group, entering an unfamiliar social environment, and preparing for a difficult conversation. The hero uses a native labeled scenario selector, a keyboard-accessible difficulty slider with English value descriptions and a green-to-amber track, explainable local recommendations, and a labeled Reset control. Reset restores the speaking example and difficulty 4 without changing the main journey or the visitor's explanation-disclosure preference.
-- A complete local journey loop: choose an example or fictional goal, set difficulty and pace, generate a sample, adapt its difficulty, choose a voluntary practice, and complete a reflection.
-- Reflection sliders and an experience selector shape an optional next suggestion. A temporary session summary shows the visitor's numeric demo check-ins; the optional written note is discarded on completion. Pause preserves the current stage, stop ends the practice, and clear resets the session.
-- A limited phrase-based crisis guard checks submitted goals and reflection notes, stops the sample when a recognized phrase appears, and shows urgent-support guidance. It does not assess risk or provide crisis counseling.
-- Keyboard-accessible public-speaking sample tabs with preparation, activity, reflection, illustrative ratings, and reversible demo completion.
-- An impact dashboard with local 7-, 30-, and 90-day filters. Its illustrative metrics are separate from the visitor's temporary session check-ins and are not clinical evidence or actual traction.
-- A 60-second pitch timer with pause, reset, and teleprompter controls.
-- An optional camera check in the pitch section. **Check my camera** requests video-only browser permission and shows a mirrored live preview once a playable frame is available. **Stop camera** releases the stream; **Cancel camera check** also disposes of a late permission result. The preview stops when the tab is hidden, the visitor leaves the page, or the component is removed. The timer and teleprompter work independently of camera access.
-- A downloadable one-page summary and print styling for saving a copy as PDF through the browser.
-- FAQ accordions, draft privacy and prototype-terms dialogs, and a contact form with local validation, clear controls, and demo-only feedback. The form does not contact the founder.
+## Rendering and performance
 
-No backend, live AI model, API key, database, authentication service, or persistent application storage is required. Form and journey entries remain temporary local draft state; they are not submitted to a server or saved in `localStorage`. Reloading the page resets this state. Use invented examples only and do not enter sensitive mental-health or identifying information. A locally generated download is a file the user chooses to retain.
+- HTML and the original-image/CSS poster render independently of WebGL.
+- The initial depth-aware artwork and particles are lazy-loaded and use asynchronous shader preparation. Hidden terrain, stairs, the figure, and glass load only when scrolling toward the landscape.
+- The original artwork stays visible until landscape shaders are ready, including after a fast jump to a later chapter. The landscape stays mounted for smooth backward navigation.
+- Expensive transmission and postprocessing activate when the visitor reaches the procedural journey, not over the fully opaque hero image.
+- Six desktop glass cards share one small refraction buffer. Stairs use instancing; particles use one point-cloud draw call.
+- Desktop: DPR capped at 1.5, 1,200 particles, transmission, subtle bloom/DOF/vignette/grain.
+- Mobile: DPR capped at 1.15, 320 particles, simpler glass, no depth of field.
+- Low tier: DPR capped at 0.85, 160 particles, no postprocessing or transmission. The absolute configurable DPR ceiling is 2.
+- Sustained slow frames lower quality. Resizing applies the mobile tier without upgrading an already degraded low tier.
+- Reduced motion, save-data, ≤2 reported GB of memory, ≤2 reported CPU threads, or unavailable WebGL2 select the static presentation.
+- Hidden/offscreen canvases stop rendering. **Pause ambient motion** uses on-demand rendering so navigation and feature changes still work.
+- Failed assets, lost contexts, and a loading watchdog preserve the HTML/poster. R3F releases the renderer; handmade geometries, card textures, render targets, effect resources, and optional-model resources have cleanup paths.
 
-The camera check is a local preview: it requests no microphone access and does not record, upload, or save video. It confirms a playable feed so the visitor can assess framing and light. Record the final pitch separately using a recording application. Camera access requires a supported browser on localhost or HTTPS and the visitor's permission; a downloaded HTML preview may have browser-specific camera restrictions.
+The bundle gate counts **HTML-linked/preloaded scripts, legacy nomodule polyfills, and inline bootstrap JavaScript**. Emitted lazy graphics, scroll-controller, model, and preview chunks are reported separately. It does not pretend those deferred downloads are free. See `artifacts/bundle-budget.json` for exact files and compressed sizes.
 
-## Replace and verify before submission
+## Optional Draco/glTF model
 
-The supplied founder name is **Vladyslav Konrad**, with the role **Founder and Product Lead**. The founder also supplied that he is a Software Engineering student at American University Kyiv, an ASU partner institution. These are founder-provided details, not independently verified credentials. AUK’s academic relationship with ASU does not establish a FearlessU partnership, endorsement, or ASU enrollment.
+No external model or decoder is requested by the default site. To replace the procedural silhouette, follow `public/models/README.md` and `public/draco/README.md`.
 
-Before submitting or publishing:
+Use a licensed, self-contained `.glb` below 1.5 MB, set `sceneConfig.models.figure`, and provide a local Draco decoder only if the GLB uses Draco. The lazy loader enforces the byte limit and local path, rejects external texture/buffer references, disposes decoder workers, and falls back to the silhouette on failure. No optional model is supplied.
 
-- Expand the founder biography with accurate experience and achievements; replace headquarters, company, contact, website, LinkedIn, and video placeholders with verified information and working destinations.
-- Replace funding, revenue, financial, customer, and application placeholders with verifiable facts. Proposed business models, pricing, milestones, and collaborator roles remain plans.
-- Confirm the accelerator's official name, 2027 availability, eligibility, participation requirements, fees, dates, and submission deadline directly with the program. The presentation does not establish eligibility or acceptance.
-- Review every claim and exported summary, and replace illustrative information only when supporting evidence exists.
+## Educational preview, privacy, and limits
 
-The website does not establish a Mayo Clinic or ASU partnership, endorsement, or acceptance. It does not claim clinical validation, regulatory clearance, patents, paying customers, investment, or security certification. Simulated metrics and charts are demonstration data and **are not clinical evidence**.
+The preview contains three predefined goals, a difficulty slider, an explained optional step, an illustrative reflection, and a repeat/preparation/pause choice. High difficulty keeps suggestions with private preparation. Closing the dialog clears the entries and restores focus.
 
-## Personalization, original research, and Ukraine
+- No live AI model, diagnosis, clinical suitability decision, or outcome prediction.
+- No free-text risk screening. Crisis guidance is always visible before the controls.
+- No form transmission, analytics, account, database, or health-data storage.
+- Demo choices remain in component memory. The only browser storage written by this site is the non-personal `sessionStorage` intro-played flag.
+- The proposed AI and four-step workflow remain concepts, not validated clinical capabilities.
 
-FearlessU’s long-term vision includes both personalizing established, evidence-informed CBT exercises and generating original CBT-inspired candidate exercises, proposing novel therapeutic strategies, and formulating hypotheses for psychological interventions. Individual needs, emotional responses, and real-world circumstances would inform research questions. These are proposed capabilities; no generative AI or candidate-generation system is connected to this demo.
+**Experimental prototype. Not clinically validated. Not medical advice.** The site is not a healthcare provider, medical device, or emergency service, and does not replace qualified care. It makes no clinical efficacy, regulatory, certification, institutional partnership, or accelerator-acceptance claim.
 
-Novel candidates would remain research ideas until expert review, safety evaluation, appropriate clinical validation, and any necessary approvals support therapeutic use. Proposed interests include anxiety, depression, complex fears, and phobias; target populations and intended use require qualified guidance. No effectiveness or clinical validation is claimed.
+If someone may be in immediate danger or at risk of harming themselves or another person, they should contact local emergency services or an appropriate crisis service. The page links to the global Find A Helpline directory without guessing the visitor's country.
 
-The proposed Ukraine-focused social-impact direction is trauma-informed psychological stabilization and PTSD support resources for military personnel and civilians affected by war and humanitarian crises. This is a research ambition, not an available treatment or support service. It requires trauma-qualified expertise, appropriate ethics and suitability review, and independent oversight. The educational demo remains outside trauma and PTSD intervention use.
+Any future backend, model integration, or research involving therapeutic interventions requires separate intended-use, privacy, security, professional-review, and clinical/ethical validation work. Never place provider credentials in `NEXT_PUBLIC_` variables.
 
-Mayo Clinic and ASU researchers are possible future collaborators the founder hopes to engage. No collaboration, institutional endorsement, or accelerator acceptance is established.
+## Accessibility
 
-## Medical, safety, and privacy limits
+All essential copy and controls are semantic HTML, outside the decorative canvas. The site includes a skip link, visible focus, roving Arrow/Home/End feature tabs, native range/select controls, a native modal dialog, focus restoration, and live result announcements. Trust labels are at least 14 px and disclaimer chips at least 13 px.
 
-FearlessU is an early-stage wellness technology concept. It is not a medical device, diagnostic tool, healthcare provider, emergency service, or substitute for care from a qualified professional. The demonstrations do not diagnose, treat, cure, or guarantee outcomes. Illustrative gradual-practice steps require individual suitability checks and professional guidance where appropriate.
+Reduced-motion preferences apply both on load and when changed. Gradients sit behind conservatively opaque reading panels; a palette test checks AA text contrast even over a white backdrop. Automated scores are not a substitute for a complete screen-reader or accessibility-conformance review.
 
-The basic phrase-based crisis guard is incomplete and can miss or misinterpret language. It is not a clinical screening, monitoring, or emergency-response system. The website cannot assess a person's safety or provide crisis counseling. If someone may be in immediate danger or at risk of harming themselves or another person, they should contact local emergency services or an appropriate crisis service immediately.
+## GitHub Pages
 
-The responsibility section distinguishes **Implemented prototype** (limited local controls), **In development** (educational interface refinement), and **Planned validation** (proposed production controls and research). Clinical content review, age and suitability screening, continuous risk evaluation, staffed escalation workflows, auditability, production encryption, role-based access, consent management, data retention, export/deletion, and security review are **planned production requirements**, not implemented or validated protections. No HIPAA compliance or other certification is claimed. The privacy and terms dialogs are draft principles, not final production legal policies.
+The existing workflow builds `out/` with:
 
-The three proposed evidence phases cover usability and safety review, feasibility and protocol design, and controlled evaluation. Research, subgroup and bias analysis, health-economic assessment, and publication are plans rather than completed findings.
+```text
+NEXT_PUBLIC_BASE_PATH=/FearlessU-accelerator-presentation
+```
 
-## Connect a future backend or AI service
+The workflow derives the name from the destination repository, runs tests and the bundle gate, and publishes its Pages artifact. Repository Pages must already be configured to use GitHub Actions. Do not change the existing `origin` remote just to publish this project to another authorized repository.
 
-1. Define the intended use, supported population, consent process, data minimization, retention/deletion rules, and clinical safety boundaries before collecting information.
-2. Add a separately secured server/API with appropriate authentication, authorization, access controls, encrypted transport and storage, rate limits, and privacy-conscious audit logging. Define a real contact submission workflow and its error states before enabling collection.
-3. Keep provider credentials on that server. **Never place secrets in frontend code or `VITE_` variables**: Vite exposes those variables in the browser bundle. A frontend environment variable may hold a public API base URL, never a secret key.
-4. Replace local recommendation rules only through a reviewed, curated content framework with server-side validation, suitability checks, tested escalation boundaries, and qualified human oversight. Keep novel candidate generation in a separately governed research workflow. Candidates must pass expert review, safety evaluation, and appropriate clinical validation before entering any therapeutic recommendation path; do not expose an unrestricted treatment-generation endpoint.
-5. Validate risk handling, model behavior, accessibility, security, privacy, and adverse-event processes with qualified advisors before a real-user pilot. Determine the applicable regulatory and clinical pathway rather than assuming this prototype establishes one.
+## Verification and remaining limits
 
-## Distribution
+See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene-math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
 
-The deliverable is `fearlessu-accelerator-website.zip`, containing project source, configuration, the dependency lockfile, and the generated `dist/` website. `node_modules/` is excluded; install dependencies after extraction. Development tooling and locally running processes are not bundled.
+The final production lab run reached desktop performance **97**, accessibility **100**, best practices **100**, SEO **100**, and **CLS 0**. Initial JavaScript was **198.3 kB gzip**, below 250 kB. Earlier runs ranged from 60 to 92 as host resources varied; hidden landscape work was subsequently deferred. These are local lab results, not field guarantees; see the verification record in `PLAN.md`.
 
-The packaged ZIP also includes `preview.html`, a self-contained snapshot with the production JavaScript and CSS embedded. Open that downloaded file in a regular browser for a quick interactive preview without installing anything. Edit the React source and rebuild to develop the application; the preview is a generated copy.
+Remaining limits:
 
-Rebuild and regenerate the packaged snapshots after source changes so the ZIP, embedded preview, and `dist/` represent the same version. Generated archives, build output, and `node_modules/` are intentionally excluded from Git.
-
-## Validate changes
-
-Run `npm run build` for strict TypeScript and production-bundle checks, then use `npm run preview` for browser review. The project currently provides development, build, and preview scripts; it does not configure a separate test or lint command.
-
-Review the following after changing a component or design token:
-
-- Layouts at **320, 375, 768, 1024, 1440, and 1920 px**, including horizontal overflow, readable body text, wrapping controls, consistent spacing, and approximately 44 px touch targets.
-- All three scenarios, empty/invalid goals, local difficulty adaptation, the practice/reflection loop, feedback rationale, pause/resume, stop, and clear. Submit a recognized crisis phrase in both the goal and the optional reflection to verify that the sample stops.
-- Keyboard navigation, visible focus, sample-tab Arrow/Home/End keys, native scenario selection, accordions, privacy/terms dialog close and Escape behavior, and reduced-motion preferences.
-- All dashboard ranges, timer start/pause/resume/reset and completion, teleprompter controls, contact validation/success/clear, summary download, and Print / Save as PDF.
-- Camera access only after an explicit click; preview readiness, denied permission, missing/busy devices, unsupported or insecure contexts, cancellation and retry, and track release on stop, disconnect, hidden tab, and unmount. Use simulated browser media devices for automated checks; those checks do not establish that a particular visitor's physical camera works.
-- Browser console errors, unintended network submissions, and unexpected local/session storage. Application inputs should remain in page memory only; ordinary development asset and hot-reload requests are separate from form submission.
-
-Interface checks do not establish clinical suitability, safety, effectiveness, or full accessibility conformance. Any reported validation results should state which commands, interactions, and viewport widths were actually checked for that version.
-
-## Redesign validation
-
-The production build passed TypeScript checking. Chromium checks passed for the three scenarios, all seven category templates, difficulty adaptation, two practice/reflection loops, memory-only history, pause/stop/reset, recognized goal and reflection risk language, keyboard journey tabs, all dashboard date filters, contact validation, legal dialogs, local downloads/printing, and pitch countdown/teleprompter controls. Layout checks at 320, 375, 768, 1024, 1440, and 1920 px found no page overflow or visible text below 12 px; visible controls met the 44 px target check. Automated WCAG A/AA checks at mobile and desktop reported no violations. This is prototype interface validation, not a clinical or complete manual accessibility evaluation.
-
-## Motion and transitions
-
-The motion layer uses native CSS and the Web Animations API; no animation dependency is required. Shared timing and interaction styles live in `src/styles/motion.css` and `src/styles/navigation-motion.css`. `src/hooks/useMotion.ts` provides one-time, staggered page reveals, cancellable native disclosure transitions, and discrete content transitions that preserve controls and draft state. Navigation has a measured sliding indicator and an accessible animated mobile menu; dashboard charts interpolate their geometry; demo and pitch state feedback remains restrained.
-
-The opening headline has a one-time entrance sequence in `src/styles/hero-motion.css`. `src/hooks/useSectionNavigation.ts` coordinates section links: nearby destinations use a bounded eased scroll, while distant destinations use a short fade over the live page. The fixed header and presentation controls stay available. Wheel, touch, pointer, and navigation-key input interrupt a transition; a newer navigation takes precedence. Page content and demo state are never copied or remounted for the effect.
-
-For a live review, select **Present** under **For investors** in the footer, then use the chapter selector or Previous/Next. The guide covers the overview, problem, product approach, live prototype, research vision, responsible design, evidence roadmap, business model, accelerator goals, and founder pitch. It does not advance automatically or require fullscreen. Use the **Exit guided presentation** control to close the guide.
-
-The hero presents an educational CBT-informed prototype, with one primary journey link and a secondary How it works link. Investor and presentation links live in the footer. The five-item primary navigation groups Evidence, Business, and Accelerator case under About. Hero labels and notes use at least 14 px text; `hero-card.css` styles the native range and collapsible explanation. The compact limits remain readable without truncation, and the urgent-support link opens the global Find A Helpline directory without assuming a visitor's country.
-
-System reduced-motion preferences apply on load and when changed while the site is open. Keyboard focus and deep links expose content immediately; critical validation and crisis messages remain immediate. Unsupported animation APIs fall back to usable native content. Print preparation clears transient motion styles so unrevealed sections are included.
+- Real iOS/Android hardware, Safari/Firefox, assistive-technology sessions, and long-duration GPU/battery behavior have not been validated.
+- Short isolated Chromium samples were near 60 FPS at desktop and mobile-width layouts. They do not establish real-phone FPS.
+- Optional GLB/Draco assets and a live GitHub Pages deployment need their own verification when enabled.
+- `npm audit --omit=dev` reports no production vulnerabilities. The full audit reports 12 moderate development-tool findings, chiefly transitive glob/minimatch issues in lint/audit tooling. No forced major-version replacement was used.
+- TypeScript 6 is pinned for the installed TypeScript-ESLint compatibility range. The preview server's `compression` patch override addresses its known advisory.

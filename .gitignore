@@ -4,3 +4,7 @@ dist/
 *.local
 artifacts/
 *.zip
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
