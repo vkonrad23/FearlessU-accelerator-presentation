@@ -34,11 +34,11 @@ const skyFragment = `
     return value;
   }
   void main() {
-    vec3 direction = normalize(vWorld);
+    vec3 direction = normalize(vWorld - cameraPosition);
     float horizon = 1.0 - smoothstep(-0.12, 0.62, direction.y);
-    float distanceToSun = distance(direction, normalize(uSun));
+    float distanceToSun = distance(direction, normalize(uSun - cameraPosition));
     float glow = exp(-distanceToSun * 3.8);
-    vec3 color = mix(uTop, uHorizon, horizon * (0.20 + glow * 0.77));
+    vec3 color = mix(uTop, uHorizon, horizon * (0.58 + glow * 0.40));
     color += vec3(0.52,0.30,0.10) * pow(glow, 2.0);
     vec2 cloudUV = direction.xz / max(0.12, direction.y + 0.26);
     float cloud = fbm(cloudUV * 2.6 + vec2(uTime, uTime * 0.23));

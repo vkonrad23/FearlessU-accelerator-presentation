@@ -4,6 +4,19 @@ import { ambientDelta, artworkOpacity, cameraCurveT, progressFromStops, safetyEn
 import { sceneConfig } from '../src/config/scene.ts';
 import { getHeroRecommendation } from '../src/data/demoJourneys.ts';
 import { isLocalModelPath } from '../src/lib/model-assets.ts';
+import { terrainHeight } from '../src/lib/terrain.ts';
+
+test('terrain is deterministic, continuous, and leaves the central valley open', () => {
+  for (let layer = 0; layer < 4; layer += 1) {
+    for (let x = -150; x <= 150; x += 3) {
+      const height = terrainHeight(x, -80, layer);
+      assert.ok(Number.isFinite(height));
+      assert.equal(height, terrainHeight(x, -80, layer));
+      assert.ok(Math.abs(height - terrainHeight(x + 0.001, -80, layer)) < 0.02);
+    }
+    assert.ok(terrainHeight(22, -80, layer) < -10);
+  }
+});
 
 test('camera visits all five scenes and holds exact keyframes', () => {
   sceneConfig.camera.keyframes.forEach((key, index) => {
@@ -106,4 +119,8 @@ test('reading colors retain AA contrast over the brightest possible backdrop', (
   }
   assert.ok(contrast(rgb(sceneConfig.colors.forest), rgb(sceneConfig.colors.cream)) >= 4.5);
   assert.ok(contrast(rgb(sceneConfig.colors.background), rgb(sceneConfig.colors.gold)) >= 4.5);
+  const brightestHero = rgb(sceneConfig.colors.background).map((value) => value * 0.76 + 0.24);
+  for (const color of [sceneConfig.colors.cream, sceneConfig.colors.gold]) {
+    assert.ok(contrast(rgb(color), brightestHero) >= 4.5, 'Transparent hero text needs a sufficient feathered scrim.');
+  }
 });

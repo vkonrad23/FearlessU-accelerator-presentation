@@ -47,11 +47,13 @@ svg { flex-shrink: 0; }
 .webgl-host, .webgl-host > div { position: absolute !important; inset: 0; width: 100%; height: 100%; }
 .webgl-host { opacity: 0; transition: opacity 1.4s ease; }
 [data-render-mode="webgl"] .webgl-host { opacity: 1; }
-.world-scrim { z-index: 1; background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 64%, transparent), color-mix(in srgb, var(--color-background) 25%, transparent) 52%, transparent 78%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 86%, transparent), transparent 26%); }
+.world-scrim { z-index: 1; background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 84%, transparent), color-mix(in srgb, var(--color-background) 76%, transparent) 48%, transparent 78%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 86%, transparent), transparent 26%); }
 main { position: relative; z-index: 2; }
 .hero-section { min-height: 100svh; display: flex; flex-direction: column; padding-top: 140px; padding-bottom: 27px; }
 .hero-main { position: relative; display: flex; align-items: center; flex: 1; min-height: 510px; padding-block: 28px 38px; }
-.hero-copy { width: 620px; max-width: 54%; padding: 34px 37px; border: 1px solid color-mix(in srgb, var(--color-cream) 13%, transparent); border-radius: 8px; background: linear-gradient(110deg, color-mix(in srgb, var(--color-background) 96%, transparent), color-mix(in srgb, var(--color-background) 92%, transparent) 72%, color-mix(in srgb, var(--color-background) 88%, transparent)); backdrop-filter: blur(8px); box-shadow: 0 20px 70px color-mix(in srgb, var(--color-background) 20%, transparent); }
+.hero-copy { width: 620px; max-width: 54%; padding: 34px 37px; border: 1px solid transparent; background: transparent; }
+.hero-copy h1 { text-shadow: 0 3px 28px color-mix(in srgb, var(--color-background) 45%, transparent); }
+.hero-copy .hero-description { color: var(--color-cream); text-shadow: 0 1px 10px var(--color-background); }
 .eyebrow { display: flex; align-items: center; gap: 11px; margin: 0 0 26px; color: var(--color-gold); font-size: 11px; letter-spacing: 0.16em; line-height: 1.7; text-transform: uppercase; font-weight: 500; }
 .small-orbit { display: inline-block; width: 16px; height: 16px; border: 1px solid color-mix(in srgb, var(--color-gold) 50%, transparent); border-radius: 50%; position: relative; }
 .small-orbit::after { content: ""; position: absolute; inset: 5px; background: var(--color-gold); border-radius: 50%; }
@@ -207,6 +209,7 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
 
 @media (max-width: 1100px) {
   .page-width { width: calc(100% - 64px); }
+  .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 84%, transparent), color-mix(in srgb, var(--color-background) 76%, transparent) 65%, transparent 95%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 86%, transparent), transparent 26%); }
   .desktop-nav { gap: 23px; margin-right: 10px; }
   .nav-shell { gap: 15px; }
   .hero-copy { max-width: 65%; padding: 28px; }
@@ -257,7 +260,7 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
   .nav-actions { gap: 1px; }
   .hero-section { min-height: 100svh; padding-top: 139px; padding-bottom: 20px; }
   .hero-main { display: block; min-height: 0; padding: 24px 0 0; }
-  .hero-copy { width: 100%; max-width: none; padding: 25px 19px; backdrop-filter: blur(5px); }
+  .hero-copy { width: 100%; max-width: none; padding: 25px 19px; }
   .hero-eyebrow { font-size: 9px; letter-spacing: 0.12em; margin-bottom: 23px; gap: 8px; }
   h1 { font-size: clamp(54px, 14.7vw, 88px); line-height: 1; letter-spacing: -0.035em; margin-bottom: 25px; }
   .hero-description { font-size: 14px; line-height: 1.9; max-width: 370px; margin-bottom: 20px; }
@@ -274,7 +277,7 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
   .trust-item > svg { width: 17px; height: 17px; }
   .trust-item strong { font-size: 14px; margin: 0; line-height: 1.5; }
   .world-layer { top: 112px; height: calc(100svh - 112px); }
-  .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 42%, transparent), transparent), linear-gradient(0deg, var(--color-background), transparent 70%); }
+  .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 82%, transparent), color-mix(in srgb, var(--color-background) 76%, transparent)), linear-gradient(0deg, var(--color-background), transparent 70%); }
   .photo-poster { object-position: 63% center; }
   .reading-panel { padding: 26px 21px; max-width: 100%; }
   .reading-panel h2 { font-size: 43px; }

@@ -1,45 +1,46 @@
 import { useEffect, useMemo } from 'react';
 import { Color, Float32BufferAttribute, PlaneGeometry } from 'three';
 import { sceneConfig } from '@/config/scene';
-import { clamp, seededRandom } from '@/lib/scene-math';
+import { clamp } from '@/lib/scene-math';
+import { terrainHeight } from '@/lib/terrain';
+import { useJourneyStore } from '@/store/journey';
 
 function Mountain({ layer }: { layer: number }) {
+  const quality = useJourneyStore((state) => state.quality);
+  const segments = quality === 'desktop' ? sceneConfig.world.mountainSegments : quality === 'mobile' ? 64 : 40;
   const geometry = useMemo(() => {
-    const random = seededRandom(sceneConfig.world.seed + layer * 100);
-    const mesh = new PlaneGeometry(300, 110, sceneConfig.world.mountainSegments, 25);
+    const mesh = new PlaneGeometry(300, 110, segments, Math.min(segments / 2, sceneConfig.world.mountainDepthSegments));
     mesh.rotateX(-Math.PI / 2);
     const position = mesh.attributes.position;
     const centerZ = -145 + layer * 43;
-    const height = 33 - layer * 3;
     for (let i = 0; i < position.count; i += 1) {
       const x = position.getX(i);
       const z = position.getZ(i);
-      const valley = Math.pow(clamp(Math.abs(x - 22) / 73), 0.65);
-      const ridge = Math.sin(x * 0.041 + layer * 2) * 0.3 + Math.sin(x * 0.117 + z * 0.09) * 0.15;
-      const peak = Math.sin(x * 0.19 + z * 0.14) * 0.11 + random() * 0.14;
-      const depth = 0.65 + Math.cos(z * 0.043) * 0.35;
-      position.setXYZ(i, x, -12 - layer * 4 + (valley + ridge + peak) * height * depth, z + centerZ);
+      position.setXYZ(i, x, terrainHeight(x, z + centerZ, layer), z + centerZ);
     }
-    const flat = mesh.toNonIndexed();
-    mesh.dispose();
-    flat.computeVertexNormals();
+    mesh.computeVertexNormals();
     const colors = [];
     const base = new Color(sceneConfig.colors.mountains[layer]);
-    const tint = new Color(sceneConfig.colors.gold);
-    const points = flat.attributes.position;
-    for (let i = 0; i < points.count; i += 3) {
-      const color = base.clone().lerp(tint, clamp((points.getY(i) + 8) / 70) * 0.26).multiplyScalar(0.85 + random() * 0.26);
-      for (let vertex = 0; vertex < 3; vertex += 1) colors.push(color.r, color.g, color.b);
+    const rock = new Color(sceneConfig.colors.rock);
+    const snow = new Color(sceneConfig.colors.snow);
+    const color = new Color();
+    for (let i = 0; i < position.count; i += 1) {
+      const elevation = position.getY(i);
+      const slope = 1 - Math.abs(mesh.attributes.normal.getY(i));
+      color.copy(base).lerp(rock, clamp(slope * 1.8 + (elevation - 12) / 65));
+      color.lerp(snow, clamp((elevation - 29) / 12) * clamp(1 - slope * 2));
+      color.multiplyScalar(0.9 + clamp((elevation + 16) / 55) * 0.15);
+      colors.push(color.r, color.g, color.b);
     }
-    flat.setAttribute('color', new Float32BufferAttribute(colors, 3));
-    return flat;
-  }, [layer]);
+    mesh.setAttribute('color', new Float32BufferAttribute(colors, 3));
+    return mesh;
+  }, [layer, segments]);
 
   useEffect(() => () => geometry.dispose(), [geometry]);
 
   return (
     <mesh geometry={geometry}>
-      <meshStandardMaterial vertexColors roughness={1} flatShading metalness={0.03} />
+      <meshStandardMaterial vertexColors roughness={0.96} metalness={0} />
     </mesh>
   );
 }

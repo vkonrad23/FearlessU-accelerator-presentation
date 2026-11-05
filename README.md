@@ -71,6 +71,8 @@ Legacy presentation components, data, `src/App.tsx`, `src/main.tsx`, `vite.confi
 - The original artwork stays visible until landscape shaders are ready, including after a fast jump to a later chapter. The landscape stays mounted for smooth backward navigation.
 - Expensive transmission and postprocessing activate when the visitor reaches the procedural journey, not over the fully opaque hero image.
 - Six desktop glass cards share one small refraction buffer. Stairs use instancing; particles use one point-cloud draw call.
+- The hero text sits directly over the artwork, without a panel background or blur. A feathered scrim preserves contrast, including a wider tablet treatment.
+- Ridged terrain uses smooth normals and elevation/slope-based rock and snow colors. Beveled stone treads and glass reflect a small, locally generated environment map, captured once rather than every frame. No HDR download is needed.
 - Desktop: DPR capped at 1.5, 1,200 particles, transmission, subtle bloom/DOF/vignette/grain.
 - Mobile: DPR capped at 1.15, 320 particles, simpler glass, no depth of field.
 - Low tier: DPR capped at 0.85, 160 particles, no postprocessing or transmission. The absolute configurable DPR ceiling is 2.
@@ -107,7 +109,7 @@ Any future backend, model integration, or research involving therapeutic interve
 
 All essential copy and controls are semantic HTML, outside the decorative canvas. The site includes a skip link, visible focus, roving Arrow/Home/End feature tabs, native range/select controls, a native modal dialog, focus restoration, and live result announcements. Trust labels are at least 14 px and disclaimer chips at least 13 px.
 
-Reduced-motion preferences apply both on load and when changed. Gradients sit behind conservatively opaque reading panels; a palette test checks AA text contrast even over a white backdrop. Automated scores are not a substitute for a complete screen-reader or accessibility-conformance review.
+Reduced-motion preferences apply both on load and when changed. Reading panels remain conservatively opaque; the transparent hero uses a feathered scrim instead. Palette tests check AA text contrast even over a white backdrop. Automated scores are not a substitute for a complete screen-reader or accessibility-conformance review.
 
 ## GitHub Pages
 
@@ -123,12 +125,12 @@ The workflow derives the name from the destination repository, runs tests and th
 
 See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene-math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
 
-The final production lab run reached desktop performance **97**, accessibility **100**, best practices **100**, SEO **100**, and **CLS 0**. Initial JavaScript was **198.3 kB gzip**, below 250 kB. Earlier runs ranged from 60 to 92 as host resources varied; hidden landscape work was subsequently deferred. These are local lab results, not field guarantees; see the verification record in `PLAN.md`.
+The transparency/3D refinement lab run reached desktop performance **89**, accessibility **100**, best practices **100**, SEO **100**, and **CLS 0**. Initial JavaScript is **198.3 kB gzip** (198.5 kB with the Pages prefix), below 250 kB. All **12 tests**, root/prefixed builds, five responsive widths, landscape stops, and static fallback checks passed. The earlier release scored 97 on a faster host benchmark; these are local lab results, not field guarantees. See `PLAN.md` for the measurement sequence and limits.
 
 Remaining limits:
 
 - Real iOS/Android hardware, Safari/Firefox, assistive-technology sessions, and long-duration GPU/battery behavior have not been validated.
-- Short isolated Chromium samples were near 60 FPS at desktop and mobile-width layouts. They do not establish real-phone FPS.
+- Short desktop Chromium samples during this refinement ranged from 48 to 61 FPS. They do not establish sustained or real-phone FPS.
 - Optional GLB/Draco assets and a live GitHub Pages deployment need their own verification when enabled.
 - `npm audit --omit=dev` reports no production vulnerabilities. The full audit reports 12 moderate development-tool findings, chiefly transitive glob/minimatch issues in lint/audit tooling. No forced major-version replacement was used.
 - TypeScript 6 is pinned for the installed TypeScript-ESLint compatibility range. The preview server's `compression` patch override addresses its known advisory.

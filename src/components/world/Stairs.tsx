@@ -1,4 +1,5 @@
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { Color, InstancedMesh, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { sceneConfig } from '@/config/scene';
@@ -16,6 +17,8 @@ export function Stairs() {
     new Color(),
   ], []);
   const { stairCount, stairWidth, stairRun } = sceneConfig.world;
+  const tread = useMemo(() => new RoundedBoxGeometry(stairWidth, 0.3, stairRun * 0.95, 1, 0.065), [stairWidth, stairRun]);
+  useEffect(() => () => tread.dispose(), [tread]);
 
   useLayoutEffect(() => {
     const transform = new Object3D();
@@ -52,9 +55,8 @@ export function Stairs() {
 
   return (
     <group>
-      <instancedMesh ref={steps} args={[undefined, undefined, stairCount]}>
-        <boxGeometry args={[stairWidth, 0.3, stairRun * 0.95]} />
-        <meshStandardMaterial color={sceneConfig.colors.forest} metalness={0.46} roughness={0.3} emissive={sceneConfig.colors.gold} emissiveIntensity={0.09} />
+      <instancedMesh ref={steps} args={[tread, undefined, stairCount]}>
+        <meshPhysicalMaterial color={sceneConfig.colors.stone} metalness={0.18} roughness={0.38} clearcoat={0.3} clearcoatRoughness={0.3} envMapIntensity={0.8} />
       </instancedMesh>
       <instancedMesh ref={edges} args={[undefined, undefined, stairCount]}>
         <boxGeometry args={[stairWidth, 0.038, 0.055]} />
