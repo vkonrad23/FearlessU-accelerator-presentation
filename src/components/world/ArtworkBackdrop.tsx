@@ -1,22 +1,26 @@
-import { useFrame } from '@react-three/fiber';
+import { useFrame, useThree } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { useMemo, useRef } from 'react';
-import { MathUtils, Mesh, PerspectiveCamera, ShaderMaterial, SRGBColorSpace, Vector2, Vector3 } from 'three';
+import { MathUtils, Mesh, PerspectiveCamera, ShaderMaterial, SRGBColorSpace, Vector2, Vector3, Vector4 } from 'three';
 import { sceneConfig } from '@/config/scene';
 import { artworkOpacity } from '@/lib/scene-math';
+import { artworkCover } from '@/lib/artwork-math';
 import { useJourneyStore } from '@/store/journey';
 import { usePointer } from './usePointer';
 
 const vertexShader = `
   varying vec2 vUv;
   uniform vec2 uPointer;
+  uniform vec2 uCover;
+  uniform vec2 uOffset;
+  uniform vec4 uSubject;
   uniform float uDepth;
   void main() {
-    vUv = uv;
+    vUv = uv * uCover + uOffset;
     vec3 transformed = position;
-    float mountainDepth = pow(1.0 - uv.y, 2.0) * 0.6;
-    float figureDepth = exp(-pow((uv.x - 0.27) * 7.0, 2.0)) * (1.0 - uv.y) * 0.4;
-    float depth = mountainDepth + figureDepth;
+    float foreground = pow(1.0 - vUv.y, 2.35);
+    float subject = 1.0 - smoothstep(0.72, 1.0, length((vUv - uSubject.xy) / uSubject.zw));
+    float depth = mix(foreground, 0.42, subject);
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
@@ -25,17 +29,17 @@ const vertexShader = `
 const fragmentShader = `
   varying vec2 vUv;
   uniform sampler2D uImage;
-  uniform vec2 uCover;
   uniform float uOpacity;
   void main() {
-    vec2 uv = (vUv - 0.5) * uCover + 0.5;
-    vec4 image = texture2D(uImage, uv);
+    vec4 image = texture2D(uImage, vUv);
     gl_FragColor = vec4(image.rgb, uOpacity);
     #include <colorspace_fragment>
   }
 `;
 
 export function ArtworkBackdrop() {
+  const size = useThree((state) => state.size);
+  const framing = useMemo(() => artworkCover(size.width, size.height), [size.width, size.height]);
   const image = useTexture(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`, (texture) => {
     texture.colorSpace = SRGBColorSpace;
   });
@@ -48,6 +52,8 @@ export function ArtworkBackdrop() {
   const uniforms = useMemo(() => ({
     uImage: { value: image },
     uCover: { value: new Vector2(1, 1) },
+    uOffset: { value: new Vector2() },
+    uSubject: { value: new Vector4(...sceneConfig.artwork.subject) },
     uPointer: { value: new Vector2() },
     uDepth: { value: sceneConfig.artwork.depth },
     uOpacity: { value: 1 },
@@ -71,10 +77,8 @@ export function ArtworkBackdrop() {
     camera.getWorldDirection(direction);
     mesh.current.position.copy(camera.position).addScaledVector(direction, distance);
     mesh.current.quaternion.copy(camera.quaternion);
-    material.current.uniforms.uCover.value.set(
-      Math.min(1, aspect / sceneConfig.artwork.aspect),
-      Math.min(1, sceneConfig.artwork.aspect / aspect),
-    );
+    material.current.uniforms.uCover.value.set(framing.coverX, framing.coverY);
+    material.current.uniforms.uOffset.value.set(framing.offsetX, framing.offsetY);
     if (!motionPaused) {
       pointerTarget.set(pointer.current.x, pointer.current.y).multiplyScalar(sceneConfig.artwork.parallax);
       material.current.uniforms.uPointer.value.lerp(pointerTarget, 1 - Math.exp(-Math.min(delta, 0.05) * sceneConfig.motion.parallaxLerp));

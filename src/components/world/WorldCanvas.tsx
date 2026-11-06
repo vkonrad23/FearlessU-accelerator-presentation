@@ -28,7 +28,9 @@ export default function WorldCanvas() {
   const visible = useJourneyStore((state) => state.visible);
   const paused = useJourneyStore((state) => state.motionPaused);
   const mode = useJourneyStore((state) => state.mode);
+  const landscapeReady = useJourneyStore((state) => state.landscapeReady);
   const profile = sceneConfig.quality[quality];
+  const maxDpr = landscapeReady ? sceneConfig.quality.maxDpr : sceneConfig.quality.artworkDpr;
 
   useEffect(() => {
     const element = host.current;
@@ -52,7 +54,7 @@ export default function WorldCanvas() {
       <Canvas
         aria-hidden="true"
         tabIndex={-1}
-        dpr={[0.75, Math.min(profile.dpr, sceneConfig.quality.maxDpr)]}
+        dpr={[0.75, Math.min(profile.dpr, maxDpr, sceneConfig.quality.maxDpr)]}
         camera={{ position: [...sceneConfig.camera.keyframes[0].position], fov: sceneConfig.camera.fov, near: sceneConfig.camera.near, far: sceneConfig.camera.far }}
         gl={{ antialias: quality !== 'low', alpha: true, powerPreference: 'high-performance', toneMapping: ACESFilmicToneMapping, outputColorSpace: SRGBColorSpace }}
         frameloop={visible && mode === 'webgl' ? (paused ? 'demand' : 'always') : 'never'}

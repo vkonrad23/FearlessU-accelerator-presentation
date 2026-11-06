@@ -99,7 +99,8 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
 .poster-haze { position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, color-mix(in srgb, var(--color-gold) 8%, transparent) 35%, transparent 65%); }
 .poster-stairs { position: absolute; left: 68%; bottom: 12%; width: 24%; height: 48%; transform: rotate(-6deg); }
 .poster-stairs span { position: absolute; bottom: calc(var(--step) * 2.3%); left: calc(var(--step) * 0.7%); width: calc(90% - var(--step) * 2%); height: 12px; transform: perspective(200px) rotateX(53deg) rotateZ(-9deg); background: color-mix(in srgb, var(--color-forest) 90%, var(--color-gold)); border-bottom: 1px solid var(--color-gold); box-shadow: 0 2px 6px color-mix(in srgb, var(--color-gold) 18%, transparent); }
-.photo-poster { object-fit: cover; object-position: center; transition: opacity 800ms ease; }
+.photo-poster { object-fit: cover; object-position: var(--artwork-focal-desktop); transform: scale(1.04) translate3d(0, 0, 0); transform-origin: 50% 44%; transition: opacity 800ms ease, transform 900ms ease; }
+.world-poster::after { position: absolute; z-index: 1; content: ''; inset: 0; pointer-events: none; background: linear-gradient(115deg, rgba(5, 16, 23, .42), transparent 42%, rgba(245, 196, 112, .12) 72%, rgba(5, 16, 23, .24)); mix-blend-mode: multiply; }
 .journey-shell:is([data-chapter="1"], [data-chapter="2"], [data-chapter="3"], [data-chapter="4"]) .photo-poster { opacity: 0; }
 .journey-shell[data-chapter="3"] .world-poster { background: radial-gradient(ellipse at 76% 35%, var(--color-skyCoolHorizon), transparent 55%), var(--color-background); }
 
@@ -278,7 +279,7 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
   .trust-item strong { font-size: 14px; margin: 0; line-height: 1.5; }
   .world-layer { top: 112px; height: calc(100svh - 112px); }
   .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 82%, transparent), color-mix(in srgb, var(--color-background) 76%, transparent)), linear-gradient(0deg, var(--color-background), transparent 70%); }
-  .photo-poster { object-position: 63% center; }
+  .photo-poster { object-position: var(--artwork-focal-mobile); }
   .reading-panel { padding: 26px 21px; max-width: 100%; }
   .reading-panel h2 { font-size: 43px; }
   .reading-panel .eyebrow { font-size: 9px; letter-spacing: 0.1em; }

@@ -2,7 +2,7 @@
 
 A scroll-driven, five-scene marketing website for an **early-stage mental wellness concept**. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
 
-**The original artwork is preserved.** `public/fearlessu-reference-hero.png` remains unchanged. Its optimized WebP is rendered as a depth-displaced, parallax image plane, with real 3D particles and glass. This is a 2.5D treatment of the supplied illustration, not a claim to have reconstructed every object in the artwork. Scrolling blends it into a continuous, procedural valley, staircase, and sunrise.
+**The supplied storm-to-sunrise artwork is the current hero.** `public/fearlessu-sunrise-reference.jpg` preserves the new image byte for byte; `public/fearlessu-sunrise.webp` is its high-quality, 226.8 kB display version at the original 1024×576 resolution. Natural color is retained without added glow, fake detail, or animated lightning. A restrained, source-aligned depth treatment separates the standing figure and foreground from the distance. This is 2.5D parallax, not a complete 3D reconstruction. Scrolling blends into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png` remains unchanged as a reference.
 
 ## Run locally
 
@@ -72,6 +72,8 @@ Legacy presentation components, data, `src/App.tsx`, `src/main.tsx`, `vite.confi
 - Expensive transmission and postprocessing activate when the visitor reaches the procedural journey, not over the fully opaque hero image.
 - Six desktop glass cards share one small refraction buffer. Stairs use instancing; particles use one point-cloud draw call.
 - The hero text sits directly over the artwork, without a panel background or blur. A feathered scrim preserves contrast, including a wider tablet treatment.
+- The static poster and WebGL image share configurable focal points. Portrait framing keeps the figure and sunrise visible; depth is calculated in source-image coordinates so it does not shift onto unrelated objects when the viewport changes.
+- The artwork-only canvas starts at DPR ≤1, avoiding oversized render buffers for the supplied 1024×576 image. The landscape restores the selected quality tier's DPR once it is ready. HTML text is unaffected.
 - Ridged terrain uses smooth normals and elevation/slope-based rock and snow colors. Beveled stone treads and glass reflect a small, locally generated environment map, captured once rather than every frame. No HDR download is needed.
 - Desktop: DPR capped at 1.5, 1,200 particles, transmission, subtle bloom/DOF/vignette/grain.
 - Mobile: DPR capped at 1.15, 320 particles, simpler glass, no depth of field.
