@@ -181,7 +181,7 @@ export function FearlessHeroScene() {
       <div className="hero-atmosphere hero-clouds" aria-hidden="true" />
       <div className="hero-atmosphere hero-rays" aria-hidden="true" />
       <div className="hero-reference-wrap" aria-hidden="true">
-        <img className="hero-reference-art" src={`${import.meta.env.BASE_URL}fearlessu-reference-hero.png`} alt="" loading="eager" decoding="async" fetchPriority="high" />
+        <img className="hero-reference-art" src={`${import.meta.env.BASE_URL}fearlessu-photo.png`} alt="" loading="eager" decoding="async" fetchPriority="high" />
       </div>
       <div className="hero-art-vignette" aria-hidden="true" />
       <div className="hero-holograms" aria-hidden="true">
