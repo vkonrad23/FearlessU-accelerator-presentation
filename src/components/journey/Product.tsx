@@ -5,6 +5,7 @@ import { useRef, type KeyboardEvent } from 'react';
 import { featureLabels } from '@/config/scene';
 import { capabilities } from '@/data/content';
 import { useJourneyStore } from '@/store/journey';
+import { useLanguage } from '@/i18n/LanguageProvider';
 
 const features = [
   { icon: Sparkles, description: capabilities[2].text, boundary: capabilities[2].limit },
@@ -16,6 +17,7 @@ const features = [
 ];
 
 export function Product() {
+  const { t } = useLanguage();
   const selected = useJourneyStore((state) => state.selectedFeature);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
   const onKeyDown = (event: KeyboardEvent, index: number) => {
@@ -33,10 +35,10 @@ export function Product() {
   return (
     <section id="product" className="content-section page-width product-section" data-camera-stop="0.22" aria-labelledby="product-title">
       <div className="reading-panel">
-        <p className="eyebrow"><span className="chapter-number">02</span>The product thesis</p>
-        <h2 id="product-title">Personal to the goal.<br /><em>Structured by design.</em></h2>
-        <p className="section-description">The vision combines generative AI personalization of CBT-informed support with research into original intervention ideas. This prototype demonstrates a bounded practice-and-reflection loop using local rules.</p>
-        <div className="feature-tabs" role="tablist" aria-label="Explore the six features">
+        <p className="eyebrow"><span className="chapter-number">02</span>{t('The product thesis')}</p>
+        <h2 id="product-title">{t('Personal to the goal.')}<br /><em>{t('Structured by design.')}</em></h2>
+        <p className="section-description">{t('The vision combines generative AI personalization of CBT-informed support with research into original intervention ideas. This prototype demonstrates a bounded practice-and-reflection loop using local rules.')}</p>
+        <div className="feature-tabs" role="tablist" aria-label={t('Explore the six features')}>
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -47,20 +49,20 @@ export function Product() {
                 onClick={() => useJourneyStore.setState({ selectedFeature: index })}
                 onKeyDown={(event) => onKeyDown(event, index)}
               >
-                <Icon size={17} strokeWidth={1.5} aria-hidden="true" />{featureLabels[index]}
+                <Icon size={17} strokeWidth={1.5} aria-hidden="true" />{t(featureLabels[index])}
               </button>
             );
           })}
         </div>
         {features.map((feature, index) => (
           <div className="feature-panel" key={featureLabels[index]} id={`feature-panel-${index}`} role="tabpanel" aria-labelledby={`feature-tab-${index}`} hidden={selected !== index} tabIndex={0}>
-            <p>{feature.description}</p>
-            <span>{feature.boundary}</span>
+            <p>{t(feature.description)}</p>
+            <span>{t(feature.boundary)}</span>
           </div>
         ))}
-        <a href="#how-it-works" className="text-link">How it works <ArrowUpRight size={17} aria-hidden="true" /></a>
+        <a href="#how-it-works" className="text-link">{t('How it works')} <ArrowUpRight size={17} aria-hidden="true" /></a>
       </div>
-      <p className="landscape-note" aria-hidden="true"><span />A structured journey.<br /><em>A pace you control.</em></p>
+      <p className="landscape-note" aria-hidden="true"><span />{t('A structured journey.')}<br /><em>{t('A pace you control.')}</em></p>
     </section>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import type { CSSProperties, ReactNode } from 'react';
 import { sceneConfig } from '@/config/scene';
+import { LanguageProvider } from '@/i18n/LanguageProvider';
 import './globals.css';
 
 const serif = localFont({
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
 
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`} style={colorVariables}>
-      <body>{children}</body>
+      <body><LanguageProvider>{children}</LanguageProvider></body>
     </html>
   );
 }
