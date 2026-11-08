@@ -22,19 +22,23 @@ const vertexShader = `
     float foreground = pow(1.0 - vUv.y, 2.35);
     float subject = 1.0 - smoothstep(0.72, 1.0, length((vUv - uSubject.xy) / uSubject.zw));
     float depth = mix(foreground, 0.42, subject);
-    float capeRegion = smoothstep(0.1, 0.17, vUv.x)
-      * (1.0 - smoothstep(0.38, 0.47, vUv.x))
-      * smoothstep(0.2, 0.27, vUv.y)
-      * (1.0 - smoothstep(0.47, 0.56, vUv.y));
-    float capeTrail = smoothstep(0.12, 0.28, vUv.x)
-      * (1.0 - smoothstep(0.36, 0.46, vUv.x))
-      * smoothstep(0.27, 0.34, vUv.y)
-      * (1.0 - smoothstep(0.5, 0.58, vUv.y));
-    float wind = sin(uTime * 1.7 + vUv.x * 17.0 + vUv.y * 8.0)
-      + 0.45 * sin(uTime * 2.6 - vUv.x * 31.0);
-    float lift = wind * capeRegion * 0.012 + sin(uTime * 1.15 + vUv.y * 14.0) * capeTrail * 0.006;
-    transformed.x += lift * (1.0 - vUv.x);
-    transformed.y += lift * 0.5;
+    float capeRegion = smoothstep(0.35, 0.39, vUv.x)
+      * (1.0 - smoothstep(0.49, 0.52, vUv.x))
+      * smoothstep(0.53, 0.58, vUv.y)
+      * (1.0 - smoothstep(0.72, 0.76, vUv.y));
+    float capeTrail = smoothstep(0.35, 0.39, vUv.x)
+      * (1.0 - smoothstep(0.47, 0.5, vUv.x))
+      * smoothstep(0.56, 0.6, vUv.y)
+      * (1.0 - smoothstep(0.68, 0.72, vUv.y));
+    float trailingEdge = clamp((0.5 - vUv.x) / 0.16, 0.0, 1.0);
+    float windWave = sin(uTime * 1.35 - trailingEdge * 8.0 + (vUv.y - 0.66) * 20.0);
+    float flutter = sin(uTime * 2.15 - trailingEdge * 14.0 + vUv.y * 28.0);
+    float gust = 0.78 + 0.22 * sin(uTime * 0.52 + 0.7);
+    float billow = capeRegion * gust * (windWave * 0.019 + flutter * 0.004);
+    float hemLift = capeTrail * gust * (0.008 + trailingEdge * 0.012) * (0.5 + 0.5 * windWave);
+    transformed.x -= billow * (0.35 + trailingEdge * 0.65);
+    transformed.y += billow * 0.62 + hemLift;
+    transformed.z += capeRegion * (0.006 + trailingEdge * 0.016) * windWave;
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
@@ -105,7 +109,7 @@ export function ArtworkBackdrop() {
 
   return (
     <mesh ref={mesh} renderOrder={5} frustumCulled={false}>
-      <planeGeometry args={[2, 2, 80, 48]} />
+      <planeGeometry args={[2, 2, 128, 80]} />
       <shaderMaterial ref={material} vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} transparent depthTest={false} depthWrite={false} toneMapped={false} />
     </mesh>
   );
