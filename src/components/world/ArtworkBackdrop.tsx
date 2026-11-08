@@ -3,7 +3,7 @@ import { useTexture } from '@react-three/drei';
 import { useMemo, useRef } from 'react';
 import { MathUtils, Mesh, PerspectiveCamera, ShaderMaterial, SRGBColorSpace, Vector2, Vector3, Vector4 } from 'three';
 import { sceneConfig } from '@/config/scene';
-import { artworkOpacity } from '@/lib/scene-math';
+import { ambientDelta, artworkOpacity } from '@/lib/scene-math';
 import { artworkCover } from '@/lib/artwork-math';
 import { useJourneyStore } from '@/store/journey';
 import { usePointer } from './usePointer';
@@ -36,15 +36,18 @@ const vertexShader = `
     float capeTrail = capeRegion
       * smoothstep(0.65, 0.67, vUv.y)
       * (1.0 - smoothstep(0.71, 0.74, vUv.y));
-    float trailingEdge = 1.0 - smoothstep(0.4, 0.49, vUv.x);
-    float windWave = sin(uTime * 1.35 - trailingEdge * 8.0 + (vUv.y - 0.72) * 20.0);
-    float flutter = sin(uTime * 2.15 - trailingEdge * 14.0 + vUv.y * 28.0);
-    float gust = 0.78 + 0.22 * sin(uTime * 0.52 + 0.7);
-    float billow = capeRegion * trailingEdge * gust * (windWave * 0.019 + flutter * 0.004);
-    float hemLift = capeTrail * trailingEdge * gust * (0.008 + trailingEdge * 0.012) * (0.5 + 0.5 * windWave);
+    // Keep the cape attached at the shoulder; let the outer tail carry the wind.
+    float trailingEdge = 1.0 - smoothstep(0.39, 0.46, vUv.x);
+    float clothWeight = trailingEdge * trailingEdge;
+    float windWave = sin(uTime * 0.92 - trailingEdge * 5.6 + (vUv.y - 0.72) * 10.5);
+    float foldWave = sin(uTime * 1.38 - trailingEdge * 10.2 + (vUv.y - 0.72) * 18.0);
+    float flutter = sin(uTime * 2.05 - trailingEdge * 15.0 + vUv.y * 27.0);
+    float gust = 0.76 + 0.15 * sin(uTime * 0.29 + 0.7) + 0.09 * sin(uTime * 0.47 + 2.1);
+    float billow = capeRegion * clothWeight * gust * (windWave * 0.016 + foldWave * 0.0035 + flutter * 0.0015);
+    float hemLift = capeTrail * clothWeight * gust * (0.006 + trailingEdge * 0.01) * (0.5 + 0.5 * windWave);
     transformed.x -= billow * (0.35 + trailingEdge * 0.65);
     transformed.y += billow * 0.62 + hemLift;
-    transformed.z += capeRegion * trailingEdge * (0.006 + trailingEdge * 0.016) * windWave;
+    transformed.z += capeRegion * clothWeight * (0.005 + trailingEdge * 0.012) * windWave;
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
@@ -63,7 +66,11 @@ const fragmentShader = `
 
 export function ArtworkBackdrop() {
   const size = useThree((state) => state.size);
+  const quality = useJourneyStore((state) => state.quality);
   const framing = useMemo(() => artworkCover(size.width, size.height), [size.width, size.height]);
+  const segments = useMemo<[number, number]>(() => quality === 'desktop'
+    ? [320, 220]
+    : quality === 'mobile' ? [224, 160] : [160, 112], [quality]);
   const image = useTexture(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`, (texture) => {
     texture.colorSpace = SRGBColorSpace;
   });
@@ -86,9 +93,9 @@ export function ArtworkBackdrop() {
 
   useFrame(({ camera, size }, delta) => {
     if (!mesh.current || !material.current) return;
-    const { progress, motionPaused, intro, landscapeReady } = useJourneyStore.getState();
-    if (!motionPaused && material.current) {
-      material.current.uniforms.uTime.value += delta * sceneConfig.motion.animationSpeed;
+    const { progress, motionPaused, intro, landscapeReady, visible } = useJourneyStore.getState();
+    if (material.current) {
+      material.current.uniforms.uTime.value += ambientDelta(delta, progress, motionPaused, visible);
     }
     const ready = landscapeReady ? 1 : 0;
     landscapeBlend.current = motionPaused ? ready
@@ -115,7 +122,7 @@ export function ArtworkBackdrop() {
 
   return (
     <mesh ref={mesh} renderOrder={5} frustumCulled={false}>
-      <planeGeometry args={[2, 2, 128, 80]} />
+      <planeGeometry args={[2, 2, ...segments]} />
       <shaderMaterial ref={material} vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} transparent depthTest={false} depthWrite={false} toneMapped={false} />
     </mesh>
   );
