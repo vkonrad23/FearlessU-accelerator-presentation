@@ -3,7 +3,7 @@ import { AdditiveBlending, BackSide, Color, Group, ShaderMaterial, Vector3 } fro
 import { useMemo, useRef } from 'react';
 import { sceneConfig } from '@/config/scene';
 import { useJourneyStore } from '@/store/journey';
-import { ambientDelta, safetyEnvelope } from '@/lib/scene-math';
+import { ambientDelta, clamp, safetyEnvelope, smoothstep } from '@/lib/scene-math';
 
 const vertexShader = `
   varying vec3 vWorld;
@@ -74,6 +74,9 @@ const sunFragment = `
 export function Sky() {
   const material = useRef<ShaderMaterial>(null);
   const sun = useRef<Group>(null);
+  const sunPosition = useRef(new Vector3(...sceneConfig.world.sunPosition));
+  const sunStart = useMemo(() => new Vector3(44, -13, -124), []);
+  const sunEnd = useMemo(() => new Vector3(...sceneConfig.world.sunPosition), []);
   const [warmHorizon, coolHorizon] = useMemo(() => [
     new Color(sceneConfig.colors.skyHorizon), new Color(sceneConfig.colors.skyCoolHorizon),
   ], []);
@@ -88,11 +91,19 @@ export function Sky() {
 
   useFrame(({ camera }, delta) => {
     const { progress, motionPaused, visible } = useJourneyStore.getState();
+    const rise = smoothstep(clamp((progress - 0.08) / 0.72));
+    const easedRise = rise;
+    sunPosition.current.lerpVectors(sunStart, sunEnd, easedRise);
     if (material.current) {
       material.current.uniforms.uTime.value += ambientDelta(delta, progress, motionPaused, visible) * sceneConfig.world.cloudSpeed;
       material.current.uniforms.uHorizon.value.copy(warmHorizon).lerp(coolHorizon, safetyEnvelope(progress) * 0.8);
+      material.current.uniforms.uSun.value.copy(sunPosition.current);
     }
-    sun.current?.quaternion.copy(camera.quaternion);
+    if (sun.current) {
+      sun.current.position.copy(sunPosition.current);
+      sun.current.quaternion.copy(camera.quaternion);
+      sun.current.scale.setScalar(0.82 + easedRise * 0.18);
+    }
   });
 
   return (
