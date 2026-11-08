@@ -26,17 +26,18 @@ const vertexShader = `
     // Color-key the red fabric inside its source-image bounds so the man stays rigid.
     vec3 fabricColor = texture2D(uImage, vUv).rgb;
     float capeRed = min(fabricColor.r - fabricColor.g, fabricColor.r - fabricColor.b);
-    float capePigment = smoothstep(0.035, 0.11, capeRed);
-    float capeBounds = smoothstep(0.36, 0.39, vUv.x)
-      * (1.0 - smoothstep(0.47, 0.49, vUv.x))
-      * smoothstep(0.62, 0.64, vUv.y)
-      * (1.0 - smoothstep(0.75, 0.78, vUv.y));
+    float capeHue = 1.0 - smoothstep(0.0, 0.018, max(fabricColor.g - fabricColor.b, 0.0));
+    float capePigment = smoothstep(0.02, 0.1, capeRed) * capeHue;
+    float capeBounds = smoothstep(0.38, 0.4, vUv.x)
+      * (1.0 - smoothstep(0.48, 0.5, vUv.x))
+      * smoothstep(0.66, 0.68, vUv.y)
+      * (1.0 - smoothstep(0.77, 0.8, vUv.y));
     float capeRegion = capeBounds * capePigment;
     float capeTrail = capeRegion
-      * smoothstep(0.63, 0.65, vUv.y)
-      * (1.0 - smoothstep(0.68, 0.72, vUv.y));
+      * smoothstep(0.65, 0.67, vUv.y)
+      * (1.0 - smoothstep(0.71, 0.74, vUv.y));
     float trailingEdge = 1.0 - smoothstep(0.4, 0.49, vUv.x);
-    float windWave = sin(uTime * 1.35 - trailingEdge * 8.0 + (vUv.y - 0.66) * 20.0);
+    float windWave = sin(uTime * 1.35 - trailingEdge * 8.0 + (vUv.y - 0.72) * 20.0);
     float flutter = sin(uTime * 2.15 - trailingEdge * 14.0 + vUv.y * 28.0);
     float gust = 0.78 + 0.22 * sin(uTime * 0.52 + 0.7);
     float billow = capeRegion * trailingEdge * gust * (windWave * 0.019 + flutter * 0.004);
