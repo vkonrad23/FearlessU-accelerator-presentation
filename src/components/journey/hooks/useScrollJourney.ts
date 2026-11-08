@@ -50,6 +50,7 @@ export function useScrollJourney() {
         if (shell) {
           shell.dataset.chapter = String(chapter);
           shell.dataset.progress = progress.toFixed(4);
+          shell.style.setProperty('--sun-progress', String(Math.min(1, Math.max(0, (progress - 0.08) / 0.72))));
         }
       };
       const tick = (time: number) => lenis.raf(time * 1000);
