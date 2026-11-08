@@ -67,7 +67,7 @@ export const sceneConfig = {
     mountainDepthSegments: 48,
   },
   artwork: {
-    src: '/fearlessu-photo.png',
+    src: '/fearlessu-photo.webp',
     aspect: 1536 / 1024,
     focalPoint: { desktop: [0.5, 0.48], mobile: [0.58, 0.42] },
     // Source UV ellipse around the standing figure, independent of the viewport crop.
