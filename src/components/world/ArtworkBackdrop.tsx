@@ -22,17 +22,19 @@ const vertexShader = `
     float foreground = pow(1.0 - vUv.y, 2.35);
     float subject = 1.0 - smoothstep(0.72, 1.0, length((vUv - uSubject.xy) / uSubject.zw));
     float depth = mix(foreground, 0.42, subject);
-    float capeRegion = smoothstep(0.08, 0.2, vUv.x)
-      * (1.0 - smoothstep(0.48, 0.62, vUv.x))
-      * smoothstep(0.12, 0.24, vUv.y)
-      * (1.0 - smoothstep(0.58, 0.72, vUv.y));
-    float capeTrail = smoothstep(0.12, 0.42, vUv.x) * (1.0 - smoothstep(0.42, 0.54, vUv.y));
+    float capeRegion = smoothstep(0.1, 0.17, vUv.x)
+      * (1.0 - smoothstep(0.38, 0.47, vUv.x))
+      * smoothstep(0.2, 0.27, vUv.y)
+      * (1.0 - smoothstep(0.47, 0.56, vUv.y));
+    float capeTrail = smoothstep(0.12, 0.28, vUv.x)
+      * (1.0 - smoothstep(0.36, 0.46, vUv.x))
+      * smoothstep(0.27, 0.34, vUv.y)
+      * (1.0 - smoothstep(0.5, 0.58, vUv.y));
     float wind = sin(uTime * 1.7 + vUv.x * 17.0 + vUv.y * 8.0)
       + 0.45 * sin(uTime * 2.6 - vUv.x * 31.0);
-    float lift = wind * capeRegion * 0.045 + sin(uTime * 1.15 + vUv.y * 14.0) * capeTrail * 0.018;
+    float lift = wind * capeRegion * 0.012 + sin(uTime * 1.15 + vUv.y * 14.0) * capeTrail * 0.006;
     transformed.x += lift * (1.0 - vUv.x);
-    transformed.y += lift * 0.65;
-    transformed.z += lift * 1.8;
+    transformed.y += lift * 0.5;
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
