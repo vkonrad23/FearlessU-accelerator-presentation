@@ -15,12 +15,24 @@ const vertexShader = `
   uniform vec2 uOffset;
   uniform vec4 uSubject;
   uniform float uDepth;
+  uniform float uTime;
   void main() {
     vUv = uv * uCover + uOffset;
     vec3 transformed = position;
     float foreground = pow(1.0 - vUv.y, 2.35);
     float subject = 1.0 - smoothstep(0.72, 1.0, length((vUv - uSubject.xy) / uSubject.zw));
     float depth = mix(foreground, 0.42, subject);
+    float capeRegion = smoothstep(0.08, 0.2, vUv.x)
+      * (1.0 - smoothstep(0.48, 0.62, vUv.x))
+      * smoothstep(0.12, 0.24, vUv.y)
+      * (1.0 - smoothstep(0.58, 0.72, vUv.y));
+    float capeTrail = smoothstep(0.12, 0.42, vUv.x) * (1.0 - smoothstep(0.42, 0.54, vUv.y));
+    float wind = sin(uTime * 1.7 + vUv.x * 17.0 + vUv.y * 8.0)
+      + 0.45 * sin(uTime * 2.6 - vUv.x * 31.0);
+    float lift = wind * capeRegion * 0.045 + sin(uTime * 1.15 + vUv.y * 14.0) * capeTrail * 0.018;
+    transformed.x += lift * (1.0 - vUv.x);
+    transformed.y += lift * 0.65;
+    transformed.z += lift * 1.8;
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
@@ -56,12 +68,16 @@ export function ArtworkBackdrop() {
     uSubject: { value: new Vector4(...sceneConfig.artwork.subject) },
     uPointer: { value: new Vector2() },
     uDepth: { value: sceneConfig.artwork.depth },
+    uTime: { value: 0 },
     uOpacity: { value: 1 },
   }), [image]);
 
   useFrame(({ camera, size }, delta) => {
     if (!mesh.current || !material.current) return;
     const { progress, motionPaused, intro, landscapeReady } = useJourneyStore.getState();
+    if (!motionPaused && material.current) {
+      material.current.uniforms.uTime.value += delta * sceneConfig.motion.animationSpeed;
+    }
     const ready = landscapeReady ? 1 : 0;
     landscapeBlend.current = motionPaused ? ready
       : MathUtils.damp(landscapeBlend.current, ready, sceneConfig.artwork.fadeSmoothing, Math.min(delta, 0.05));
