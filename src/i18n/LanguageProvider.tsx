@@ -19,9 +19,12 @@ let sessionLocale: Locale = 'en';
 function getLocaleSnapshot(): Locale {
   if (typeof window === 'undefined') return 'en';
   try {
-    sessionLocale = window.localStorage.getItem(STORAGE_KEY) === 'uk' ? 'uk' : 'en';
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    sessionLocale = stored === 'uk' || stored === 'en'
+      ? stored
+      : window.navigator.language.toLowerCase().startsWith('uk') ? 'uk' : 'en';
   } catch {
-    // Use the in-memory locale when storage is unavailable.
+    sessionLocale = window.navigator.language.toLowerCase().startsWith('uk') ? 'uk' : 'en';
   }
   return sessionLocale;
 }
