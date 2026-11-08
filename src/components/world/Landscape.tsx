@@ -8,6 +8,8 @@ import { Figure } from './Figure';
 import { Mountains } from './Mountains';
 import { Sky } from './Sky';
 import { Stairs } from './Stairs';
+import { HopefulRight } from './HopefulRight';
+import { RuinedLeft } from './RuinedLeft';
 
 const Effects = lazy(() => import('./Effects'));
 
@@ -41,6 +43,8 @@ export default function Landscape() {
       <group ref={root} visible={ready}>
         <Sky />
         <Mountains />
+        <RuinedLeft />
+        <HopefulRight />
         <Stairs />
         <Figure />
         <Cards />
