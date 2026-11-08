@@ -45,6 +45,20 @@ export function CameraRig() {
     position.z += (1 - state.intro) * sceneConfig.motion.introDolly;
     camera.position.copy(position);
     camera.lookAt(target);
+    camera.rotation.z = MathUtils.damp(
+      camera.rotation.z,
+      Math.sin(t * Math.PI * 2) * 0.008 + pointer.current.x * 0.004,
+      3,
+      Math.min(delta, 0.05),
+    );
+    if ('fov' in camera) {
+      const perspectiveCamera = camera as typeof camera & { fov: number; updateProjectionMatrix: () => void };
+      const targetFov = sceneConfig.camera.fov + Math.sin(t * Math.PI) * 1.2;
+      if (Math.abs(perspectiveCamera.fov - targetFov) > 0.01) {
+        perspectiveCamera.fov = MathUtils.damp(perspectiveCamera.fov, targetFov, 2.5, Math.min(delta, 0.05));
+        perspectiveCamera.updateProjectionMatrix();
+      }
+    }
     gl.domElement.dataset.cameraProgress = current.current.toFixed(4);
     gl.domElement.dataset.intro = state.intro.toFixed(3);
     gl.domElement.dataset.frameCount = String(++frames.current);
