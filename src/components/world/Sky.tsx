@@ -53,26 +53,30 @@ const skyFragment = `
 const glowFragment = `
   varying vec2 vUv;
   uniform vec3 uColor;
+  uniform float uOpacity;
   void main() {
     float radius = length(vUv - 0.5) * 2.0;
     float halo = exp(-radius * radius * 5.5) * (1.0 - smoothstep(0.65, 1.0, radius));
-    gl_FragColor = vec4(uColor, halo * 0.3);
+    gl_FragColor = vec4(uColor, halo * 0.3 * uOpacity);
   }
 `;
 
 const sunFragment = `
   varying vec2 vUv;
   uniform vec3 uColor;
+  uniform float uOpacity;
   void main() {
     float radius = length(vUv - 0.5) * 2.0;
     float core = 1.0 - smoothstep(0.72, 1.0, radius);
-    gl_FragColor = vec4(uColor * 2.1, core);
+    gl_FragColor = vec4(uColor * 2.1, core * uOpacity);
     #include <colorspace_fragment>
   }
 `;
 
 export function Sky() {
   const material = useRef<ShaderMaterial>(null);
+  const glowMaterial = useRef<ShaderMaterial>(null);
+  const sunMaterial = useRef<ShaderMaterial>(null);
   const sun = useRef<Group>(null);
   const sunPosition = useRef(new Vector3(...sceneConfig.world.sunPosition));
   const sunStart = useMemo(() => new Vector3(44, -13, -124), []);
@@ -86,19 +90,28 @@ export function Sky() {
     uSun: { value: new Vector3(...sceneConfig.world.sunPosition) },
     uTime: { value: 0 },
   }), []);
-  const glowUniforms = useMemo(() => ({ uColor: { value: new Color(sceneConfig.colors.gold) } }), []);
-  const sunUniforms = useMemo(() => ({ uColor: { value: new Color(sceneConfig.colors.sun) } }), []);
+  const glowUniforms = useMemo(() => ({
+    uColor: { value: new Color(sceneConfig.colors.gold) },
+    uOpacity: { value: 0 },
+  }), []);
+  const sunUniforms = useMemo(() => ({
+    uColor: { value: new Color(sceneConfig.colors.sun) },
+    uOpacity: { value: 0 },
+  }), []);
 
   useFrame(({ camera }, delta) => {
     const { progress, motionPaused, visible } = useJourneyStore.getState();
     const rise = smoothstep(clamp((progress - 0.08) / 0.72));
     const easedRise = rise;
+    const shine = smoothstep(clamp((progress - 0.18) / 0.46));
     sunPosition.current.lerpVectors(sunStart, sunEnd, easedRise);
     if (material.current) {
       material.current.uniforms.uTime.value += ambientDelta(delta, progress, motionPaused, visible) * sceneConfig.world.cloudSpeed;
       material.current.uniforms.uHorizon.value.copy(warmHorizon).lerp(coolHorizon, safetyEnvelope(progress) * 0.8);
       material.current.uniforms.uSun.value.copy(sunPosition.current);
     }
+    if (sunMaterial.current?.uniforms.uOpacity) sunMaterial.current.uniforms.uOpacity.value = shine;
+    if (glowMaterial.current?.uniforms.uOpacity) glowMaterial.current.uniforms.uOpacity.value = shine * 0.82;
     if (sun.current) {
       sun.current.position.copy(sunPosition.current);
       sun.current.quaternion.copy(camera.quaternion);
@@ -115,11 +128,11 @@ export function Sky() {
       <group ref={sun} position={[...sceneConfig.world.sunPosition]}>
         <mesh>
           <planeGeometry args={[sceneConfig.world.sunRadius * 2, sceneConfig.world.sunRadius * 2]} />
-          <shaderMaterial vertexShader={vertexShader} fragmentShader={sunFragment} uniforms={sunUniforms} transparent depthWrite={false} toneMapped={false} />
+          <shaderMaterial ref={sunMaterial} vertexShader={vertexShader} fragmentShader={sunFragment} uniforms={sunUniforms} transparent depthWrite={false} toneMapped={false} />
         </mesh>
         <mesh position={[0, 0, 1]}>
           <planeGeometry args={[sceneConfig.world.sunHaloSize, sceneConfig.world.sunHaloSize]} />
-          <shaderMaterial vertexShader={vertexShader} fragmentShader={glowFragment} uniforms={glowUniforms} transparent depthWrite={false} blending={AdditiveBlending} />
+          <shaderMaterial ref={glowMaterial} vertexShader={vertexShader} fragmentShader={glowFragment} uniforms={glowUniforms} transparent depthWrite={false} blending={AdditiveBlending} />
         </mesh>
       </group>
     </>
