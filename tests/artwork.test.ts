@@ -32,6 +32,18 @@ test('portrait framing retains the standing figure and sunrise', () => {
   }
 });
 
+test('wide framing keeps the full figure visible with room around the head and feet', () => {
+  const headTop = 0.17;
+  const feetBottom = 0.58;
+  for (const [width, height] of [[760, 430], [1440, 774], [1920, 954], [1920, 1080]]) {
+    const crop = artworkCover(width, height);
+    const visibleTop = 1 - (crop.offsetY + crop.coverY);
+    const visibleBottom = 1 - crop.offsetY;
+    assert.ok(headTop - visibleTop >= 0.06, `head margin too small at ${width}x${height}`);
+    assert.ok(visibleBottom - feetBottom >= 0.06, `foot margin too small at ${width}x${height}`);
+  }
+});
+
 test('the selected hero is a local, optimized WebP', () => {
   assert.match(sceneConfig.artwork.src, /^\/fearlessu-[a-z-]+\.webp$/);
   const image = readFileSync(new URL(`../public${sceneConfig.artwork.src}`, import.meta.url));
