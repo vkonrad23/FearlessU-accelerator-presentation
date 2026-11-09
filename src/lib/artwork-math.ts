@@ -1,5 +1,15 @@
 import { sceneConfig } from '../config/scene.ts';
 
+export function artworkFrame(width: number, height: number) {
+  const frameHeight = width <= sceneConfig.quality.mobileBreakpoint
+    ? Math.min(height, Math.max(
+      Math.min(sceneConfig.artwork.mobileHeight, height * sceneConfig.artwork.mobileHeightRatio),
+      width / sceneConfig.artwork.mobileMaxAspect,
+    ))
+    : height;
+  return { width, height: frameHeight };
+}
+
 export function artworkCover(width: number, height: number) {
   const aspect = Math.max(1, width) / Math.max(1, height);
   const coverX = Math.min(1, aspect / sceneConfig.artwork.aspect);

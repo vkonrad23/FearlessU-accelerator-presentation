@@ -1,8 +1,8 @@
 # FearlessU, a cinematic journey
 
-A scroll-driven, five-scene marketing website for an **early-stage mental wellness concept**. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
+A scroll-driven, five-scene English/Ukrainian marketing website for an **early-stage mental wellness concept**. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
 
-**The supplied storm-to-sunrise artwork is the current hero.** `public/fearlessu-sunrise-reference.jpg` preserves the new image byte for byte; `public/fearlessu-sunrise.webp` is its high-quality, 226.8 kB display version at the original 1024×576 resolution. Natural color is retained without added glow, fake detail, or animated lightning. A restrained, source-aligned depth treatment separates the standing figure and foreground from the distance. This is 2.5D parallax, not a complete 3D reconstruction. Scrolling blends into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png` remains unchanged as a reference.
+**The current hero shows a standing civilian with a flowing cape.** `public/fearlessu-civilian-cape.webp` is the local 1448×1086, 241,650-byte artwork. Restrained, source-aligned depth separates the figure and foreground from the distance; the cape has gentle cloth motion with an anchored shoulder. This is 2.5D animation, not a complete 3D reconstruction. Scrolling blends into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png`, `public/fearlessu-sunrise-reference.jpg`, and `public/fearlessu-sunrise.webp` remain reference assets, not the selected hero.
 
 ## Run locally
 
@@ -34,7 +34,7 @@ This launches an isolated Lighthouse browser, writes `artifacts/lighthouse-deskt
 
 ## Scenes
 
-1. **The beginning:** the original illustration, “Beyond fear. Beyond limits.”, clear prototype limits, and four trust principles.
+1. **The beginning:** the cape artwork, “Beyond fear. Beyond limits.”, clear prototype limits, and four trust principles.
 2. **The possibilities:** six keyboard-accessible feature tabs, mirrored by a floating 3D card ring.
 3. **Your own pace:** four scroll stops, using the existing process-step copy and illuminated stair landings.
 4. **Care comes first:** cooler lighting, slower ambient movement, clear AI/data boundaries, and crisis signposting.
@@ -51,10 +51,11 @@ src/components/world/       Canvas, camera, terrain, stairs, artwork, cards,
                             particles, effects, optional model loader
 src/config/scene.ts          Palette, camera keyframes, motion, lighting,
                             effects, image depth, quality, and model budgets
-src/lib/                    Deterministic scene math and model-path validation
+src/lib/                    Scene/artwork math, material fades, model validation
+src/i18n/                   English/Ukrainian language selection and translations
 src/store/                  Small transient scene store
 src/data/                   Preserved copy and local demonstration rules
-tests/                      Scene, safety-boundary, model-path, contrast tests
+tests/                      Scene, artwork, opacity, safety, model, contrast tests
 scripts/                    Bundle and Lighthouse gates
 public/models/              Optional model contract, no model required
 public/draco/               Instructions for a local decoder
@@ -64,6 +65,12 @@ Start visual tuning in **`src/config/scene.ts`**. The layout receives its CSS pa
 
 Legacy presentation components, data, `src/App.tsx`, `src/main.tsx`, `vite.config.ts`, and `FearlessU_Presentation_Website/` remain as reference material. They are not entry points for the current Next.js site. Vite is no longer installed.
 
+## Language and typography
+
+The language control switches between English and Ukrainian, including page metadata, and remembers the choice locally. Without a saved choice, a Ukrainian browser preference selects Ukrainian after hydration. The static HTML starts in English.
+
+Editorial headings use locally bundled Cormorant Garamond, including regular and italic Cyrillic fonts. Both Cyrillic files are preloaded to reduce late font swapping; no remote font service is needed. Responsive heading sizes accommodate the longer Ukrainian copy.
+
 ## Rendering and performance
 
 - HTML and the original-image/CSS poster render independently of WebGL.
@@ -71,14 +78,16 @@ Legacy presentation components, data, `src/App.tsx`, `src/main.tsx`, `vite.confi
 - The original artwork stays visible until landscape shaders are ready, including after a fast jump to a later chapter. The landscape stays mounted for smooth backward navigation.
 - Expensive transmission and postprocessing activate when the visitor reaches the procedural journey, not over the fully opaque hero image.
 - Six desktop glass cards share one small refraction buffer. Stairs use instancing; particles use one point-cloud draw call.
-- The hero text sits directly over the artwork, without a panel background or blur. A feathered scrim preserves contrast, including a wider tablet treatment.
-- The static poster and WebGL image share configurable focal points. Portrait framing keeps the figure and sunrise visible; depth is calculated in source-image coordinates so it does not shift onto unrelated objects when the viewport changes.
-- The artwork-only canvas starts at DPR ≤1, avoiding oversized render buffers for the supplied 1024×576 image. The landscape restores the selected quality tier's DPR once it is ready. HTML text is unaffected.
+- Desktop hero text sits directly over the artwork, without a panel background or blur. A feathered scrim preserves contrast, including a wider tablet treatment. On mobile, a shorter artwork frame sits above the copy and fades into its dark reading background.
+- The static poster and WebGL image share configurable focal points and responsive frame dimensions. Framing keeps the figure and sunlit valley visible; depth is calculated in source-image coordinates so it does not shift onto unrelated objects when the viewport changes.
+- The artwork-only canvas starts at DPR ≤1 to limit render-buffer cost. The landscape restores the selected quality tier's DPR once it is ready. HTML text is unaffected.
 - Ridged terrain uses smooth normals and elevation/slope-based rock and snow colors. Beveled stone treads and glass reflect a small, locally generated environment map, captured once rather than every frame. No HDR download is needed.
+- Landscape fades multiply each material's authored opacity instead of making translucent beams and ground overlays fully opaque. Material lookup is captured once, not traversed on every frame.
 - Desktop: DPR capped at 1.5, 1,200 particles, transmission, subtle bloom/DOF/vignette/grain.
 - Mobile: DPR capped at 1.15, 320 particles, simpler glass, no depth of field.
 - Low tier: DPR capped at 0.85, 160 particles, no postprocessing or transmission. The absolute configurable DPR ceiling is 2.
 - Sustained slow frames lower quality. Resizing applies the mobile tier without upgrading an already degraded low tier.
+- Scroll refreshes update Lenis's cached dimensions without resetting an active anchor animation, keeping navigation aligned after desktop/mobile resizing.
 - Reduced motion, save-data, ≤2 reported GB of memory, ≤2 reported CPU threads, or unavailable WebGL2 select the static presentation.
 - Hidden/offscreen canvases stop rendering. **Pause ambient motion** uses on-demand rendering so navigation and feature changes still work.
 - Failed assets, lost contexts, and a loading watchdog preserve the HTML/poster. R3F releases the renderer; handmade geometries, card textures, render targets, effect resources, and optional-model resources have cleanup paths.
@@ -98,7 +107,7 @@ The preview contains three predefined goals, a difficulty slider, an explained o
 - No live AI model, diagnosis, clinical suitability decision, or outcome prediction.
 - No free-text risk screening. Crisis guidance is always visible before the controls.
 - No form transmission, analytics, account, database, or health-data storage.
-- Demo choices remain in component memory. The only browser storage written by this site is the non-personal `sessionStorage` intro-played flag.
+- Demo choices remain in component memory. Browser storage contains only the non-personal `sessionStorage` intro-played flag and `localStorage` language preference.
 - The proposed AI and four-step workflow remain concepts, not validated clinical capabilities.
 
 **Experimental prototype. Not clinically validated. Not medical advice.** The site is not a healthcare provider, medical device, or emergency service, and does not replace qualified care. It makes no clinical efficacy, regulatory, certification, institutional partnership, or accelerator-acceptance claim.
@@ -127,12 +136,17 @@ The workflow derives the name from the destination repository, runs tests and th
 
 See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene-math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
 
-The transparency/3D refinement lab run reached desktop performance **89**, accessibility **100**, best practices **100**, SEO **100**, and **CLS 0**. Initial JavaScript is **198.3 kB gzip** (198.5 kB with the Pages prefix), below 250 kB. All **12 tests**, root/prefixed builds, five responsive widths, landscape stops, and static fallback checks passed. The earlier release scored 97 on a faster host benchmark; these are local lab results, not field guarantees. See `PLAN.md` for the measurement sequence and limits.
+The current English desktop lab run reached **97 performance / 100 accessibility / 100 best practices / 100 SEO**, with **CLS 0**. Initial JavaScript is **209.1 kB gzip** (209.2 kB with the Pages prefix), below 250 kB; emitted deferred chunks total approximately **383.3 kB gzip**. Both exports passed lint, TypeScript, all **20 tests**, the bundle gate, and the full release browser checks.
+
+The prefixed export also passed **76 detailed checks** covering both languages, widths from 320 to 1440 px, keyboard controls, Cyrillic font rendering, and sampled hero contrast. Axe reported no violations in the tested English desktop, Ukrainian mobile, and Ukrainian dialog states. Page gradient contrast remained incomplete in axe; supplemental pixel-based hero samples met their contrast thresholds. These checks do not establish whole-site accessibility conformance.
+
+Current local reports include `artifacts/lighthouse-design-complete.json`, `artifacts/design-bounds-final-release-qa.json`, `artifacts/design-pages-final-release-qa.json`, and `artifacts/design-pages-final-report.json`. See `PLAN.md` for historical results and test scope.
 
 Remaining limits:
 
 - Real iOS/Android hardware, Safari/Firefox, assistive-technology sessions, and long-duration GPU/battery behavior have not been validated.
-- Short desktop Chromium samples during this refinement ranged from 48 to 61 FPS. They do not establish sustained or real-phone FPS.
+- Cold Ukrainian visits still show small layout movement while the saved/browser language is applied after English static HTML. With preloaded Cyrillic fonts, observed layout-shift totals were approximately 0.0112 on mobile and 0.0228 on desktop. These are local observations, not field CLS measurements or a zero-shift guarantee.
+- Short desktop Chromium samples measured 56 FPS for the root export and 60 FPS for the prefixed export. They do not establish sustained or real-phone FPS.
 - Optional GLB/Draco assets and a live GitHub Pages deployment need their own verification when enabled.
-- `npm audit --omit=dev` reports no production vulnerabilities. The full audit reports 12 moderate development-tool findings, chiefly transitive glob/minimatch issues in lint/audit tooling. No forced major-version replacement was used.
+- Dependency-audit results in `PLAN.md` are historical. No fresh dependency audit was run for this design refinement.
 - TypeScript 6 is pinned for the installed TypeScript-ESLint compatibility range. The preview server's `compression` patch override addresses its known advisory.

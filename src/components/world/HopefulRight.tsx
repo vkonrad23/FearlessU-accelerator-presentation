@@ -1,10 +1,6 @@
-import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
-import { Group, Mesh } from 'three';
 import { sceneConfig } from '@/config/scene';
-import { smoothstep } from '@/lib/scene-math';
 import { terrainHeight } from '@/lib/terrain';
-import { useJourneyStore } from '@/store/journey';
+import { FadeGroup } from './FadeGroup';
 
 const grove = [
   [34, -56, 1.3, 5.8],
@@ -13,22 +9,10 @@ const grove = [
   [48, -90, 1.2, 5.4],
 ] as const;
 
-function FadeGroup({ children }: { children: React.ReactNode }) {
-  const group = useRef<Group>(null);
-  useFrame(() => {
-    const opacity = smoothstep((useJourneyStore.getState().progress - 0.12) / 0.48);
-    group.current?.traverse((object) => {
-      const material = (object as Mesh).material;
-      if (material && 'opacity' in material) material.opacity = opacity;
-    });
-  });
-  return <group ref={group}>{children}</group>;
-}
-
 export function HopefulRight() {
   const ground = (x: number, z: number) => terrainHeight(x, z, 0);
   return (
-    <FadeGroup>
+    <FadeGroup start={0.12} end={0.6}>
       <group position={[0, 0, 0]}>
         {grove.map(([x, z, radius, height], index) => (
           <group key={index} position={[x, ground(x, z), z]}>

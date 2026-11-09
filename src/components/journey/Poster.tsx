@@ -18,7 +18,9 @@ export function Poster() {
       <div className="poster-mountain mountain-front" />
       <div className="poster-stairs">{Array.from({ length: 30 }, (_, i) => <span key={i} style={{ '--step': i } as React.CSSProperties} />)}</div>
       <div className="poster-haze" />
-      <Image className="photo-poster" style={artworkStyle} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`} alt="" fill sizes="100vw" priority />
+      <div className="artwork-poster">
+        <Image className="photo-poster" style={artworkStyle} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`} alt="" fill sizes="100vw" priority />
+      </div>
     </div>
   );
 }

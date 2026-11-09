@@ -70,7 +70,12 @@ export function useScrollJourney() {
         start: 0,
         end: 'max',
         onUpdate: update,
-        onRefresh: () => { measure(); update(); },
+        onRefresh: () => {
+          // Refresh bounds without resetting an in-flight anchor animation.
+          lenis.dimensions.resize();
+          measure();
+          update();
+        },
       });
       const observer = new ResizeObserver(() => ScrollTrigger.refresh());
       observer.observe(document.body);

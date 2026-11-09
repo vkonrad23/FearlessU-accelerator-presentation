@@ -10,10 +10,20 @@ const serif = localFont({
     { path: '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-normal.woff2', weight: '400', style: 'normal' },
     { path: '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-latin-400-italic.woff2', weight: '400', style: 'italic' },
   ],
-  variable: '--font-editorial',
+  variable: '--font-editorial-latin',
   display: 'swap',
   fallback: ['Georgia'],
   adjustFontFallback: 'Times New Roman',
+});
+
+const serifCyrillic = localFont({
+  src: [
+    { path: '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-cyrillic-400-normal.woff2', weight: '400', style: 'normal' },
+    { path: '../../node_modules/@fontsource/cormorant-garamond/files/cormorant-garamond-cyrillic-400-italic.woff2', weight: '400', style: 'italic' },
+  ],
+  variable: '--font-editorial-cyrillic',
+  display: 'swap',
+  adjustFontFallback: false,
 });
 
 const sans = localFont({
@@ -40,14 +50,19 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const colorVariables = Object.fromEntries(
-    Object.entries(sceneConfig.colors)
-      .filter(([, color]) => typeof color === 'string')
-      .map(([name, color]) => [`--color-${name}`, color]),
-  ) as CSSProperties;
+  const themeVariables = {
+    ...Object.fromEntries(
+      Object.entries(sceneConfig.colors)
+        .filter(([, color]) => typeof color === 'string')
+        .map(([name, color]) => [`--color-${name}`, color]),
+    ),
+    '--artwork-mobile-max-height': `${sceneConfig.artwork.mobileHeight}px`,
+    '--artwork-mobile-height-ratio': sceneConfig.artwork.mobileHeightRatio,
+    '--artwork-mobile-max-aspect': sceneConfig.artwork.mobileMaxAspect,
+  } as CSSProperties;
 
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`} style={colorVariables}>
+    <html lang="en" className={`${serif.variable} ${serifCyrillic.variable} ${sans.variable}`} style={themeVariables}>
       <body><LanguageProvider>{children}</LanguageProvider></body>
     </html>
   );

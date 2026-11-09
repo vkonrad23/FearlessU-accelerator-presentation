@@ -4,7 +4,7 @@ import { useMemo, useRef } from 'react';
 import { MathUtils, Mesh, PerspectiveCamera, ShaderMaterial, SRGBColorSpace, Vector2, Vector3, Vector4 } from 'three';
 import { sceneConfig } from '@/config/scene';
 import { ambientDelta, artworkOpacity } from '@/lib/scene-math';
-import { artworkCover } from '@/lib/artwork-math';
+import { artworkCover, artworkFrame } from '@/lib/artwork-math';
 import { useJourneyStore } from '@/store/journey';
 import { usePointer } from './usePointer';
 
@@ -67,7 +67,8 @@ const fragmentShader = `
 export function ArtworkBackdrop() {
   const size = useThree((state) => state.size);
   const quality = useJourneyStore((state) => state.quality);
-  const framing = useMemo(() => artworkCover(size.width, size.height), [size.width, size.height]);
+  const frame = useMemo(() => artworkFrame(size.width, size.height), [size.width, size.height]);
+  const framing = useMemo(() => artworkCover(frame.width, frame.height), [frame]);
   const segments = useMemo<[number, number]>(() => quality === 'desktop'
     ? [320, 220]
     : quality === 'mobile' ? [224, 160] : [160, 112], [quality]);
@@ -80,6 +81,7 @@ export function ArtworkBackdrop() {
   const pointer = usePointer();
   const pointerTarget = useMemo(() => new Vector2(), []);
   const direction = useMemo(() => new Vector3(), []);
+  const up = useMemo(() => new Vector3(), []);
   const uniforms = useMemo(() => ({
     uImage: { value: image },
     uCover: { value: new Vector2(1, 1) },
@@ -106,11 +108,14 @@ export function ArtworkBackdrop() {
     if (!mesh.current.visible) return;
     const distance = 90;
     const height = 2 * Math.tan((camera as PerspectiveCamera).fov * Math.PI / 360) * distance;
+    const frameHeight = height * frame.height / size.height;
     const aspect = size.width / size.height;
     const zoom = sceneConfig.artwork.overscan - (1 - intro) * sceneConfig.artwork.introZoom;
-    mesh.current.scale.set(height * aspect * zoom * 0.5, height * zoom * 0.5, 1);
+    mesh.current.scale.set(height * aspect * zoom * 0.5, frameHeight * zoom * 0.5, 1);
     camera.getWorldDirection(direction);
+    up.set(0, 1, 0).applyQuaternion(camera.quaternion);
     mesh.current.position.copy(camera.position).addScaledVector(direction, distance);
+    mesh.current.position.addScaledVector(up, (height - frameHeight) * 0.5);
     mesh.current.quaternion.copy(camera.quaternion);
     material.current.uniforms.uCover.value.set(framing.coverX, framing.coverY);
     material.current.uniforms.uOffset.value.set(framing.offsetX, framing.offsetY);

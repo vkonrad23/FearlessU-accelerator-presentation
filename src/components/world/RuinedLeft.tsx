@@ -1,10 +1,6 @@
-import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
-import { Group, Mesh } from 'three';
 import { sceneConfig } from '@/config/scene';
-import { smoothstep } from '@/lib/scene-math';
 import { terrainHeight } from '@/lib/terrain';
-import { useJourneyStore } from '@/store/journey';
+import { FadeGroup } from './FadeGroup';
 
 const rubble = [
   [-25, -36, 0.6, 0.25, 0.8],
@@ -13,24 +9,12 @@ const rubble = [
   [-30, -28, 0.5, 0.2, 0.9],
 ] as const;
 
-function FadeGroup({ children }: { children: React.ReactNode }) {
-  const group = useRef<Group>(null);
-  useFrame(() => {
-    const opacity = 1 - smoothstep((useJourneyStore.getState().progress - 0.18) / 0.52);
-    group.current?.traverse((object) => {
-      const material = (object as Mesh).material;
-      if (material && 'opacity' in material) material.opacity = opacity;
-    });
-  });
-  return <group ref={group}>{children}</group>;
-}
-
 export function RuinedLeft() {
   const ground = (x: number, z: number) => terrainHeight(x, z, 0);
   const stone = sceneConfig.colors.deep;
   const ash = '#172522';
   return (
-    <FadeGroup>
+    <FadeGroup start={0.18} end={0.7} reverse>
       <group position={[-22, ground(-22, -35), -35]} rotation={[0, -0.12, 0]}>
         <mesh position={[-3.4, 3.2, 0]} rotation={[0.02, 0.1, -0.08]}>
           <boxGeometry args={[0.55, 6.4, 0.8]} />
