@@ -56,7 +56,7 @@ The partner brief, pitch, and founder sections follow the five scenic chapters w
 
 ## Founder and supplied media
 
-The founder section includes the supplied, close-cropped 4:5 portrait, software-engineering background, motivation, and the approved public contacts: **vladkonrad11@gmail.com** and [Vladyslav Konrad on LinkedIn](https://www.linkedin.com/in/vladyslav-konrad). The crop makes the founder prominent without inventing facial detail; the supplied photo's resolution limits large-display sharpness.
+The founder section uses the latest supplied JPEG at its original 966×1024 dimensions and aspect ratio, without cropping, retouching, or re-encoding. It also includes the software-engineering background, motivation, and the approved public contacts: **vladkonrad11@gmail.com** and [Vladyslav Konrad on LinkedIn](https://www.linkedin.com/in/vladyslav-konrad).
 
 The self-hosted pitch is **61.233 seconds**, 1280×720 H.264/AAC, approximately **3.66 MB**. Its native player has a poster, keyboard-accessible play control, `preload="none"`, no autoplay, English/Ukrainian subtitle tracks, a transcript, and a download fallback. Caption selection follows the page language until the visitor makes an explicit choice; native track changes also update the selector.
 

@@ -11,7 +11,7 @@ export function Founder() {
     <section id="founder" className={styles.section} aria-labelledby="founder-title">
       <div className={`page-width ${styles.layout}`}>
         <figure className={styles.portrait}>
-          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/media/vladyslav-konrad.webp`} width={600} height={750} sizes="(max-width: 767px) calc(100vw - 44px), 420px" alt={t('Vladyslav Konrad, founder of FearlessU')} />
+          <Image src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/media/vladyslav-konrad.jpg`} width={966} height={1024} sizes="(max-width: 767px) calc(100vw - 44px), 420px" alt={t('Vladyslav Konrad, founder of FearlessU')} />
           <figcaption>{t(founder.name)} <span>{t(founder.role)}</span></figcaption>
         </figure>
         <div className={styles.copy}>

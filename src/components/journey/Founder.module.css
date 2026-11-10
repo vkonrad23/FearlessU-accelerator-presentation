@@ -1,7 +1,7 @@
 .section { padding-block: 100px; background: var(--color-deep); color: var(--color-cream); }
 .layout { display: grid; grid-template-columns: minmax(240px, 420px) minmax(0, 1fr); align-items: start; gap: 80px; }
 .portrait { margin: 0; }
-.portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--color-cream) 15%, transparent); }
+.portrait img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--color-cream) 15%, transparent); }
 .portrait figcaption { display: flex; flex-direction: column; gap: 6px; padding-top: 17px; font-size: 14px; line-height: 1.6; }
 .portrait figcaption span { color: var(--color-muted); font-size: 12px; }
 .copy { max-width: 720px; }

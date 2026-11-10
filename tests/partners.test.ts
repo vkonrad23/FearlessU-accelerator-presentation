@@ -55,16 +55,21 @@ test('contact links use only the founder-approved public addresses', () => {
   assert.ok(!Object.values(founderContact).some((value) => value.includes('.example')));
 });
 
-test('the supplied pitch and close-cropped portrait are small local assets', () => {
+test('the supplied pitch and founder portrait are small local assets', () => {
   const video = new URL(`../public${pitchMedia.video}`, import.meta.url);
   const bytes = readFileSync(video);
   assert.equal(bytes.toString('ascii', 4, 8), 'ftyp');
   assert.ok(bytes.length < 5_000_000);
   assert.ok(pitchMedia.durationSeconds >= 60 && pitchMedia.durationSeconds <= 90);
-  for (const path of [pitchMedia.poster, '/media/vladyslav-konrad.webp']) {
+  for (const path of [pitchMedia.poster, '/media/vladyslav-konrad.jpg']) {
     const asset = new URL(`../public${path}`, import.meta.url);
     assert.ok(statSync(asset).size < 250_000);
-    assert.equal(readFileSync(asset).toString('ascii', 8, 12), 'WEBP');
+    const image = readFileSync(asset);
+    if (path.endsWith('.jpg')) {
+      assert.deepEqual(image.subarray(0, 3), Buffer.from([0xff, 0xd8, 0xff]));
+    } else {
+      assert.equal(image.toString('ascii', 8, 12), 'WEBP');
+    }
   }
 });
 
