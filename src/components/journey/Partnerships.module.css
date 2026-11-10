@@ -1,0 +1,108 @@
+.section {
+  position: relative;
+  padding-block: 100px;
+  background: var(--color-cream);
+  color: var(--color-deep);
+}
+
+.section :focus-visible { outline-color: var(--color-forest); }
+.header { display: grid; grid-template-columns: 1.2fr 1fr; align-items: end; gap: 70px; }
+.kicker { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; font-size: 11px; font-weight: 500; line-height: 1.6; letter-spacing: .12em; text-transform: uppercase; color: var(--color-forest); }
+.kicker > span { width: 7px; height: 7px; border-radius: 50%; background: var(--color-forest); }
+.title { margin-bottom: 0; font-size: clamp(52px, 5vw, 82px); line-height: 1; letter-spacing: -.04em; text-wrap: balance; }
+.title em { color: var(--color-forest); }
+.intro > p { max-width: 470px; font-size: 16px; line-height: 1.85; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 24px; }
+.primaryLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 20px; min-height: 48px; padding: 13px 20px; border: 1px solid var(--color-forest); border-radius: 5px; background: var(--color-forest); color: var(--color-cream); font-size: 13px; line-height: 1.6; }
+.primaryLink:hover { background: var(--color-deep); }
+.inlineLink { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding-block: 9px; color: var(--color-forest); font-size: 13px; line-height: 1.5; text-decoration: underline; text-underline-offset: 4px; }
+.inlineLink:hover { text-decoration-thickness: 2px; }
+.index { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-top: 46px; padding-block: 12px; border-block: 1px solid color-mix(in srgb, var(--color-forest) 22%, transparent); }
+.index a { display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; }
+.index a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.block { padding-top: 80px; }
+.sectionHeading { max-width: 800px; margin-bottom: 30px; }
+.sectionHeading .kicker { margin-bottom: 13px; }
+.sectionHeading h3 { margin-bottom: 18px; font-family: var(--font-editorial), Georgia, serif; font-size: clamp(36px, 3.5vw, 52px); font-weight: 400; line-height: 1.1; letter-spacing: -.03em; text-wrap: balance; }
+.sectionHeading > p:not(.kicker) { max-width: 640px; font-size: 15px; line-height: 1.85; }
+.opportunity { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.problem { padding-block: 24px; }
+.label { font-size: 12px; font-weight: 600; letter-spacing: .02em; line-height: 1.7; }
+.problem > p:not(.label):not(.small) { max-width: 560px; font-size: 18px; line-height: 1.75; }
+.small { font-size: 13px; line-height: 1.8; }
+.market { padding: 30px; border: 1px solid color-mix(in srgb, var(--color-forest) 23%, transparent); border-radius: 8px; background: color-mix(in srgb, var(--color-forest) 4%, var(--color-cream)); }
+.badge { display: inline-block; padding: 5px 9px; border: 1px solid color-mix(in srgb, var(--color-forest) 25%, transparent); border-radius: 4px; font-size: 11px; line-height: 1.6; }
+.market h4 { margin: 21px 0 15px; font-size: 21px; line-height: 1.5; font-weight: 500; }
+.market > p:not(.small), .model > p, .proof p, .supportGrid p { font-size: 14px; line-height: 1.85; }
+.market > p:last-child { margin-bottom: 0; }
+.subheading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin: 32px 0 19px; }
+.subheading h4 { margin: 0; font-size: 17px; font-weight: 500; }
+.modelGrid, .statusGrid, .evidenceGrid, .supportGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+.model { display: flex; flex-direction: column; padding: 24px; border: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); border-radius: 6px; }
+.model h5 { margin: 0 0 16px; font-size: 16px; line-height: 1.5; font-weight: 500; }
+.model .question { margin-top: auto; margin-bottom: 0; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--color-forest) 16%, transparent); font-size: 13px; }
+.question > span, .decision > span { display: block; margin-bottom: 9px; font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+.status { display: flex; flex-direction: column; padding: 28px; border-radius: 8px; background: var(--color-deep); color: var(--color-cream); border-top: 3px solid var(--color-forest); }
+.status[data-status="planned"] { border-top-color: var(--color-gold); }
+.status[data-status="research"] { border-top-color: var(--color-cool); }
+.statusIcon { display: inline-flex; margin-bottom: 22px; color: var(--color-gold); }
+.status[data-status="research"] .statusIcon { color: var(--color-cool); }
+.status h4 { margin: 0 0 8px; font-size: 22px; font-weight: 500; line-height: 1.4; }
+.statusLabel { margin-bottom: 23px; color: var(--color-gold); font-size: 12px; line-height: 1.6; }
+.status[data-status="research"] .statusLabel { color: var(--color-cool); }
+.status ul { margin: 0 0 25px; padding-left: 17px; }
+.status li { padding-left: 3px; margin-bottom: 14px; font-size: 14px; line-height: 1.8; }
+.status li::marker { color: var(--color-gold); }
+.statusBoundary { margin: auto 0 0; padding-top: 19px; border-top: 1px solid color-mix(in srgb, var(--color-cream) 19%, transparent); color: var(--color-muted); font-size: 13px; line-height: 1.8; }
+.timeline { padding: 0; margin: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--color-forest) 25%, transparent); }
+.timeline li { display: grid; grid-template-columns: 48px 1.45fr 1fr; gap: 30px; padding-block: 26px; border-bottom: 1px solid color-mix(in srgb, var(--color-forest) 22%, transparent); }
+.stepNumber { font-family: var(--font-editorial), Georgia, serif; font-size: 32px; color: var(--color-forest); }
+.timeline h4 { margin: 0 0 12px; font-size: 17px; font-weight: 500; line-height: 1.5; }
+.timeline p { margin: 0; font-size: 14px; line-height: 1.8; }
+.timeline .decision { padding-left: 26px; border-left: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); font-size: 13px; }
+.proof { display: flex; flex-direction: column; padding: 25px 0; border-top: 1px solid color-mix(in srgb, var(--color-forest) 35%, transparent); }
+.proof > svg { margin-bottom: 20px; color: var(--color-forest); }
+.proof h4 { margin: 0 0 15px; font-size: 19px; font-weight: 500; line-height: 1.5; }
+.proof .inlineLink { margin-top: auto; align-self: flex-start; }
+.evidenceNote { padding: 24px 28px; border-left: 3px solid var(--color-forest); background: color-mix(in srgb, var(--color-forest) 5%, var(--color-cream)); }
+.evidenceNote p { max-width: 950px; }
+.evidenceNote > p:not(.label):not(.small) { font-size: 14px; line-height: 1.85; }
+.evidenceNote .small { margin-bottom: 0; }
+.support { margin-top: 80px; padding: 40px; background: color-mix(in srgb, var(--color-forest) 7%, var(--color-cream)); border: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); border-radius: 8px; }
+.supportGrid { gap: 30px; margin-bottom: 20px; }
+.supportGrid h4 { margin: 0 0 12px; font-size: 16px; font-weight: 500; line-height: 1.5; }
+.support > .small { margin: 19px 0 0; max-width: 720px; }
+
+@media (max-width: 1100px) {
+  .header { gap: 35px; }
+  .title { font-size: 56px; }
+  .status, .model { padding: 22px; }
+  .opportunity { gap: 28px; }
+  .modelGrid, .statusGrid, .evidenceGrid { gap: 16px; }
+}
+
+@media (max-width: 767px) {
+  .section { padding-block: 65px; }
+  .header, .opportunity, .modelGrid, .statusGrid, .evidenceGrid, .supportGrid { grid-template-columns: 1fr; }
+  .header { gap: 26px; }
+  .title { font-size: clamp(42px, 11vw, 60px); }
+  .intro > p { font-size: 14px; }
+  .kicker { font-size: 10px; }
+  .index { gap: 4px 20px; margin-top: 28px; }
+  .index a { font-size: 12px; }
+  .block { padding-top: 54px; }
+  .sectionHeading h3 { font-size: 36px; }
+  .sectionHeading > p:not(.kicker) { font-size: 14px; }
+  .opportunity { gap: 12px; }
+  .problem { padding-top: 0; }
+  .problem > p:not(.label):not(.small) { font-size: 17px; }
+  .market, .evidenceNote { padding: 23px; }
+  .statusGrid { gap: 20px; }
+  .status { padding: 26px; }
+  .timeline li { grid-template-columns: 30px 1fr; gap: 14px; }
+  .timeline .decision { grid-column: 2; border-left: 0; padding: 10px 0 0; }
+  .evidenceGrid { gap: 0; }
+  .support { margin-top: 54px; padding: 24px; }
+  .supportGrid { gap: 12px; }
+  .support .primaryLink { width: 100%; }
+}

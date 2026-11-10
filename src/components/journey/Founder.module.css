@@ -1,0 +1,37 @@
+.section { padding-block: 100px; background: var(--color-deep); color: var(--color-cream); }
+.layout { display: grid; grid-template-columns: minmax(240px, 420px) minmax(0, 1fr); align-items: start; gap: 80px; }
+.portrait { margin: 0; }
+.portrait img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--color-cream) 15%, transparent); }
+.portrait figcaption { display: flex; flex-direction: column; gap: 6px; padding-top: 17px; font-size: 14px; line-height: 1.6; }
+.portrait figcaption span { color: var(--color-muted); font-size: 12px; }
+.copy { max-width: 720px; }
+.copy > :global(.eyebrow) { margin-bottom: 20px; }
+.copy h2 { margin: 0 0 26px; font-size: clamp(54px, 5.5vw, 84px); font-weight: 400; line-height: .98; letter-spacing: -.04em; }
+.copy > p:not(.note, :global(.eyebrow)) { font-size: 15px; line-height: 1.85; color: var(--color-muted); }
+.copy > .bio { color: var(--color-cream); }
+.copy blockquote { padding-left: 23px; margin: 30px 0; border-left: 1px solid var(--color-gold); font-family: var(--font-editorial), Georgia, serif; font-size: 25px; line-height: 1.45; }
+.note { color: var(--color-muted); font-size: 13px; line-height: 1.8; }
+.contact { margin-top: 35px; padding-top: 27px; border-top: 1px solid color-mix(in srgb, var(--color-cream) 20%, transparent); }
+.contact h3 { margin: 0 0 14px; font-size: 22px; font-weight: 500; line-height: 1.5; }
+.contact > p:not(.note) { color: var(--color-muted); font-size: 14px; line-height: 1.8; }
+.links { display: grid; grid-template-columns: 1.25fr 1fr; gap: 14px; margin-block: 22px; }
+.links a { display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 96px; padding: 18px; border: 1px solid color-mix(in srgb, var(--color-gold) 32%, transparent); border-radius: 5px; background: var(--color-background); }
+.links a:hover { border-color: var(--color-gold); }
+.links span:not(:global(.sr-only)) { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; line-height: 1.5; color: var(--color-gold); }
+.links strong { font-size: 14px; font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }
+.contact > .note { margin-bottom: 0; }
+
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: minmax(240px, 330px) minmax(0, 1fr); gap: 42px; }
+  .links { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+  .section { padding-block: 64px; }
+  .layout { grid-template-columns: 1fr; gap: 38px; }
+  .portrait { width: min(100%, 420px); }
+  .copy h2 { font-size: 60px; }
+  .copy blockquote { font-size: 24px; padding-left: 18px; }
+  .copy > p:not(.note, :global(.eyebrow)) { font-size: 14px; }
+  .contact h3 { font-size: 20px; }
+}

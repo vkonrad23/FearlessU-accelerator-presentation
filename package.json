@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "preview": "serve out --listen tcp://127.0.0.1:3000",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "captions": "node --experimental-strip-types scripts/generate-pitch-captions.mjs",
     "check:budget": "node scripts/check-budget.mjs",
     "audit:desktop": "node scripts/check-budget.mjs && lighthouse http://127.0.0.1:3000 --preset=desktop --chrome-flags=--headless=new --output=json --output-path=./artifacts/lighthouse-desktop.json && node scripts/check-lighthouse.mjs"
   },

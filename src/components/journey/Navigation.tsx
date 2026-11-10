@@ -17,6 +17,7 @@ export function Navigation() {
     [t('Product'), '#product'],
     [t('How it works'), '#how-it-works'],
     [t('AI & safety'), '#ai-safety'],
+    [t('For investors'), '#investors'],
   ];
 
   return (
@@ -40,15 +41,18 @@ export function Navigation() {
           <button className="motion-toggle" data-enabled={!reduced && mode === 'webgl'} disabled={reduced || mode !== 'webgl'} aria-label={paused ? t('Resume ambient motion') : t('Pause ambient motion')} aria-pressed={paused} onClick={() => useJourneyStore.setState({ motionPaused: !paused })}>
             {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}
           </button>
-          <a className="nav-cta" href="#begin">{t('Explore the prototype')} <ArrowUpRight size={15} aria-hidden="true" /></a>
+          <a className="nav-cta" href="#contact">{t('Get in touch')} <ArrowUpRight size={15} aria-hidden="true" /></a>
           <button ref={menu} className="menu-toggle" aria-expanded={open} aria-controls="mobile-navigation" aria-label={open ? t('Close navigation') : t('Open navigation')} onClick={() => setOpen(!open)} onKeyDown={(event) => { if (event.key === 'Escape') setOpen(false); }}>
             {open ? <X size={23} /> : <Menu size={23} />}
           </button>
         </div>
       </div>
       {open && (
-        <nav id="mobile-navigation" className="mobile-nav" aria-label={t('Mobile navigation')} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); menu.current?.focus(); } }}>
+        <nav id="mobile-navigation" className="mobile-nav" data-lenis-prevent aria-label={t('Mobile navigation')} onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); menu.current?.focus(); } }}>
           {links.map(([label, href]) => <a href={href} key={href} onClick={() => setOpen(false)}>{label}<ArrowUpRight size={17} aria-hidden="true" /></a>)}
+          <a href="#pitch" onClick={() => setOpen(false)}>{t('Watch the founder pitch')}<ArrowUpRight size={17} aria-hidden="true" /></a>
+          <a href="#founder" onClick={() => setOpen(false)}>{t('Meet the Founder')}<ArrowUpRight size={17} aria-hidden="true" /></a>
+          <a href="#contact" onClick={() => setOpen(false)}>{t('Contact')}<ArrowUpRight size={17} aria-hidden="true" /></a>
           <a href="#begin" onClick={() => setOpen(false)}>{t('Explore the prototype')}<ArrowUpRight size={17} aria-hidden="true" /></a>
         </nav>
       )}

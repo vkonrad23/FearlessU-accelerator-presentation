@@ -2,6 +2,7 @@ import { useThree } from '@react-three/fiber';
 import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Group } from 'three';
 import { useJourneyStore } from '@/store/journey';
+import { prepareShaders } from '@/lib/prepare-shaders';
 import { Atmosphere } from './Atmosphere';
 import { Cards } from './Cards';
 import { Figure } from './Figure';
@@ -23,16 +24,16 @@ export default function Landscape() {
   useEffect(() => {
     const group = root.current;
     if (!group) return;
-    let cancelled = false;
-    void gl.compileAsync(group, camera, scene).then(() => {
-      if (cancelled) return;
+    const controller = new AbortController();
+    void prepareShaders(gl, group, camera, controller.signal, scene).then(() => {
+      if (controller.signal.aborted) return;
       useJourneyStore.setState({ landscapeReady: true });
       invalidate();
     }).catch(() => {
-      if (!cancelled) useJourneyStore.setState({ mode: 'static' });
+      if (!controller.signal.aborted) useJourneyStore.setState({ mode: 'static' });
     });
     return () => {
-      cancelled = true;
+      controller.abort();
       useJourneyStore.setState({ landscapeReady: false });
     };
   }, [gl, scene, camera, invalidate]);

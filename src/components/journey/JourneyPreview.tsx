@@ -6,15 +6,19 @@ import { demoScenarios, getHeroRecommendation, type DemoScenarioKey } from '@/da
 import { CrisisSupport } from './CrisisSupport';
 import { useLanguage } from '@/i18n/LanguageProvider';
 
-export default function JourneyPreview({ onClose }: { onClose: () => void }) {
+export default function JourneyPreview({ onClose, initialScenario = 'speaking', initialDifficulty = 5 }: {
+  onClose: () => void;
+  initialScenario?: DemoScenarioKey;
+  initialDifficulty?: number;
+}) {
   const { t } = useLanguage();
   const dialog = useRef<HTMLDialogElement>(null);
-  const [scenario, setScenario] = useState<DemoScenarioKey>('speaking');
-  const [difficulty, setDifficulty] = useState(5);
+  const [scenario, setScenario] = useState<DemoScenarioKey>(initialScenario);
+  const [difficulty, setDifficulty] = useState(initialDifficulty);
   const [showStep, setShowStep] = useState(false);
   const [reflect, setReflect] = useState(false);
   const [reflected, setReflected] = useState(false);
-  const [newDifficulty, setNewDifficulty] = useState(5);
+  const [newDifficulty, setNewDifficulty] = useState(initialDifficulty);
   const [nextChoice, setNextChoice] = useState('repeat');
   const recommendation = getHeroRecommendation(scenario, difficulty);
   const nextRecommendation = getHeroRecommendation(scenario, nextChoice === 'prepare' || newDifficulty >= 8 ? Math.max(8, newDifficulty) : difficulty);

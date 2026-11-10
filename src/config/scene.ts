@@ -70,9 +70,10 @@ export const sceneConfig = {
     src: '/fearlessu-civilian-cape.webp',
     aspect: 4 / 3,
     focalPoint: { desktop: [0.5, 0.18], mobile: [0.53, 0.18] },
-    mobileHeight: 380,
+    mobileHeight: 160,
     mobileHeightRatio: 0.55,
     mobileMaxAspect: 2.35,
+    segments: { desktop: [192, 132], mobile: [128, 88], low: [96, 64] },
     // Source UV ellipse around the standing figure, independent of the viewport crop.
     subject: [0.5, 0.62, 0.08, 0.22],
     parallax: 0.018,

@@ -10,6 +10,10 @@ import { HowItWorks } from './HowItWorks';
 import { Safety } from './Safety';
 import { FinalCTA } from './FinalCTA';
 import { ChapterRail } from './ChapterRail';
+import { Partnerships } from './Partnerships';
+import { PitchVideo } from './PitchVideo';
+import { Founder } from './Founder';
+import { SiteFooter } from './SiteFooter';
 
 export function Journey() {
   useScrollJourney();
@@ -22,12 +26,18 @@ export function Journey() {
       <div className="world-scrim" aria-hidden="true" />
       <ChapterRail />
       <main id="main" tabIndex={-1}>
-        <Hero />
-        <Product />
-        <HowItWorks />
-        <Safety />
-        <FinalCTA />
+        <div data-scenic-journey>
+          <Hero />
+          <Product />
+          <HowItWorks />
+          <Safety />
+          <FinalCTA />
+        </div>
+        <Partnerships />
+        <PitchVideo />
+        <Founder />
       </main>
+      <SiteFooter />
     </div>
   );
 }

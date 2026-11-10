@@ -1,5 +1,8 @@
+import { partnersUk } from './partners.uk.ts';
+
 /** Ukrainian copy for the active website and its interactive prototype. */
 export const uk: Record<string, string> = {
+  ...partnersUk,
   'FearlessU · Beyond fear. Beyond limits.': 'FearlessU · За межами страху. За межами обмежень.',
   'An early-stage AI mental wellness concept exploring personalized, CBT-informed tools. Experimental prototype. Not clinically validated. Not medical advice.': 'Концепція ШІ-платформи психологічного добробуту на ранньому етапі, що досліджує персоналізовані інструменти на засадах КПТ. Експериментальний прототип. Клінічно не перевірено. Не є медичною порадою.',
   'Skip to content': 'Перейти до вмісту',

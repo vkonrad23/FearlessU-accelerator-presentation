@@ -22,6 +22,7 @@ export function CameraRig() {
     if (state.visible && state.motionPaused && (
       state.progress !== previous.progress || state.selectedFeature !== previous.selectedFeature
       || state.activeStep !== previous.activeStep || state.landscapeReady !== previous.landscapeReady
+      || state.visible !== previous.visible
     )) invalidate();
   }), [invalidate]);
 

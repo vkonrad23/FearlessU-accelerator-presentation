@@ -69,9 +69,7 @@ export function ArtworkBackdrop() {
   const quality = useJourneyStore((state) => state.quality);
   const frame = useMemo(() => artworkFrame(size.width, size.height), [size.width, size.height]);
   const framing = useMemo(() => artworkCover(frame.width, frame.height), [frame]);
-  const segments = useMemo<[number, number]>(() => quality === 'desktop'
-    ? [320, 220]
-    : quality === 'mobile' ? [224, 160] : [160, 112], [quality]);
+  const segments = sceneConfig.artwork.segments[quality];
   const image = useTexture(`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`, (texture) => {
     texture.colorSpace = SRGBColorSpace;
   });

@@ -33,7 +33,7 @@ export default function WorldCanvas() {
   const maxDpr = landscapeReady ? sceneConfig.quality.maxDpr : sceneConfig.quality.artworkDpr;
 
   useEffect(() => {
-    const element = host.current;
+    const element = document.querySelector('[data-scenic-journey]') ?? host.current;
     if (!element) return;
     let intersecting = true;
     const update = () => useJourneyStore.setState({ visible: intersecting && !document.hidden });
