@@ -11,7 +11,7 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="process-section page-width" data-camera-stop="0.4" aria-labelledby="how-title">
       <div className="reading-panel process-intro">
-        <p className="eyebrow"><span className="chapter-number">03</span>{t('A loop you can see')}</p>
+      <p className="eyebrow"><span className="chapter-number">04</span>{t('A loop you can see')}</p>
         <h2 id="how-title">{t('Clear structure.')}<br /><em>{t('Choices you control.')}</em></h2>
         <p className="section-description">{t('The intended AI workflow keeps each suggestion connected to user input and a visible boundary. The working demonstration uses predefined local rules.')}</p>
         <p className="implementation-note">{t('The preview uses fixed choices, not free-text risk screening. Crisis guidance is always visible; production safety controls require qualified review.')}</p>

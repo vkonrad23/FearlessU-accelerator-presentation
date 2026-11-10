@@ -9,7 +9,7 @@ export function FinalCTA() {
   return (
       <section id="begin" className="content-section final-section page-width" data-camera-stop="1" aria-labelledby="begin-title">
         <div className="reading-panel final-panel">
-          <p className="eyebrow"><span className="chapter-number">05</span>{t('A guided first step')}</p>
+          <p className="eyebrow"><span className="chapter-number">06</span>{t('A guided first step')}</p>
           <h2 id="begin-title">{t('Experience the')}<br /><em>{t('FearlessU Journey.')}</em></h2>
           <p className="section-description">{t('Explore the working prototype below. It uses transparent local rules to demonstrate how a small reflection can become an optional, bounded practice step.')}</p>
           <PreviewButton>{t('Explore the fear journey')} <ArrowUpRight size={19} aria-hidden="true" /></PreviewButton>

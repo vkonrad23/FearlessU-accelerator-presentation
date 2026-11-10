@@ -22,7 +22,7 @@ test('partner, evidence, and founder copy has complete Ukrainian translations', 
 });
 
 test('new and updated interface labels never fall back to English in Ukrainian', () => {
-  const components = ['Partnerships', 'HeroProductPreview', 'PreviewButton', 'Founder', 'PitchVideo', 'SiteFooter', 'Navigation', 'Hero', 'FinalCTA', 'JourneyPreview'];
+  const components = ['Partnerships', 'AIArchitecture', 'HeroProductPreview', 'PreviewButton', 'Founder', 'PitchVideo', 'SiteFooter', 'Navigation', 'Hero', 'FinalCTA', 'JourneyPreview'];
   for (const name of components) {
     const path = new URL(`../src/components/journey/${name}.tsx`, import.meta.url);
     const source = ts.createSourceFile(path.pathname, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -95,5 +95,33 @@ test('exported WebVTT stays in sync with the bilingual transcript', () => {
   for (const locale of ['en', 'uk'] as const) {
     const file = new URL(`../public${pitchMedia.captions[locale]}`, import.meta.url);
     assert.equal(readFileSync(file, 'utf8').replace(/\r\n/g, '\n'), pitchWebVtt(locale), 'Run npm run captions after editing the transcript.');
+  }
+});
+
+test('the current silent prototype walkthrough ships with valid local bilingual subtitles', () => {
+  const videoPath = new URL(`../public${pitchMedia.walkthrough.video}`, import.meta.url);
+  const video = readFileSync(videoPath);
+  assert.equal(video.toString('ascii', 4, 8), 'ftyp');
+  assert.ok(video.length < 800_000);
+  assert.ok(pitchMedia.walkthrough.durationSeconds > 10 && pitchMedia.walkthrough.durationSeconds < 15);
+
+  const posterPath = new URL(`../public${pitchMedia.walkthrough.poster}`, import.meta.url);
+  const poster = readFileSync(posterPath);
+  assert.ok(statSync(posterPath).size < 250_000);
+  assert.equal(poster.toString('ascii', 8, 12), 'WEBP');
+
+  for (const locale of ['en', 'uk'] as const) {
+    const path = new URL(`../public${pitchMedia.walkthrough.captions[locale]}`, import.meta.url);
+    const text = readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+    assert.match(text, /^WEBVTT\n/);
+    const cues = text.split('\n').filter((line) => line.includes(' --> '));
+    assert.equal(cues.length, 5);
+    let previousEnd = 0;
+    for (const cue of cues) {
+      const [start, end] = cue.split(' --> ').map((stamp) => stamp.split(':').reduce((sum, part) => sum * 60 + Number(part), 0));
+      assert.ok(start >= previousEnd && end > start);
+      previousEnd = end;
+    }
+    assert.equal(previousEnd, pitchMedia.walkthrough.durationSeconds);
   }
 });

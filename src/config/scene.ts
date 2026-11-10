@@ -161,7 +161,8 @@ export const featureLabels = [
 export const chapters = [
   { id: 'top', label: 'The beginning', number: '01' },
   { id: 'product', label: 'The possibilities', number: '02' },
-  { id: 'how-it-works', label: 'Your own pace', number: '03' },
-  { id: 'ai-safety', label: 'Care comes first', number: '04' },
-  { id: 'begin', label: 'A new perspective', number: '05' },
+  { id: 'ai-architecture', label: 'How the AI fits', number: '03' },
+  { id: 'how-it-works', label: 'Your own pace', number: '04' },
+  { id: 'ai-safety', label: 'Care comes first', number: '05' },
+  { id: 'begin', label: 'A new perspective', number: '06' },
 ] as const;

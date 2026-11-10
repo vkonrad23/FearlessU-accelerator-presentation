@@ -15,11 +15,20 @@ export const pitchMedia = {
     uk: '/media/fearlessu-pitch.uk.vtt',
   },
   durationSeconds: 61.233,
+  walkthrough: {
+    video: '/media/fearlessu-prototype-walkthrough.mp4',
+    poster: '/media/fearlessu-prototype-walkthrough-poster.webp',
+    captions: {
+      en: '/media/fearlessu-prototype-walkthrough.en.vtt',
+      uk: '/media/fearlessu-prototype-walkthrough.uk.vtt',
+    },
+    durationSeconds: 12.3,
+  },
 } as const;
 
 export const investorModels = [
-  buyerHypotheses[0],
   buyerHypotheses[2],
+  buyerHypotheses[0],
   buyerHypotheses[4],
 ] as const;
 
@@ -30,7 +39,7 @@ export const developmentStatus = [
     label: 'Available in this prototype',
     items: [
       'Three predefined everyday goals with transparent, local step-selection rules.',
-      'Difficulty controls, optional reflection, and a clear choice to prepare, repeat, or pause.',
+      'Difficulty controls, a selectable example result, optional reflection, and a clear choice to prepare, repeat, or pause.',
       'English and Ukrainian interfaces, keyboard controls, and a static alternative to 3D.',
     ],
     boundary: 'No live AI, accounts, clinical assessment, or storage of demo entries.',

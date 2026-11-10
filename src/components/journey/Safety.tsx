@@ -14,7 +14,7 @@ export function Safety() {
   return (
     <section id="ai-safety" className="content-section safety-section page-width" data-camera-stop="0.8" aria-labelledby="safety-title">
       <div className="reading-panel safety-panel">
-        <p className="eyebrow"><span className="chapter-number">04</span>{t('Responsible AI & data practices')}</p>
+        <p className="eyebrow"><span className="chapter-number">05</span>{t('Responsible AI & data practices')}</p>
         <h2 id="safety-title">{t('Clear boundaries.')}<br /><em>{t('Visible accountability.')}</em></h2>
         <p className="section-description">{t('What a visitor can use today is distinct from what a production product would need. No completed clinical validation or production safety system is implied.')}</p>
         <div className="safety-boundaries">

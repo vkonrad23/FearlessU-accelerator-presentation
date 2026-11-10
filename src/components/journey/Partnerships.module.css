@@ -42,6 +42,11 @@
 .model h5 { margin: 0 0 16px; font-size: 16px; line-height: 1.5; font-weight: 500; }
 .model .question { margin-top: auto; margin-bottom: 0; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--color-forest) 16%, transparent); font-size: 13px; }
 .question > span, .decision > span { display: block; margin-bottom: 9px; font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+.differentiationGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.differentiationGrid article { padding: 20px; border: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); border-radius: 6px; background: color-mix(in srgb, var(--color-forest) 3%, var(--color-cream)); }
+.differentiationGrid h5 { margin: 0 0 10px; font-size: 14px; line-height: 1.55; font-weight: 600; }
+.differentiationGrid p { margin: 0; font-size: 13px; line-height: 1.8; }
+.competitorNote { max-width: 950px; margin: 14px 0 0; color: #52645d; font-size: 12px; line-height: 1.75; }
 .status { display: flex; flex-direction: column; padding: 28px; border-radius: 8px; background: var(--color-deep); color: var(--color-cream); border-top: 3px solid var(--color-forest); }
 .status[data-status="planned"] { border-top-color: var(--color-gold); }
 .status[data-status="research"] { border-top-color: var(--color-cool); }
@@ -60,6 +65,17 @@
 .timeline h4 { margin: 0 0 12px; font-size: 17px; font-weight: 500; line-height: 1.5; }
 .timeline p { margin: 0; font-size: 14px; line-height: 1.8; }
 .timeline .decision { padding-left: 26px; border-left: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); font-size: 13px; }
+.study { margin: 0 0 30px; padding: 25px; border: 1px solid color-mix(in srgb, var(--color-forest) 20%, transparent); border-radius: 7px; background: color-mix(in srgb, var(--color-forest) 4%, var(--color-cream)); scroll-margin-top: 110px; }
+.studyIntro { max-width: 780px; }
+.studyIntro .label { margin: 0 0 7px; color: var(--color-forest); font-size: 10px; letter-spacing: .11em; text-transform: uppercase; }
+.studyIntro h4 { margin: 0 0 6px; font-family: var(--font-editorial), Georgia, serif; font-size: 27px; font-weight: 400; line-height: 1.25; }
+.studyIntro > p:last-child { margin: 0; font-size: 13px; line-height: 1.75; }
+.studyGrid { display: grid; grid-template-columns: .85fr 1.15fr 1fr; gap: 22px; margin-top: 22px; padding-top: 20px; border-top: 1px solid color-mix(in srgb, var(--color-forest) 18%, transparent); }
+.studyGrid h5 { margin: 0 0 8px; font-size: 12px; font-weight: 600; }
+.studyGrid p, .studyGrid li { margin: 0; font-size: 12px; line-height: 1.75; }
+.studyGrid ul { padding-left: 16px; margin: 0; }
+.studyGrid li + li { margin-top: 5px; }
+.studyBoundary { margin: 17px 0 0; padding-top: 14px; border-top: 1px solid color-mix(in srgb, var(--color-forest) 15%, transparent); color: #52645d; font-size: 11px; line-height: 1.7; }
 .proof { display: flex; flex-direction: column; padding: 25px 0; border-top: 1px solid color-mix(in srgb, var(--color-forest) 35%, transparent); }
 .proof > svg { margin-bottom: 20px; color: var(--color-forest); }
 .proof h4 { margin: 0 0 15px; font-size: 19px; font-weight: 500; line-height: 1.5; }
@@ -72,6 +88,10 @@
 .supportGrid { gap: 30px; margin-bottom: 20px; }
 .supportGrid h4 { margin: 0 0 12px; font-size: 16px; font-weight: 500; line-height: 1.5; }
 .support > .small { margin: 19px 0 0; max-width: 720px; }
+.ask { margin: 0 0 22px; padding: 21px 24px; border: 1px solid color-mix(in srgb, var(--color-forest) 23%, transparent); background: var(--color-cream); }
+.ask h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
+.ask p { margin: 0; font-size: 13px; line-height: 1.8; }
+.ask p + p { margin-top: 7px; color: #52645d; }
 
 @media (max-width: 1100px) {
   .header { gap: 35px; }
@@ -83,7 +103,7 @@
 
 @media (max-width: 767px) {
   .section { padding-block: 65px; }
-  .header, .opportunity, .modelGrid, .statusGrid, .evidenceGrid, .supportGrid { grid-template-columns: 1fr; }
+  .header, .opportunity, .modelGrid, .statusGrid, .evidenceGrid, .supportGrid, .differentiationGrid, .studyGrid { grid-template-columns: 1fr; }
   .header { gap: 26px; }
   .title { font-size: clamp(42px, 11vw, 60px); }
   .intro > p { font-size: 14px; }
@@ -105,4 +125,6 @@
   .support { margin-top: 54px; padding: 24px; }
   .supportGrid { gap: 12px; }
   .support .primaryLink { width: 100%; }
+  .study { padding: 21px; }
+  .ask { padding: 19px; }
 }

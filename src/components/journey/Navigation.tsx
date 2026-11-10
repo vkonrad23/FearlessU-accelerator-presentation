@@ -16,7 +16,9 @@ export function Navigation() {
   const links = [
     [t('Product'), '#product'],
     [t('How it works'), '#how-it-works'],
+    [t('AI architecture'), '#ai-architecture'],
     [t('AI & safety'), '#ai-safety'],
+    [t('Evidence & partners'), '#validation-plan'],
     [t('For investors'), '#investors'],
   ];
 
@@ -34,9 +36,9 @@ export function Navigation() {
         </nav>
         <div className="nav-actions">
           <div className="language-toggle" role="group" aria-label={t('Choose language')}>
-            <button type="button" lang="en" aria-label={t('Switch language to English')} aria-pressed={locale === 'en'} onClick={() => setLocale('en')}>EN</button>
+            <button type="button" lang="en" aria-pressed={locale === 'en'} onClick={() => setLocale('en')}>EN</button>
             <span aria-hidden="true">/</span>
-            <button type="button" lang="uk" aria-label={t('Switch language to Ukrainian')} aria-pressed={locale === 'uk'} onClick={() => setLocale('uk')}>УКР</button>
+            <button type="button" lang="uk" aria-pressed={locale === 'uk'} onClick={() => setLocale('uk')}>УКР</button>
           </div>
           <button className="motion-toggle" data-enabled={!reduced && mode === 'webgl'} disabled={reduced || mode !== 'webgl'} aria-label={paused ? t('Resume ambient motion') : t('Pause ambient motion')} aria-pressed={paused} onClick={() => useJourneyStore.setState({ motionPaused: !paused })}>
             {paused ? <Play size={15} aria-hidden="true" /> : <Pause size={15} aria-hidden="true" />}

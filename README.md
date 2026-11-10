@@ -44,15 +44,19 @@ The 3.5-second intro runs once per browser-tab session, after the base scene is 
 
 ## For investors and research partners
 
-The separate **For Investors & Research Partners** section (`#investors`) covers the problem, a narrow market-entry hypothesis, three business-model hypotheses, a validation plan, inspectable development evidence, and the support needed. It is reachable from the main navigation and hero.
+The scenic chapters include a visual, status-labeled architecture map that separates local prototype rules, visible but limited safety boundaries, and future expert-reviewed components. The flow shows goal selection, a bounded example, CBT-informed skills, safety, and user-chosen reflection without implying that a live AI system exists.
 
-- **Built Today:** three fixed goals, local recommendation rules, reflection, preparation/repeat/pause choices, bilingual controls, and static rendering fallback.
+The separate **For Investors & Research Partners** section (`#investors`) covers the problem, an initial adult-university-student beachhead and possible wellbeing/student-success buyer, monetization hypotheses, proposed design differences to test, staged validation, project evidence, and a direct request for partners. The competitive framing is explicitly a hypothesis, not a benchmark or moat claim.
+
+- **Built Today:** three fixed goals, local recommendation rules, a selectable illustrative result, reflection, preparation/repeat/pause choices, bilingual controls, and static rendering fallback.
 - **Planned Next:** user/buyer interviews, usability testing, qualified review, privacy architecture, constrained-AI evaluation, and a reviewed pilot proposal.
 - **Research Ambitions:** original CBT-inspired exercise candidates and trauma-informed/PTSD-related research with qualified collaborators. These are not available treatments or validated therapies.
 
+The first proposed usability study is clearly marked **not recruited** and non-clinical. It names an adult-student sample hypothesis, prototype tasks, consent/ethics gates, and the interaction and accessibility measures to report. No user interviews, usability sessions, or clinical results are claimed as completed.
+
 The site does not invent users, revenue, testimonials, market-size figures, clinical results, or institutional endorsements. The displayed evidence is implementation work. Interviews and usability findings remain future work and should be published with methods and limitations.
 
-The partner brief, pitch, and founder sections follow the five scenic chapters without adding camera stops. The header contact button opens the real contact section, not the local demo.
+The six anchored scenic content chapters move the camera along the existing five-keyframe 3D path. The partner brief, pitch, and founder sections follow without adding camera stops. The header contact button opens the real contact section, not the local demo.
 
 ## Founder and supplied media
 
@@ -60,7 +64,7 @@ The founder section uses the latest supplied JPEG at its original 966×1024 dime
 
 The self-hosted pitch is **61.233 seconds**, 1280×720 H.264/AAC, approximately **3.66 MB**. Its native player has a poster, keyboard-accessible play control, `preload="none"`, no autoplay, English/Ukrainian subtitle tracks, a transcript, and a download fallback. Caption selection follows the page language until the visitor makes an explicit choice; native track changes also update the selector.
 
-The recording shows an earlier interface and describes intended AI/therapeutic goals. A prominent notice separates that vision from the current local-rules demo and explicitly states that citing established CBT does not validate FearlessU.
+The recording shows an earlier interface and describes intended AI/therapeutic goals. A prominent notice separates that vision from the current local-rules demo and explicitly states that citing established CBT does not validate FearlessU. A separate **12-second silent screen recording** shows the current goal → optional example → simulated result → possible next-choice flow. It has English/Ukrainian subtitles, a poster, no autoplay, and a download link; the captions describe the screen and are not voiceover.
 
 Media optimization and draft transcription were performed locally; the source recording was not uploaded. Captions are lightly edited draft transcriptions, not a certified human-reviewed transcript. The shared 17-cue source lives in `src/data/pitchTranscript.ts`. After editing it, regenerate and verify both WebVTT files:
 
@@ -87,7 +91,7 @@ src/store/                  Small transient scene store
 src/data/                   Demo rules, partner brief, bilingual pitch transcript
 tests/                      Scene, artwork, safety, translation, contact/media tests
 scripts/                    Bundle/Lighthouse gates and caption generation
-public/media/               Supplied pitch, poster, portrait, and subtitle tracks
+public/media/               Pitch, current prototype walkthrough, portrait, posters, and subtitle tracks
 public/models/              Optional model contract, no model required
 public/draco/               Instructions for a local decoder
 ```
@@ -170,7 +174,11 @@ The workflow derives the name from the destination repository, runs tests and th
 
 See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene-math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
 
-The final optimized Pages export reached **91 performance / 100 accessibility / 100 best practices / 100 SEO** in the English desktop lab audit, with **CLS 0**, LCP 1.062 s, and TBT 202 ms. An earlier Pages audit failed at 60; both shader preparation and mesh density were subsequently improved. The host CPU benchmark also changed, so the difference is not attributable solely to the code. Initial JavaScript is **226.2 kB gzip** (226.3 kB with the Pages prefix), below 250 kB; emitted deferred chunks total approximately **383.8 kB gzip**. Both optimized exports passed lint, TypeScript, all **33 tests**, and the bundle gate.
+The latest local root-export Lighthouse run scored **95 performance / 100 accessibility / 100 best practices / 100 SEO**, with FCP 305 ms, LCP 1,081 ms, TBT 140 ms, and CLS 0. Repeated desktop runs of identical code ranged from 84 to 95 as blocking time varied, so treat Lighthouse as a noisy local lab measure; the final run passed the configured ≥85 gate. Initial JavaScript is **232.5 kB gzip** against a 250 kB budget; emitted deferred chunks total **380.5 kB gzip**. `npm run build`, all **34 tests**, and the bundle gate passed.
+
+The production browser pass rendered WebGL at 1440 px. Reduced-motion mobile selected the static scene; English/Ukrainian layouts at 390 px, 320 px, and 667×375 had no horizontal overflow. Keyboard feature switching, Escape behavior and focus return for the menu/dialog, the Ukrainian example-result/next-step flow, and the 12.3-second video with both subtitle tracks passed with no application errors. Neither pitch video is requested before play.
+
+The previous optimized Pages export reached **91 performance / 100 accessibility / 100 best practices / 100 SEO**, with CLS 0, LCP 1.062 s, and TBT 202 ms. An earlier Pages audit failed at 60; both shader preparation and mesh density were subsequently improved. The host CPU benchmark also changed, so the score difference is not attributable solely to code.
 
 Before the final graphics optimization, both root and Pages exports passed **132 partner/media checks**, scenic release checks, and **76 detailed interface checks**. The optimized Pages export then passed the **132 checks and scenic release suite again**, with no application errors or failed resources. Coverage includes both languages, widths from 320 to 1920 px across the suites, first-screen controls, mini-to-dialog state, captions, manual video playback, contact links, portrait dimensions, reversible scene navigation, and fallbacks. Axe reported no violations in the sampled desktop, mobile, and dialog states. Gradient contrast remained incomplete in axe; supplemental hero samples met their thresholds. These checks do not establish whole-site accessibility conformance.
 
@@ -179,6 +187,7 @@ Final optimization reports are `artifacts/lighthouse-partner-optimized.json`, `a
 Remaining limits:
 
 - Real iOS/Android hardware, Safari/Firefox, assistive-technology sessions, and long-duration GPU/battery behavior have not been validated.
+- No user interviews, usability sessions, or clinical studies have been conducted. The proposed sample and protocol are planning details, not research results.
 - Cold Ukrainian visits still show layout movement while the saved/browser language is applied after English static HTML. Current isolated samples observed accumulated shifts of approximately 0.0979 on mobile and 0.0501 on desktop, versus 0 in the English samples. These are local observations, not field CLS measurements or a zero-shift guarantee.
 - The optimized Pages release check sampled 53 FPS in desktop Chromium. This is not a sustained or real-phone FPS measurement.
 - Optional GLB/Draco assets and a live GitHub Pages deployment need their own verification when enabled.

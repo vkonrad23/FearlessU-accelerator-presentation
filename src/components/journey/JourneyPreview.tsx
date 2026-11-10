@@ -11,6 +11,7 @@ export default function JourneyPreview({ onClose, initialScenario = 'speaking', 
   initialScenario?: DemoScenarioKey;
   initialDifficulty?: number;
 }) {
+  type ExampleOutcome = 'tried' | 'prepared' | 'paused';
   const { t } = useLanguage();
   const dialog = useRef<HTMLDialogElement>(null);
   const [scenario, setScenario] = useState<DemoScenarioKey>(initialScenario);
@@ -19,10 +20,14 @@ export default function JourneyPreview({ onClose, initialScenario = 'speaking', 
   const [reflect, setReflect] = useState(false);
   const [reflected, setReflected] = useState(false);
   const [newDifficulty, setNewDifficulty] = useState(initialDifficulty);
+  const [outcome, setOutcome] = useState<ExampleOutcome>('tried');
   const [nextChoice, setNextChoice] = useState('repeat');
   const recommendation = getHeroRecommendation(scenario, difficulty);
-  const nextRecommendation = getHeroRecommendation(scenario, nextChoice === 'prepare' || newDifficulty >= 8 ? Math.max(8, newDifficulty) : difficulty);
-  const resetResult = () => { setShowStep(false); setReflect(false); setReflected(false); };
+  const nextDifficulty = nextChoice === 'prepare' || newDifficulty >= 8 ? Math.max(8, newDifficulty) : newDifficulty;
+  const nextRecommendation = getHeroRecommendation(scenario, nextDifficulty);
+  const outcomeLabel = { tried: 'I tried the example action', prepared: 'I prepared without doing it', paused: 'I chose to pause or stop' }[outcome];
+  const noNextStep = nextChoice === 'pause' || outcome === 'paused';
+  const resetResult = () => { setShowStep(false); setReflect(false); setReflected(false); setOutcome('tried'); };
 
   useEffect(() => {
     const element = dialog.current;
@@ -51,9 +56,9 @@ export default function JourneyPreview({ onClose, initialScenario = 'speaking', 
       <p id="preview-boundary" className="preview-boundary">{t('No autonomous diagnosis. No replacement for professional care. No promise of a clinical outcome.')}</p>
       <CrisisSupport compact />
       <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        {reflected ? (nextChoice === 'pause' ? t('You can stop here. No next step is needed.') : t('A next choice: {title}').replace('{title}', t(nextRecommendation.title))) : showStep ? `${t(recommendation.title)} ${t(recommendation.activity)}` : ''}
+        {reflected ? (noNextStep ? t('You can stop here. No next step is needed.') : t('A possible next choice: {title}').replace('{title}', t(nextRecommendation.title))) : showStep ? `${t(recommendation.title)} ${t(recommendation.activity)}` : ''}
       </p>
-      <form onSubmit={(event) => { event.preventDefault(); setShowStep(true); setReflect(false); setReflected(false); setNewDifficulty(difficulty); setNextChoice('repeat'); }}>
+      <form onSubmit={(event) => { event.preventDefault(); setShowStep(true); setReflect(false); setReflected(false); setNewDifficulty(difficulty); setOutcome('tried'); setNextChoice('repeat'); }}>
         <label htmlFor="preview-scenario">{t('Choose an illustrative goal')}</label>
         <select id="preview-scenario" value={scenario} onChange={(event) => { setScenario(event.target.value as DemoScenarioKey); resetResult(); }}>
           {demoScenarios.map((item) => <option key={item.value} value={item.value}>{t(item.label)}</option>)}
@@ -76,7 +81,13 @@ export default function JourneyPreview({ onClose, initialScenario = 'speaking', 
       {showStep && reflect && (
         <form className="preview-reflection" onSubmit={(event) => { event.preventDefault(); setReflected(true); }}>
           <p className="eyebrow">{t('A private, optional check-in')}</p>
-          <p className="implementation-note">{t('You do not need to carry out the activity. Use an illustrative rating to explore how the local rules respond.')}</p>
+          <p className="implementation-note">{t('This is a simulation. You do not need to carry out the activity. Choose an example result and rating to see how the local rules offer a possible next choice.')}</p>
+          <label htmlFor="reflection-outcome">{t('What happened in this example?')}</label>
+          <select id="reflection-outcome" value={outcome} onChange={(event) => { setOutcome(event.target.value as ExampleOutcome); setReflected(false); }}>
+            <option value="tried">{t('I tried the example action')}</option>
+            <option value="prepared">{t('I prepared without doing it')}</option>
+            <option value="paused">{t('I chose to pause or stop')}</option>
+          </select>
           <div className="range-label"><label htmlFor="reflection-difficulty">{t('Perceived difficulty now')}</label><output htmlFor="reflection-difficulty">{newDifficulty} / 10</output></div>
           <input id="reflection-difficulty" type="range" min={0} max={10} value={newDifficulty} aria-valuetext={t('At {score} out of 10').replace('{score}', String(newDifficulty))} onChange={(event) => { setNewDifficulty(Number(event.target.value)); setReflected(false); }} />
           <label htmlFor="reflection-choice">{t('What would you prefer next?')}</label>
@@ -88,8 +99,8 @@ export default function JourneyPreview({ onClose, initialScenario = 'speaking', 
           <button className="button button-primary" type="submit">{t('Review my next choice')} <ArrowRight size={17} aria-hidden="true" /></button>
           {reflected && (
             <section className="preview-summary" aria-label={t('Your temporary practice summary')}>
-              <p>{t('Illustrative check-ins: {before} / 10, then {after} / 10. These are not clinical measures.').replace('{before}', String(difficulty)).replace('{after}', String(newDifficulty))}</p>
-              <p>{nextChoice === 'pause' ? t('You can stop here. No next step is needed.') : t(nextRecommendation.activity)}</p>
+              <p>{t('Example result: {outcome}. Difficulty check-ins: {before} / 10, then {after} / 10. These are not clinical measures.').replace('{outcome}', t(outcomeLabel)).replace('{before}', String(difficulty)).replace('{after}', String(newDifficulty))}</p>
+              <p>{noNextStep ? t('You can stop here. No next step is needed.') : t('Possible next step: {activity}').replace('{activity}', t(nextRecommendation.activity))}</p>
               <p className="implementation-note">{t('Your choice remains optional. Closing this preview clears the entries.')}</p>
             </section>
           )}

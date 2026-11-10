@@ -32,6 +32,18 @@
 .transcriptNote { padding: 18px; margin-bottom: 24px; border-left: 1px solid var(--color-gold); color: var(--color-muted); font-size: 13px; line-height: 1.8; background: var(--color-background); }
 .cue { display: grid; grid-template-columns: 44px 1fr; gap: 20px; max-width: 880px; padding-block: 4px; font-size: 14px; line-height: 1.8; }
 .timestamp { color: var(--color-gold); font-size: 12px; font-variant-numeric: tabular-nums; }
+.walkthrough { margin-top: 62px; padding-top: 34px; border-top: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent); }
+.walkthroughHeader { display: grid; grid-template-columns: .9fr 1.1fr; align-items: end; gap: 45px; margin-bottom: 22px; }
+.walkthroughHeader h3 { margin: 0; font-size: clamp(28px, 3vw, 42px); line-height: 1.12; letter-spacing: -.025em; }
+.walkthroughHeader > p { margin: 0; color: var(--color-muted); font-size: 13px; line-height: 1.8; }
+.walkthroughPlayer { overflow: hidden; background: #061912; border: 1px solid color-mix(in srgb, var(--color-cream) 20%, transparent); border-radius: 9px; }
+.walkthroughPlayer video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #061912; }
+.walkthroughPlayer video::cue { background: rgb(6 25 18 / 92%); color: #fffdf7; }
+.walkthroughControls { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; padding-top: 13px; }
+.walkthroughControls p { margin: 0; color: var(--color-muted); font-size: 12px; line-height: 1.7; }
+.walkthroughControls a { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; min-height: 44px; font-size: 13px; }
+.walkthroughControls a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.walkthroughControls a span { color: var(--color-muted); font-size: 12px; }
 
 @media (max-width: 767px) {
   .section { padding-block: 65px 45px; }
@@ -39,6 +51,10 @@
   .header h2 { font-size: 54px; }
   .header p:not(:global(.eyebrow)) { font-size: 14px; }
   .context { padding: 20px; }
+  .walkthrough { margin-top: 47px; padding-top: 26px; }
+  .walkthroughHeader { grid-template-columns: 1fr; gap: 9px; }
+  .walkthroughHeader h3 { font-size: 31px; }
+  .walkthroughControls { gap: 5px; }
   .play { gap: 13px; font-size: 15px; padding: 16px; }
   .playIcon { width: 52px; height: 52px; }
   .playIcon svg { width: 21px; }

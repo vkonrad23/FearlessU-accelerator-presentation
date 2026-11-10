@@ -4,7 +4,7 @@ import { partnersUk } from './partners.uk.ts';
 export const uk: Record<string, string> = {
   ...partnersUk,
   'FearlessU · Beyond fear. Beyond limits.': 'FearlessU · За межами страху. За межами обмежень.',
-  'An early-stage AI mental wellness concept exploring personalized, CBT-informed tools. Experimental prototype. Not clinically validated. Not medical advice.': 'Концепція ШІ-платформи психологічного добробуту на ранньому етапі, що досліджує персоналізовані інструменти на засадах КПТ. Експериментальний прототип. Клінічно не перевірено. Не є медичною порадою.',
+  'An early-stage mental wellness concept exploring future AI personalization of CBT-informed practice. Educational prototype. Not clinically validated. Not medical advice.': 'Концепція психологічного добробуту на ранньому етапі, що досліджує майбутню персоналізацію практик на засадах КПТ за допомогою ШІ. Освітній прототип. Клінічно не перевірено. Не є медичною порадою.',
   'Skip to content': 'Перейти до вмісту',
   'Early-stage concept. Educational prototype, not medical advice.': 'Концепція на ранньому етапі. Освітній прототип, не медична порада.',
   'Main navigation': 'Головна навігація',
@@ -24,7 +24,7 @@ export const uk: Record<string, string> = {
   'Interactive prototype · CBT-informed': 'Інтерактивний прототип · на засадах КПТ',
   'Beyond fear.': 'За межами страху.',
   'Beyond limits.': 'За межами обмежень.',
-  'FearlessU is an early-stage AI-powered mental wellness platform exploring personalized, CBT-informed tools to help people understand fears, challenge unhelpful thoughts, and build emotional resilience.': 'FearlessU — це платформа психологічного добробуту на ранньому етапі розробки, яка досліджує персоналізовані інструменти на засадах когнітивно-поведінкової терапії (КПТ). Вони мають допомагати людям краще розуміти страхи, переосмислювати думки, що заважають, і розвивати емоційну стійкість.',
+  'FearlessU is an early-stage mental wellness concept exploring how future AI could personalize CBT-informed practice. This working demo uses transparent local rules, not a live model.': 'FearlessU — концепція психологічного добробуту на ранньому етапі. Вона досліджує, як майбутній ШІ міг би персоналізувати практики на засадах КПТ. Ця робоча демонстрація використовує зрозумілі локальні правила, а не живу модель.',
   'Experimental prototype · Not clinically validated · Not medical advice': 'Експериментальний прототип · Клінічно не перевірено · Не є медичною порадою',
   'Explore the fear journey': 'Дослідити шлях до подолання страху',
   'A little courage.': 'Трохи сміливості.',

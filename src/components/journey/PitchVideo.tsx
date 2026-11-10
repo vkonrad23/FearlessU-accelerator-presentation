@@ -13,31 +13,39 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 export function PitchVideo() {
   const { locale, t } = useLanguage();
   const video = useRef<HTMLVideoElement>(null);
+  const walkthroughVideo = useRef<HTMLVideoElement>(null);
   const [started, setStarted] = useState(false);
   const [failed, setFailed] = useState(false);
   const [captionChoice, setCaptionChoice] = useState<Locale | 'off' | null>(null);
   const captionLanguage = captionChoice ?? locale;
   const applyCaptions = useCallback(() => {
-    if (!video.current) return;
-    for (const track of Array.from(video.current.textTracks)) {
-      track.mode = track.language === captionLanguage ? 'showing' : 'disabled';
+    for (const element of [video.current, walkthroughVideo.current]) {
+      if (!element) continue;
+      for (const track of Array.from(element.textTracks)) {
+        track.mode = track.language === captionLanguage ? 'showing' : 'disabled';
+      }
     }
   }, [captionLanguage]);
 
   useEffect(() => {
-    const element = video.current;
-    if (!element) return;
-    const syncCaptions = () => {
+    const elements = [video.current, walkthroughVideo.current].filter((element): element is HTMLVideoElement => element !== null);
+    if (elements.length === 0) return;
+    const syncCaptions = (element: HTMLVideoElement) => () => {
       const showing = Array.from(element.textTracks).find((track) => track.mode === 'showing');
       const selected = showing?.language === 'en' || showing?.language === 'uk' ? showing.language : 'off';
       if (selected !== captionLanguage) setCaptionChoice(selected);
     };
     applyCaptions();
-    element.textTracks.addEventListener('addtrack', applyCaptions);
-    element.textTracks.addEventListener('change', syncCaptions);
+    const listeners = elements.map((element) => ({ element, sync: syncCaptions(element) }));
+    for (const { element, sync } of listeners) {
+      element.textTracks.addEventListener('addtrack', applyCaptions);
+      element.textTracks.addEventListener('change', sync);
+    }
     return () => {
-      element.textTracks.removeEventListener('addtrack', applyCaptions);
-      element.textTracks.removeEventListener('change', syncCaptions);
+      for (const { element, sync } of listeners) {
+        element.textTracks.removeEventListener('addtrack', applyCaptions);
+        element.textTracks.removeEventListener('change', sync);
+      }
     };
   }, [applyCaptions, captionLanguage]);
 
@@ -122,6 +130,38 @@ export function PitchVideo() {
             </p>
           ))}
         </details>
+        <section className={styles.walkthrough} aria-labelledby="walkthrough-title">
+          <div className={styles.walkthroughHeader}>
+            <div>
+              <p className="eyebrow">{t('Current interface · screen recording')} <span className={styles.duration}>0:12</span></p>
+              <h3 id="walkthrough-title">{t('A short look at the working demo.')}</h3>
+            </div>
+            <p id="walkthrough-description">{t('This silent screen recording shows the local demo flow: choose an everyday goal, review an optional example, mark a simulated result, and see a possible next choice. Subtitles describe the interface; there is no voiceover.')}</p>
+          </div>
+          <div className={styles.walkthroughPlayer}>
+            <video
+              ref={walkthroughVideo}
+              width={1280}
+              height={720}
+              controls
+              playsInline
+              preload="none"
+              poster={`${basePath}${pitchMedia.walkthrough.poster}`}
+              aria-labelledby="walkthrough-title"
+              aria-describedby="walkthrough-description"
+              onLoadedMetadata={applyCaptions}
+            >
+              <source src={`${basePath}${pitchMedia.walkthrough.video}`} type="video/mp4" />
+              <track kind="subtitles" srcLang="en" label="English guidance" src={`${basePath}${pitchMedia.walkthrough.captions.en}`} default={locale === 'en'} />
+              <track kind="subtitles" srcLang="uk" label="Український опис" src={`${basePath}${pitchMedia.walkthrough.captions.uk}`} default={locale === 'uk'} />
+              {t('Your browser does not support inline video. Use the download link or read the description above.')}
+            </video>
+          </div>
+          <div className={styles.walkthroughControls}>
+            <p>{t('12-second silent capture. The prototype inputs stay in the page session and are not sent to a live AI model.')}</p>
+            <a href={`${basePath}${pitchMedia.walkthrough.video}`} download><Download size={15} aria-hidden="true" />{t('Download screen recording')} <span>(MP4, 475 KiB)</span></a>
+          </div>
+        </section>
         <a href="#contact" className="text-link">{t('Help shape the next stage')} <ArrowRight size={17} aria-hidden="true" /></a>
       </div>
     </section>

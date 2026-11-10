@@ -27,6 +27,7 @@ export function Partnerships() {
         <nav className={styles.index} aria-label={t('Partner brief sections')}>
           <a href="#opportunity">{t('Problem & market')}</a>
           <a href="#development-status">{t('Built & planned')}</a>
+          <a href="#research-study">{t('Proposed first study')}</a>
           <a href="#validation-plan">{t('Validation plan')}</a>
           <a href="#project-evidence">{t('Project evidence')}</a>
           <a href="#partner-support">{t('Support needed')}</a>
@@ -45,9 +46,9 @@ export function Partnerships() {
             </div>
             <div className={styles.market}>
               <span className={styles.badge}>{t('Market-entry hypothesis')}</span>
-              <h4>{t('Start narrow. Learn before scaling.')}</h4>
-              <p>{t('Begin with manageable everyday goals, such as speaking in a small group. Explore direct-user demand and university wellbeing workflows before considering broader institutional use.')}</p>
-              <p className={styles.small}>{t('Audience size, willingness to pay, purchasing pathways, and pricing are not validated. No market-size or revenue figure is claimed.')}</p>
+              <h4>{t('Adult students. Everyday speaking confidence.')}</h4>
+              <p>{t('Initial beachhead hypothesis: adult university students navigating everyday speaking and social-confidence goals. A possible first buyer is a university wellbeing or student-success team.')}</p>
+              <p className={styles.small}>{t('Test this alongside existing student support, never as its replacement. Audience size, demand, purchasing pathways, and pricing are unvalidated; no market-size or revenue figure is claimed.')}</p>
             </div>
           </div>
           <div className={styles.subheading}>
@@ -63,6 +64,16 @@ export function Partnerships() {
               </article>
             ))}
           </div>
+          <div className={styles.subheading}>
+            <h4>{t('Potential differentiation to test')}</h4>
+            <span className={styles.badge}>{t('Design hypothesis, not a proven advantage')}</span>
+          </div>
+          <div className={styles.differentiationGrid}>
+            <article><h5>{t('Compared with static wellness content')}</h5><p>{t('The prototype connects one chosen goal to an explained, optional example action and reflection.')}</p></article>
+            <article><h5>{t('Compared with open-ended AI chat')}</h5><p>{t('This demo uses fixed choices and deterministic local rules, with no free-text prompt or live model.')}</p></article>
+            <article><h5>{t('Alongside professional support')}</h5><p>{t('A future self-guided practice step could complement existing services; this prototype does not provide care.')}</p></article>
+          </div>
+          <p className={styles.competitorNote}>{t('These are hypotheses to evaluate with users and independent reviewers. No head-to-head competitor audit, validated moat, or superiority claim is presented.')}</p>
         </section>
 
         <section id="development-status" className={styles.block} aria-labelledby="status-title">
@@ -92,6 +103,23 @@ export function Partnerships() {
             <h3 id="validation-title">{t('The next milestone is better evidence.')}</h3>
             <p>{t('A proposed sequence, not completed research or a promise of clinical benefit. Each stage should inform whether and how to proceed.')}</p>
           </div>
+          <aside id="research-study" className={styles.study} aria-labelledby="study-title">
+            <div className={styles.studyIntro}>
+              <p className={styles.label}>{t('Proposed first study · Not recruited')}</p>
+              <h4 id="study-title">{t('Can people understand and use the demo as intended?')}</h4>
+              <p>{t('A small, non-clinical usability study would test clarity and user control, not treatment benefit.')}</p>
+            </div>
+            <div className={styles.studyGrid}>
+              <div><h5>{t('Proposed participants')}</h5><p>{t('8–12 adult students and 3–5 student-support staff, subject to recruitment, consent, and any required ethics review.')}</p></div>
+              <div><h5>{t('Prototype tasks')}</h5><ul>
+                <li>{t('Choose an everyday example and find the optional practice.')}</li>
+                <li>{t('Explain why the suggestion appeared and how to pause or decline it.')}</li>
+                <li>{t('Record an illustrative reflection and identify what the demo remembers.')}</li>
+              </ul></div>
+              <div><h5>{t('What to report')}</h5><p>{t('Recruitment and completion counts, task success and time, boundary comprehension, accessibility issues, and participant feedback. No clinical outcome claim.')}</p></div>
+            </div>
+            <p className={styles.studyBoundary}>{t('Protocol review, consent, and any required approvals come before recruitment. No sessions or results are reported as completed.')}</p>
+          </aside>
           <ol className={styles.timeline}>
             {validationPlan.map((step, index) => (
               <li key={step.title}>
@@ -136,6 +164,11 @@ export function Partnerships() {
           <div className={styles.supportGrid}>
             {supportPriorities.map((priority) => <article key={priority.title}><h4>{t(priority.title)}</h4><p>{t(priority.detail)}</p></article>)}
           </div>
+          <aside className={styles.ask}>
+            <h4>{t('The immediate ask')}</h4>
+            <p>{t('Seeking two university wellbeing or student-success research partners, one qualified clinical reviewer, and one usability-research collaborator to shape this small adult-student study.')}</p>
+            <p>{t('For early-stage investors: feedback and introductions to these partners are the immediate request. A funding amount is not set. None of these partners is represented as confirmed.')}</p>
+          </aside>
           <a className={styles.primaryLink} href="#founder">{t('Meet the founder & get in touch')} <ArrowUpRight size={18} aria-hidden="true" /></a>
           <p className={styles.small}>{t('No funding amount, institutional partnership, accelerator acceptance, or clinical endorsement is claimed.')}</p>
         </section>

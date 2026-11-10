@@ -14,6 +14,7 @@ import { Partnerships } from './Partnerships';
 import { PitchVideo } from './PitchVideo';
 import { Founder } from './Founder';
 import { SiteFooter } from './SiteFooter';
+import { AIArchitecture } from './AIArchitecture';
 
 export function Journey() {
   useScrollJourney();
@@ -29,6 +30,7 @@ export function Journey() {
         <div data-scenic-journey>
           <Hero />
           <Product />
+          <AIArchitecture />
           <HowItWorks />
           <Safety />
           <FinalCTA />
