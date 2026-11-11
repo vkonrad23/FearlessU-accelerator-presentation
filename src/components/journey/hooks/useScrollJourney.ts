@@ -24,7 +24,13 @@ export function useScrollJourney() {
         anchors: true,
       });
       let stops: ScrollStop[] = [];
+      let chapterTops: Array<{ top: number; index: number }> = [];
+      let stepTops: number[] = [];
+      let viewportHeight = window.innerHeight;
+      const shell = document.querySelector<HTMLElement>('.journey-shell');
+      const poster = document.querySelector<HTMLElement>('.world-poster');
       const measure = () => {
+        viewportHeight = window.innerHeight;
         const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
         const scrollPadding = Number.parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
         stops = Array.from(document.querySelectorAll<HTMLElement>('[data-camera-stop]'))
@@ -32,26 +38,28 @@ export function useScrollJourney() {
             top: Math.min(max, Math.max(0, element.getBoundingClientRect().top + window.scrollY - (element.id === 'top' ? 0 : scrollPadding))),
             progress: Number(element.dataset.cameraStop),
           }));
+        chapterTops = chapters.flatMap((item, index) => {
+          const element = document.getElementById(item.id);
+          return element ? [{ top: element.getBoundingClientRect().top + window.scrollY, index }] : [];
+        });
+        stepTops = Array.from(document.querySelectorAll<HTMLElement>('[data-process-step]'))
+          .map((element) => element.getBoundingClientRect().top + window.scrollY);
       };
       const update = () => {
         const y = window.scrollY;
         const progress = progressFromStops(y, stops);
         let chapter = 0;
-        chapters.forEach((item, index) => {
-          const element = document.getElementById(item.id);
-          if (element && element.getBoundingClientRect().top < window.innerHeight * 0.48) chapter = index;
-        });
-        let activeStep = 0;
-        document.querySelectorAll<HTMLElement>('[data-process-step]').forEach((element, index) => {
-          if (element.getBoundingClientRect().top < window.innerHeight * 0.55) activeStep = index;
-        });
-        useJourneyStore.setState({ progress, chapter, activeStep });
-        const shell = document.querySelector<HTMLElement>('.journey-shell');
-        if (shell) {
-          shell.dataset.chapter = String(chapter);
-          shell.dataset.progress = progress.toFixed(4);
-          shell.style.setProperty('--sun-progress', String(Math.min(1, Math.max(0, (progress - 0.08) / 0.72))));
+        for (const stop of chapterTops) {
+          if (stop.top - y < viewportHeight * 0.48) chapter = stop.index;
+          else break;
         }
+        let activeStep = 0;
+        stepTops.forEach((top, index) => { if (top - y < viewportHeight * 0.55) activeStep = index; });
+        useJourneyStore.setState({ progress, chapter, activeStep });
+        if (shell) {
+          if (shell.dataset.chapter !== String(chapter)) shell.dataset.chapter = String(chapter);
+        }
+        poster?.style.setProperty('--sun-progress', String(Math.min(1, Math.max(0, (progress - 0.08) / 0.72))));
       };
       const tick = (time: number) => lenis.raf(time * 1000);
       const onVisibility = () => {

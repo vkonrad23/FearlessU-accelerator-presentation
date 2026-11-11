@@ -1,5 +1,5 @@
-import { Bloom, DepthOfField, EffectComposer, Noise, ToneMapping, Vignette } from '@react-three/postprocessing';
-import { BlendFunction, ToneMappingMode } from 'postprocessing';
+import { Bloom, DepthOfField, EffectComposer, ToneMapping, Vignette } from '@react-three/postprocessing';
+import { ToneMappingMode } from 'postprocessing';
 import { sceneConfig } from '@/config/scene';
 import { useJourneyStore } from '@/store/journey';
 
@@ -14,7 +14,6 @@ export default function Effects() {
       {quality === 'desktop' && chapter > 0 ? <DepthOfField focusDistance={config.focusDistance} focalLength={config.focalLength} bokehScale={config.bokehScale} height={360} /> : null}
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
       <Vignette eskil={false} offset={0.25} darkness={config.vignetteDarkness} />
-      <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} opacity={config.noiseOpacity} />
     </EffectComposer>
   );
 }

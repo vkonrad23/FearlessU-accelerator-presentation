@@ -116,7 +116,6 @@ export const sceneConfig = {
     bloomThreshold: 1.05,
     bloomSmoothing: 0.65,
     vignetteDarkness: 0.3,
-    noiseOpacity: 0.009,
     focusDistance: 0.08,
     focalLength: 0.11,
     bokehScale: 0.25,

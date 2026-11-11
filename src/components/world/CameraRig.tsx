@@ -9,7 +9,6 @@ import { usePointer } from './usePointer';
 export function CameraRig() {
   const { invalidate } = useThree();
   const current = useRef(useJourneyStore.getState().progress);
-  const frames = useRef(0);
   const pointer = usePointer();
   const offset = useRef({ x: 0, y: 0 });
   const scratch = useRef({ position: new Vector3(), target: new Vector3() });
@@ -26,7 +25,7 @@ export function CameraRig() {
     )) invalidate();
   }), [invalidate]);
 
-  useFrame(({ camera, gl }, delta) => {
+  useFrame(({ camera }, delta) => {
     const state = useJourneyStore.getState();
     if (!state.landscapeRequested && state.progress >= sceneConfig.world.loadAt) {
       useJourneyStore.setState({ landscapeRequested: true });
@@ -60,10 +59,6 @@ export function CameraRig() {
         perspectiveCamera.updateProjectionMatrix();
       }
     }
-    gl.domElement.dataset.cameraProgress = current.current.toFixed(4);
-    gl.domElement.dataset.intro = state.intro.toFixed(3);
-    gl.domElement.dataset.frameCount = String(++frames.current);
-    gl.domElement.dataset.landscapeReady = String(state.landscapeReady);
   });
 
   return null;

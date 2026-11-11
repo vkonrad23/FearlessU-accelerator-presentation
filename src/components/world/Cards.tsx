@@ -136,12 +136,17 @@ function Card({ index, active, buffer }: { index: number; active: boolean; buffe
 
 export function Cards() {
   const root = useRef<Group>(null);
+  const captureElapsed = useRef(0);
   const quality = useJourneyStore((state) => state.quality);
   const active = useJourneyStore((state) => state.chapter > 0);
   const resolution = sceneConfig.quality[quality].transmissionResolution;
   const target = useFBO(resolution, resolution, { type: HalfFloatType, samples: 0 });
-  useFrame(({ gl, scene, camera }) => {
+  useFrame(({ gl, scene, camera }, delta) => {
     if (!active || quality !== 'desktop' || !root.current || useJourneyStore.getState().progress >= sceneConfig.cards.fadeEnd) return;
+    // The small reflection buffer does not need a full scene render on every display frame.
+    captureElapsed.current += delta;
+    if (captureElapsed.current < 1 / 30) return;
+    captureElapsed.current %= 1 / 30;
     // One shared, low-resolution refraction pass for all six cards.
     const previousTarget = gl.getRenderTarget();
     const previousToneMapping = gl.toneMapping;
