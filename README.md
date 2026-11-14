@@ -2,7 +2,7 @@
 
 A scroll-driven English/Ukrainian product and partner presentation for an **early-stage mental wellness concept**. Five cinematic scenes lead into an investor/research brief, founder pitch, and direct contact section. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
 
-**The current hero shows a standing civilian with a flowing cape.** `public/fearlessu-civilian-cape.webp` is the local 1448×1086, 241,650-byte artwork. Restrained, source-aligned depth separates the figure and foreground from the distance; the cape has gentle cloth motion with an anchored shoulder. This is 2.5D animation, not a complete 3D reconstruction. Scrolling blends into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png`, `public/fearlessu-sunrise-reference.jpg`, and `public/fearlessu-sunrise.webp` remain reference assets, not the selected hero.
+**The current hero shows a standing civilian with a wind-responsive cape.** `public/fearlessu-civilian-cape.webp` is the local 1448×1086, 241,650-byte artwork. The WebGL scene separates the figure, foreground, and distance with source-aligned depth; a continuous cloth shader adds billow, fold highlights, and cursor-responsive gusts while keeping the shoulder anchored. This is layered 2.5D animation, not a complete 3D reconstruction of the photograph. The cape-to-landscape blend follows the same eased scroll progress as the camera, leading into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png`, `public/fearlessu-sunrise-reference.jpg`, and `public/fearlessu-sunrise.webp` remain reference assets, not the selected hero.
 
 ## Run locally
 

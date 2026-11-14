@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { sceneConfig, chapters } from '@/config/scene';
-import { progressFromStops, type ScrollStop } from '@/lib/scene-math';
+import { progressFromStops, smoothstep, type ScrollStop } from '@/lib/scene-math';
 import { useJourneyStore } from '@/store/journey';
 
 export function useScrollJourney() {
@@ -59,7 +59,12 @@ export function useScrollJourney() {
         if (shell) {
           if (shell.dataset.chapter !== String(chapter)) shell.dataset.chapter = String(chapter);
         }
-        poster?.style.setProperty('--sun-progress', String(Math.min(1, Math.max(0, (progress - 0.08) / 0.72))));
+        if (poster) {
+          const { fadeStart, fadeEnd } = sceneConfig.artwork;
+          const photoOpacity = 1 - smoothstep((progress - fadeStart) / (fadeEnd - fadeStart));
+          poster.style.setProperty('--photo-opacity', String(photoOpacity));
+          poster.style.setProperty('--sun-progress', String(Math.min(1, Math.max(0, (progress - 0.08) / 0.72))));
+        }
       };
       const tick = (time: number) => lenis.raf(time * 1000);
       const onVisibility = () => {

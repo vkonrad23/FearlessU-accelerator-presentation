@@ -31,7 +31,7 @@ export const sceneConfig = {
     ],
   },
   motion: {
-    parallaxStrength: 0.65,
+    parallaxStrength: 0.82,
     parallaxLerp: 3,
     animationSpeed: 1,
     floatingAmplitude: 0.27,
@@ -76,13 +76,17 @@ export const sceneConfig = {
     segments: { desktop: [192, 132], mobile: [128, 88], low: [96, 64] },
     // Source UV ellipse around the standing figure, independent of the viewport crop.
     subject: [0.5, 0.62, 0.08, 0.22],
-    parallax: 0.018,
+    parallax: 0.024,
     depth: 1.15,
     overscan: 1.035,
     introZoom: 0.015,
     fadeSmoothing: 4,
-    fadeStart: 0.07,
-    fadeEnd: 0.215,
+    fadeStart: 0.06,
+    fadeEnd: 0.24,
+    wind: {
+      pointerSensitivity: 7.5,
+      response: 4.4,
+    },
   },
   cards: {
     size: [3.65, 2.04, 0.18],

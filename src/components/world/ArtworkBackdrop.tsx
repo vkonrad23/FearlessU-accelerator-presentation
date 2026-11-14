@@ -17,6 +17,8 @@ const vertexShader = `
   uniform sampler2D uImage;
   uniform float uDepth;
   uniform float uTime;
+  uniform float uWindGust;
+  varying float vClothSheen;
   void main() {
     vUv = uv * uCover + uOffset;
     vec3 transformed = position;
@@ -42,24 +44,26 @@ const vertexShader = `
     float windWave = sin(uTime * 0.92 - trailingEdge * 5.6 + (vUv.y - 0.72) * 10.5);
     float foldWave = sin(uTime * 1.38 - trailingEdge * 10.2 + (vUv.y - 0.72) * 18.0);
     float flutter = sin(uTime * 2.05 - trailingEdge * 15.0 + vUv.y * 27.0);
-    float gust = 0.76 + 0.15 * sin(uTime * 0.29 + 0.7) + 0.09 * sin(uTime * 0.47 + 2.1);
-    float billow = capeRegion * clothWeight * gust * (windWave * 0.016 + foldWave * 0.0035 + flutter * 0.0015);
-    float hemLift = capeTrail * clothWeight * gust * (0.006 + trailingEdge * 0.01) * (0.5 + 0.5 * windWave);
+    float gust = clamp(0.76 + 0.15 * sin(uTime * 0.29 + 0.7) + 0.09 * sin(uTime * 0.47 + 2.1) + uWindGust * 0.24, 0.55, 1.28);
+    float billow = capeRegion * clothWeight * gust * (windWave * 0.024 + foldWave * 0.0065 + flutter * 0.0025);
+    float hemLift = capeTrail * clothWeight * gust * (0.012 + trailingEdge * 0.018) * (0.5 + 0.5 * windWave);
     transformed.x -= billow * (0.35 + trailingEdge * 0.65);
     transformed.y += billow * 0.62 + hemLift;
-    transformed.z += capeRegion * clothWeight * (0.005 + trailingEdge * 0.012) * windWave;
+    transformed.z += capeRegion * clothWeight * (0.012 + trailingEdge * 0.028) * (0.55 * windWave + 0.45 * foldWave);
     transformed.z += depth * uDepth;
     transformed.xy += uPointer * depth;
+    vClothSheen = capeRegion * clothWeight * foldWave;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
   }
 `;
 const fragmentShader = `
   varying vec2 vUv;
+  varying float vClothSheen;
   uniform sampler2D uImage;
   uniform float uOpacity;
   void main() {
     vec4 image = texture2D(uImage, vUv);
-    gl_FragColor = vec4(image.rgb, uOpacity);
+    gl_FragColor = vec4(image.rgb * (1.0 + vClothSheen * 0.075), uOpacity);
     #include <colorspace_fragment>
   }
 `;
@@ -76,6 +80,8 @@ export function ArtworkBackdrop() {
   const mesh = useRef<Mesh>(null);
   const material = useRef<ShaderMaterial>(null);
   const landscapeBlend = useRef(0);
+  const previousPointer = useRef({ x: 0, y: 0 });
+  const windGust = useRef(0);
   const pointer = usePointer();
   const pointerTarget = useMemo(() => new Vector2(), []);
   const direction = useMemo(() => new Vector3(), []);
@@ -88,12 +94,23 @@ export function ArtworkBackdrop() {
     uPointer: { value: new Vector2() },
     uDepth: { value: sceneConfig.artwork.depth },
     uTime: { value: 0 },
+    uWindGust: { value: 0 },
     uOpacity: { value: 1 },
   }), [image]);
 
   useFrame(({ camera, size }, delta) => {
     if (!mesh.current || !material.current) return;
     const { progress, motionPaused, intro, landscapeReady, visible } = useJourneyStore.getState();
+    const pointerTravel = Math.hypot(
+      pointer.current.x - previousPointer.current.x,
+      pointer.current.y - previousPointer.current.y,
+    );
+    previousPointer.current.x = pointer.current.x;
+    previousPointer.current.y = pointer.current.y;
+    const gustTarget = motionPaused || !visible ? 0
+      : Math.min(1, pointerTravel * sceneConfig.artwork.wind.pointerSensitivity);
+    windGust.current = MathUtils.damp(windGust.current, gustTarget, sceneConfig.artwork.wind.response, Math.min(delta, 0.05));
+    material.current.uniforms.uWindGust.value = windGust.current;
     if (material.current) {
       material.current.uniforms.uTime.value += ambientDelta(delta, progress, motionPaused, visible);
     }
