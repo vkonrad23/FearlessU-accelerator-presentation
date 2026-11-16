@@ -79,7 +79,7 @@ export function Sky() {
   const sunMaterial = useRef<ShaderMaterial>(null);
   const sun = useRef<Group>(null);
   const sunPosition = useRef(new Vector3(...sceneConfig.world.sunPosition));
-  const sunStart = useMemo(() => new Vector3(44, -13, -124), []);
+  const sunStart = useMemo(() => new Vector3(30, 21, -110), []);
   const sunEnd = useMemo(() => new Vector3(...sceneConfig.world.sunPosition), []);
   const [warmHorizon, coolHorizon] = useMemo(() => [
     new Color(sceneConfig.colors.skyHorizon), new Color(sceneConfig.colors.skyCoolHorizon),
@@ -103,7 +103,7 @@ export function Sky() {
     const { progress, motionPaused, visible } = useJourneyStore.getState();
     const rise = smoothstep(clamp((progress - 0.08) / 0.72));
     const easedRise = rise;
-    const shine = smoothstep(clamp((progress - 0.18) / 0.46));
+    const shine = 0.48 + smoothstep(clamp((progress - 0.08) / 0.62)) * 0.52;
     sunPosition.current.lerpVectors(sunStart, sunEnd, easedRise);
     if (material.current) {
       material.current.uniforms.uTime.value += ambientDelta(delta, progress, motionPaused, visible) * sceneConfig.world.cloudSpeed;

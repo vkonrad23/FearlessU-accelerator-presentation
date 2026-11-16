@@ -1,8 +1,8 @@
 # FearlessU, a cinematic journey
 
-A scroll-driven English/Ukrainian product and partner presentation for an **early-stage mental wellness concept**. Five cinematic scenes lead into an investor/research brief, founder pitch, and direct contact section. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
+A scroll-driven English/Ukrainian product and partner presentation for an **early-stage mental wellness concept**. Six cinematic chapters inside one continuous real-time 3D mountain world lead into an investor/research brief, founder pitch, and direct contact section. Built with Next.js App Router, TypeScript, Tailwind, React Three Fiber, drei, postprocessing, GSAP ScrollTrigger, Lenis, and Zustand.
 
-**The current hero shows a standing civilian with a wind-responsive cape.** `public/fearlessu-civilian-cape.webp` is the local 1448×1086, 241,650-byte artwork. The WebGL scene separates the figure, foreground, and distance with source-aligned depth; a continuous cloth shader adds billow, fold highlights, and cursor-responsive gusts while keeping the shoulder anchored. This is layered 2.5D animation, not a complete 3D reconstruction of the photograph. The cape-to-landscape blend follows the same eased scroll progress as the camera, leading into the procedural valley, staircase, and sunrise. The earlier `public/fearlessu-reference-hero.png`, `public/fearlessu-sunrise-reference.jpg`, and `public/fearlessu-sunrise.webp` remain reference assets, not the selected hero.
+**The whole journey is a single real-time 3D scene, starting at the hero.** A stylized figure with a wind-simulated cape stands on a suspended stone platform above a procedural valley. Five further platforms, an illuminated staircase, floating glass feature cards, layered ridged mountains, drifting particles, and a low sunrise carry the camera upward as the visitor scrolls. The cape is CPU-simulated cloth, anchored at the shoulders, with gusts that respond to cursor travel. The figure is a generic procedural character, not a reconstruction of any person or photograph. When WebGL is unavailable or unsuitable, the site falls back to a static presentation built around the original cape artwork `public/fearlessu-civilian-cape.webp` (1448×1086, 241,650 bytes). The earlier `public/fearlessu-reference-hero.png`, `public/fearlessu-sunrise-reference.jpg`, and `public/fearlessu-sunrise.webp` remain reference assets, not the selected hero.
 
 ## Run locally
 
@@ -34,11 +34,12 @@ This launches an isolated Lighthouse browser, writes `artifacts/lighthouse-deskt
 
 ## Scenes
 
-1. **The beginning:** the cape artwork, “Beyond fear. Beyond limits.”, a working local-rules mini-demo, clear prototype limits, and four trust principles.
+1. **The beginning:** the caped figure on its platform above the valley, “Beyond fear. Beyond limits.”, a working local-rules mini-demo, clear prototype limits, and four trust principles.
 2. **The possibilities:** six keyboard-accessible feature tabs, mirrored by a floating 3D card ring.
-3. **Your own pace:** four scroll stops, using the existing process-step copy and illuminated stair landings.
-4. **Care comes first:** cooler lighting, slower ambient movement, clear AI/data boundaries, and crisis signposting.
-5. **A new perspective:** mountain sunrise and an optional local educational preview.
+3. **How the AI fits:** a status-labeled architecture map separating local prototype rules, visible but limited safety boundaries, and future expert-reviewed components.
+4. **Your own pace:** four scroll stops, using the existing process-step copy and illuminated stair landings.
+5. **Care comes first:** cooler lighting, slower ambient movement, clear AI/data boundaries, and crisis signposting.
+6. **A new perspective:** mountain sunrise and an optional local educational preview.
 
 The 3.5-second intro runs once per browser-tab session, after the base scene is ready. It never blocks reading or navigation. Scrolling, pausing, hiding the scene, or enabling reduced motion ends it immediately.
 
@@ -56,7 +57,7 @@ The first proposed usability study is clearly marked **not recruited** and non-c
 
 The site does not invent users, revenue, testimonials, market-size figures, clinical results, or institutional endorsements. The displayed evidence is implementation work. Interviews and usability findings remain future work and should be published with methods and limitations.
 
-The six anchored scenic content chapters move the camera along the existing five-keyframe 3D path. The partner brief, pitch, and founder sections follow without adding camera stops. The header contact button opens the real contact section, not the local demo.
+The six anchored scenic content chapters move the camera along a six-keyframe 3D path. The partner brief, pitch, and founder sections follow without adding camera stops. The header contact button opens the real contact section, not the local demo.
 
 ## Founder and supplied media
 
@@ -80,16 +81,17 @@ Public assets live in `public/media/`. Original intake files and local transcrip
 ```text
 src/app/                    App Router, local fonts, metadata, responsive CSS
 src/components/journey/     Semantic HTML, navigation, sections, local preview
-src/components/world/       Canvas, camera, terrain, stairs, artwork, cards,
-                            particles, effects, optional model loader
+src/components/world/       Canvas, camera, sky, terrain, stairs, platforms,
+                            figure and cape cloth, cards, particles, effects,
+                            optional model loader
 src/config/scene.ts          Palette, camera keyframes, motion, lighting,
-                            effects, image depth, quality, and model budgets
-src/lib/                    Scene/artwork math, material fades, model validation,
-                            shared WebVTT formatting
+                            effects, figure/cloth, quality, and model budgets
+src/lib/                    Scene, cloth, and camera math, material fades,
+                            model validation, shared WebVTT formatting
 src/i18n/                   English/Ukrainian language selection and translations
 src/store/                  Small transient scene store
 src/data/                   Demo rules, partner brief, bilingual pitch transcript
-tests/                      Scene, artwork, safety, translation, contact/media tests
+tests/                      Scene, cloth, spatial, safety, translation, contact/media tests
 scripts/                    Bundle/Lighthouse gates and caption generation
 public/media/               Pitch, current prototype walkthrough, portrait, posters, and subtitle tracks
 public/models/              Optional model contract, no model required
@@ -109,14 +111,15 @@ Editorial headings use locally bundled Cormorant Garamond, including regular and
 ## Rendering and performance
 
 - HTML and the original-image/CSS poster render independently of WebGL.
-- The initial depth-aware artwork and particles are lazy-loaded. Hidden terrain, stairs, the figure, and glass load only when scrolling toward the landscape. Shader preparation starts with Three's public compile API, then yields while live GPU programs finish. The wait cancels on unmount and handles disposed programs, context loss, and timeouts without Three's stale-material readiness polling.
-- The artwork uses bounded mesh densities of 25,669 / 11,481 / 6,305 vertices across desktop/mobile/low quality. The image, focal points, and cape shader are unchanged.
-- The original artwork stays visible until landscape shaders are ready, including after a fast jump to a later chapter. The landscape stays mounted for smooth backward navigation.
-- Expensive transmission and postprocessing activate when the visitor reaches the procedural journey, not over the fully opaque hero image.
-- Six desktop glass cards share one small refraction buffer. Stairs use instancing; particles use one point-cloud draw call.
-- Desktop hero text sits directly over the artwork, without a panel background or blur. A feathered scrim preserves contrast, including a wider tablet treatment. On mobile, a shorter artwork frame sits above the copy and fades into its dark reading background.
-- The static poster and WebGL image share configurable focal points and responsive frame dimensions. Framing keeps the figure and sunlit valley visible; depth is calculated in source-image coordinates so it does not shift onto unrelated objects when the viewport changes.
-- The artwork-only canvas starts at DPR ≤1 to limit render-buffer cost. The landscape restores the selected quality tier's DPR once it is ready. HTML text is unaffected.
+- The entire 3D world loads as one deferred graphics chunk shortly after first paint, so the HTML page never waits on WebGL. Sky, terrain, stairs, platforms, the figure and cape, cards, and particles mount together. Shader preparation starts with Three's public compile API, then yields while live GPU programs finish. The wait cancels on unmount and handles disposed programs, context loss, and timeouts without Three's stale-material readiness polling.
+- Cloth, terrain, and platform density adapt by quality tier. The cape grid is 30×40 / 22×30 / 16×24 segments on desktop/mobile/low and stays below 1,400 vertices; mountains and platforms reduce subdivisions on lower tiers. No external models, textures, or HDR downloads are used.
+- The poster stays visible until the scene's shaders are ready, including after a fast jump to a later chapter. The world stays mounted for smooth backward navigation.
+- Postprocessing effects mount only after the visitor scrolls past the opening chapter, and never on the low quality tier.
+- Six desktop glass cards share one small refraction buffer, updated at a capped 30 Hz and only while the card scene is on stage. Stairs use instancing; particles use one point-cloud draw call.
+- The cape integrates wind and pointer-travel gusts only while the scene runs. Pausing, hiding the page, or scrolling past the figure's chapter stops cloth updates entirely.
+- Hero copy sits over the live scene behind a feathered gradient scrim, with a wider tablet treatment. Reading panels stay 96–97% opaque with layered depth shadows, so text remains legible in front of the moving world.
+- The static poster keeps the original artwork with responsive framing. On narrow screens the camera applies a view offset so the figure and staircase stay in frame instead of being cropped away.
+- The camera follows a six-keyframe path with damped scroll progress. Pointer parallax is frozen while rendering is paused.
 - Ridged terrain uses smooth normals and elevation/slope-based rock and snow colors. Beveled stone treads and glass reflect a small, locally generated environment map, captured once rather than every frame. No HDR download is needed.
 - Landscape fades multiply each material's authored opacity instead of making translucent beams and ground overlays fully opaque. Material lookup is captured once, not traversed on every frame.
 - Desktop: DPR capped at 1.5, 1,200 particles, transmission, subtle bloom/DOF/vignette/grain.
@@ -132,9 +135,9 @@ The bundle gate counts **HTML-linked/preloaded scripts, legacy nomodule polyfill
 
 ## Optional Draco/glTF model
 
-No external model or decoder is requested by the default site. To replace the procedural silhouette, follow `public/models/README.md` and `public/draco/README.md`.
+No external model or decoder is requested by the default site. To replace the procedural figure, follow `public/models/README.md` and `public/draco/README.md`.
 
-Use a licensed, self-contained `.glb` below 1.5 MB, set `sceneConfig.models.figure`, and provide a local Draco decoder only if the GLB uses Draco. The lazy loader enforces the byte limit and local path, rejects external texture/buffer references, disposes decoder workers, and falls back to the silhouette on failure. No optional model is supplied.
+Use a licensed, self-contained `.glb` below 1.5 MB, set `sceneConfig.models.figure`, and provide a local Draco decoder only if the GLB uses Draco. The lazy loader enforces the byte limit and local path, rejects external texture/buffer references, disposes decoder workers, and falls back to the procedural figure on failure. No optional model is supplied.
 
 ## Educational preview, privacy, and limits
 
@@ -158,7 +161,7 @@ Any future backend, model integration, or research involving therapeutic interve
 
 All essential copy and controls are semantic HTML, outside the decorative canvas. The site includes a skip link, visible focus, roving Arrow/Home/End feature tabs, native range/select controls, a native modal dialog, focus restoration, and live result announcements. Trust labels are at least 14 px and disclaimer chips at least 13 px.
 
-Reduced-motion preferences apply both on load and when changed. Reading panels remain conservatively opaque; the transparent hero uses a feathered scrim instead. Palette tests check AA text contrast even over a white backdrop. Automated scores are not a substitute for a complete screen-reader or accessibility-conformance review.
+Reduced-motion preferences apply both on load and when changed. Reading panels remain conservatively opaque; the hero copy uses a feathered scrim over the live scene instead. Palette tests check AA text contrast even over a white backdrop. Automated scores are not a substitute for a complete screen-reader or accessibility-conformance review.
 
 ## GitHub Pages
 
@@ -172,24 +175,31 @@ The workflow derives the name from the destination repository, runs tests and th
 
 ## Verification and remaining limits
 
-See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene-math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
+See **`PLAN.md`** for the phase record. Local checks cover build/lint/types, scene and cloth math tests, desktop/mobile screenshots, keyboard controls, the local reflection flow, forward/backward scrolling, reduced motion, simulated no-WebGL/low-memory conditions, context loss, and pause/offscreen behavior.
 
-The latest local root-export Lighthouse run scored **95 performance / 100 accessibility / 100 best practices / 100 SEO**, with FCP 305 ms, LCP 1,081 ms, TBT 140 ms, and CLS 0. Repeated desktop runs of identical code ranged from 84 to 95 as blocking time varied, so treat Lighthouse as a noisy local lab measure; the final run passed the configured ≥85 gate. Initial JavaScript is **232.5 kB gzip** against a 250 kB budget; emitted deferred chunks total **380.5 kB gzip**. `npm run build`, all **34 tests**, and the bundle gate passed.
+The current build passed ESLint, strict TypeScript, and all **41 tests** (34 existing plus 7 new spatial/cloth tests). Initial JavaScript is **232.7 kB gzip** against the 250 kB budget; emitted deferred chunks total **378.7 kB gzip** (`artifacts/bundle-budget.json`).
 
-The production browser pass rendered WebGL at 1440 px. Reduced-motion mobile selected the static scene; English/Ukrainian layouts at 390 px, 320 px, and 667×375 had no horizontal overflow. Keyboard feature switching, Escape behavior and focus return for the menu/dialog, the Ukrainian example-result/next-step flow, and the 12.3-second video with both subtitle tracks passed with no application errors. Neither pitch video is requested before play.
+The current release suite ran in an isolated Chrome window against the production export and passed **70 checks with 0 failures** (`artifacts/spatial-release-report.json`): actual WebGL rendering, pause and page-hide stopping all draws, exact 2 px anchor landings across 21 anchor checks at desktop and mobile widths, six English layouts (1440/1280/1920/390/320/667) and Ukrainian bounds at 390/320/667 without horizontal overflow, first-screen demo controls, keyboard feature tabs and range input, dialog example carry-over and Escape focus restoration, reflection stop behavior, mobile menu dismissal, media preload and native controls, founder portrait geometry, and the reduced-motion, no-WebGL, low-memory, and context-loss fallbacks. Three axe runs (English desktop, English mobile dialog, Ukrainian mobile) reported **0 violations**; `color-contrast` and `video-caption` remain incomplete in axe, so this is not a full conformance assessment. The intro measured **3.476 seconds** and did not repeat. Short desktop Chromium samples averaged about **60 FPS** at the hero and **58 FPS** in the product scene, with zero draws while paused or hidden; these are lab samples, not sustained or real-phone measurements.
+
+The current real-time 3D build was audited twice against the root export in isolated headless Chrome 157 (`artifacts/lighthouse-spatial.json`, `artifacts/lighthouse-spatial-2.json`). Accessibility, best practices, and SEO scored **100** with **CLS 0** both times, but desktop **performance scored 48 and 56**, below the configured ≥85 gate. FCP was about 0.8 s and LCP 1.4–2.3 s; total blocking time was 4.1–5.5 s, dominated by evaluation of the deferred 3D graphics chunk and scene/shader setup during the load trace. This is the direct cost of building the full 3D world at the hero instead of deferring it until scrolling: the historical scores below come from a design where the audit never paid that cost. Host CPU benchmark indices (1,729.5 and 791) also varied widely between runs, so treat these as noisy local lab measurements, not field data. Live-render samples in the release suite still averaged about 60 FPS, so the blocking time is a startup cost, not sustained runtime jank. **`npm run audit:desktop` currently fails its ≥85 performance gate.** Reducing startup blocking (for example staggered scene construction or idle-time shader preparation) is identified future work that needs its own verification.
+
+The results below are **historical**: they describe the site before the real-time 3D rework and are kept for the record.
+
+The last pre-rework root-export Lighthouse run scored **95 performance / 100 accessibility / 100 best practices / 100 SEO**, with FCP 305 ms, LCP 1,081 ms, TBT 140 ms, and CLS 0. Repeated desktop runs of identical code ranged from 84 to 95 as blocking time varied, so Lighthouse was treated as a noisy local lab measure. Initial JavaScript was **232.5 kB gzip**; emitted deferred chunks totaled **380.5 kB gzip**.
 
 The previous optimized Pages export reached **91 performance / 100 accessibility / 100 best practices / 100 SEO**, with CLS 0, LCP 1.062 s, and TBT 202 ms. An earlier Pages audit failed at 60; both shader preparation and mesh density were subsequently improved. The host CPU benchmark also changed, so the score difference is not attributable solely to code.
 
-Before the final graphics optimization, both root and Pages exports passed **132 partner/media checks**, scenic release checks, and **76 detailed interface checks**. The optimized Pages export then passed the **132 checks and scenic release suite again**, with no application errors or failed resources. Coverage includes both languages, widths from 320 to 1920 px across the suites, first-screen controls, mini-to-dialog state, captions, manual video playback, contact links, portrait dimensions, reversible scene navigation, and fallbacks. Axe reported no violations in the sampled desktop, mobile, and dialog states. Gradient contrast remained incomplete in axe; supplemental hero samples met their thresholds. These checks do not establish whole-site accessibility conformance.
-
-Final optimization reports are `artifacts/lighthouse-partner-optimized.json`, `artifacts/partner-optimized-report.json`, and `artifacts/partner-optimized-release-qa.json`. Earlier root, Pages, cold-load, and failed-audit reports are retained locally. See `PLAN.md` for their names and test scope.
+Before the final graphics optimization, both root and Pages exports passed **132 partner/media checks**, scenic release checks, and **76 detailed interface checks**. The optimized Pages export then passed the **132 checks and scenic release suite again**, with no application errors or failed resources. Final optimization reports are `artifacts/lighthouse-partner-optimized.json`, `artifacts/partner-optimized-report.json`, and `artifacts/partner-optimized-release-qa.json`. Earlier root, Pages, cold-load, and failed-audit reports are retained locally. See `PLAN.md` for their names and test scope.
 
 Remaining limits:
 
 - Real iOS/Android hardware, Safari/Firefox, assistive-technology sessions, and long-duration GPU/battery behavior have not been validated.
 - No user interviews, usability sessions, or clinical studies have been conducted. The proposed sample and protocol are planning details, not research results.
 - Cold Ukrainian visits still show layout movement while the saved/browser language is applied after English static HTML. Current isolated samples observed accumulated shifts of approximately 0.0979 on mobile and 0.0501 on desktop, versus 0 in the English samples. These are local observations, not field CLS measurements or a zero-shift guarantee.
-- The optimized Pages release check sampled 53 FPS in desktop Chromium. This is not a sustained or real-phone FPS measurement.
+- The release suite's frame samples are short desktop Chromium runs (about 60 FPS hero, 58 FPS product scene). They are not sustained or real-phone FPS measurements.
+- The desktop Lighthouse performance gate (≥85) currently fails on the 3D build (48/56 across two runs); see the Lighthouse paragraph above. The gate configuration was not weakened.
+- A Three.js X4122/X4008 HLSL shader-precision warning appears while shaders compile on the test GPU/driver. Its source is undiagnosed and possibly driver-generated; the site reports it rather than suppressing it, and it had no observed visual effect in the checked scenes.
+- No Pages-prefix export or deployment check was run for the 3D rework. The last verified Pages export predates it and must be re-verified before any publication.
 - Optional GLB/Draco assets and a live GitHub Pages deployment need their own verification when enabled.
-- Dependency-audit results in `PLAN.md` are historical. No fresh dependency audit was run for this partner/media phase.
+- Dependency-audit results in `PLAN.md` are historical. No fresh dependency audit was run for this phase.
 - TypeScript 6 is pinned for the installed TypeScript-ESLint compatibility range. The preview server's `compression` patch override addresses its known advisory.

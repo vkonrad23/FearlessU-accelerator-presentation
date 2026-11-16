@@ -1,9 +1,10 @@
 import { useFrame, useThree } from '@react-three/fiber';
-import { CatmullRomCurve3, Vector3, MathUtils } from 'three';
+import { CatmullRomCurve3, Vector3, MathUtils, PerspectiveCamera } from 'three';
 import { useEffect, useMemo, useRef } from 'react';
 import { sceneConfig } from '@/config/scene';
 import { useJourneyStore } from '@/store/journey';
 import { cameraCurveT } from '@/lib/scene-math';
+import { spatialFrameHeight } from '@/lib/spatial-math';
 import { usePointer } from './usePointer';
 
 export function CameraRig() {
@@ -25,11 +26,8 @@ export function CameraRig() {
     )) invalidate();
   }), [invalidate]);
 
-  useFrame(({ camera }, delta) => {
+  useFrame(({ camera, size }, delta) => {
     const state = useJourneyStore.getState();
-    if (!state.landscapeRequested && state.progress >= sceneConfig.world.loadAt) {
-      useJourneyStore.setState({ landscapeRequested: true });
-    }
     const { position, target } = scratch.current;
     current.current = state.motionPaused ? state.progress : MathUtils.damp(current.current, state.progress, sceneConfig.camera.smoothing, Math.min(delta, 0.05));
     const t = cameraCurveT(current.current);
@@ -47,16 +45,20 @@ export function CameraRig() {
     camera.lookAt(target);
     camera.rotation.z = MathUtils.damp(
       camera.rotation.z,
-      Math.sin(t * Math.PI * 2) * 0.008 + pointer.current.x * 0.004,
+      Math.sin(t * Math.PI * 2) * 0.008 + offset.current.x * 0.004,
       3,
       Math.min(delta, 0.05),
     );
-    if ('fov' in camera) {
-      const perspectiveCamera = camera as typeof camera & { fov: number; updateProjectionMatrix: () => void };
+    if (camera instanceof PerspectiveCamera) {
+      const frameHeight = spatialFrameHeight(size.width, size.height, current.current);
       const targetFov = sceneConfig.camera.fov + Math.sin(t * Math.PI) * 1.2;
-      if (Math.abs(perspectiveCamera.fov - targetFov) > 0.01) {
-        perspectiveCamera.fov = MathUtils.damp(perspectiveCamera.fov, targetFov, 2.5, Math.min(delta, 0.05));
-        perspectiveCamera.updateProjectionMatrix();
+      camera.fov = state.motionPaused ? targetFov : MathUtils.damp(camera.fov, targetFov, 2.5, dt);
+      if (frameHeight < size.height - 0.5) {
+        camera.setViewOffset(size.width, frameHeight, 0, 0, size.width, size.height);
+      } else {
+        camera.aspect = size.width / size.height;
+        if (camera.view?.enabled) camera.clearViewOffset();
+        camera.updateProjectionMatrix();
       }
     }
   });

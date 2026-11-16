@@ -1,10 +1,11 @@
 import { MeshTransmissionMaterial, RoundedBox, useFBO } from '@react-three/drei';
 import { useEffect, useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { CanvasTexture, Group, HalfFloatType, MeshBasicMaterial, NoToneMapping, PerspectiveCamera, SRGBColorSpace, Texture, Vector3 } from 'three';
+import { CanvasTexture, Group, HalfFloatType, MeshBasicMaterial, NoToneMapping, SRGBColorSpace, Texture } from 'three';
 import { featureLabels, sceneConfig } from '@/config/scene';
 import { ambientDelta, smoothstep } from '@/lib/scene-math';
 import { useJourneyStore } from '@/store/journey';
+import { cardWorldPosition, type SpatialPoint } from '@/lib/spatial-math';
 
 function CardFace({ index }: { index: number }) {
   const material = useRef<MeshBasicMaterial>(null);
@@ -58,7 +59,7 @@ function CardFace({ index }: { index: number }) {
     if (!material.current) return;
     const { progress } = useJourneyStore.getState();
     const config = sceneConfig.cards;
-    material.current.opacity = smoothstep((progress - config.ringStart) / (config.ringEnd - config.ringStart))
+    material.current.opacity = (0.65 + 0.35 * smoothstep((progress - config.ringStart) / (config.ringEnd - config.ringStart)))
       * (1 - smoothstep((progress - config.fadeStart) / (config.fadeEnd - config.fadeStart)));
   });
   if (!texture) return null;
@@ -70,48 +71,31 @@ function CardFace({ index }: { index: number }) {
   );
 }
 
-function Card({ index, active, buffer }: { index: number; active: boolean; buffer?: Texture }) {
+function Card({ index, buffer }: { index: number; buffer?: Texture }) {
   const group = useRef<Group>(null);
   const glass = useRef<{ opacity?: number } | null>(null);
   const time = useRef(0);
-  const scratch = useRef(Array.from({ length: 5 }, () => new Vector3()));
+  const position = useRef<SpatialPoint>([0, 0, 0]);
   const selected = useJourneyStore((state) => state.selectedFeature);
-  useFrame(({ camera, size }, delta) => {
+  useFrame(({ camera }, delta) => {
     if (!group.current) return;
-    const [position, right, up, forward, ring] = scratch.current;
-    const { progress, motionPaused, visible, intro } = useJourneyStore.getState();
+    const { progress, motionPaused, visible } = useJourneyStore.getState();
     const config = sceneConfig.cards;
     const opacity = 1 - smoothstep((progress - config.fadeStart) / (config.fadeEnd - config.fadeStart));
     group.current.visible = opacity > 0.001;
     if (!group.current.visible) return;
     time.current += ambientDelta(delta, progress, motionPaused, visible);
     const ringBlend = smoothstep((progress - config.ringStart) / (config.ringEnd - config.ringStart));
-    const distance = 22 + index * 0.9;
-    const height = 2 * Math.tan((camera as PerspectiveCamera).fov * Math.PI / 360) * distance;
-    const [u, v] = sceneConfig.cards.heroAnchors[index];
-    const aspect = size.width / size.height;
-    const coverX = Math.min(1, aspect / sceneConfig.artwork.aspect);
-    const coverY = Math.min(1, sceneConfig.artwork.aspect / aspect);
-    const zoom = sceneConfig.artwork.overscan - (1 - intro) * sceneConfig.artwork.introZoom;
-    camera.getWorldDirection(forward);
-    right.set(1, 0, 0).applyQuaternion(camera.quaternion);
-    up.set(0, 1, 0).applyQuaternion(camera.quaternion);
-    position.copy(camera.position).addScaledVector(forward, distance)
-      .addScaledVector(right, (u - 0.5) / coverX * height * aspect * zoom)
-      .addScaledVector(up, (0.5 - v) / coverY * height * zoom);
-    const angle = index / 6 * Math.PI * 2 + Math.PI / 2;
-    const [x, y, z] = sceneConfig.cards.ringCenter;
-    ring.set(x + Math.cos(angle) * sceneConfig.cards.ringRadius, y + Math.sin(angle) * sceneConfig.cards.ringRadius, z + Math.cos(angle) * 2);
-    position.lerp(ring, ringBlend);
+    const point = cardWorldPosition(index, progress, position.current);
     const phase = time.current * Math.PI * 2 / sceneConfig.motion.floatingPeriods[index] + index * 1.7;
-    position.y += Math.sin(phase) * sceneConfig.motion.floatingAmplitude * ringBlend;
-    group.current.position.copy(position);
+    point[1] += Math.sin(phase) * sceneConfig.motion.floatingAmplitude;
+    group.current.position.set(...point);
     group.current.quaternion.copy(camera.quaternion);
-    group.current.rotateX(Math.sin(phase * 0.7) * sceneConfig.motion.cardTilt * ringBlend);
-    group.current.rotateY(Math.cos(phase * 0.5) * sceneConfig.motion.cardTilt * ringBlend);
+    group.current.rotateX(Math.sin(phase * 0.7) * sceneConfig.motion.cardTilt);
+    group.current.rotateY(-0.16 + Math.cos(phase * 0.5) * sceneConfig.motion.cardTilt);
     const scale = sceneConfig.cards.heroScale + ringBlend * (1 - sceneConfig.cards.heroScale);
     group.current.scale.setScalar(scale * (selected === index ? 1.06 : 1) * (0.9 + opacity * 0.1));
-    if (glass.current) glass.current.opacity = opacity * (buffer ? 0.15 + ringBlend * 0.72 : config.fallbackOpacity * (0.4 + ringBlend * 0.6));
+    if (glass.current) glass.current.opacity = opacity * (buffer ? 0.3 + ringBlend * 0.57 : config.fallbackOpacity);
   });
 
   return (
@@ -129,7 +113,7 @@ function Card({ index, active, buffer }: { index: number; active: boolean; buffe
           <meshStandardMaterial ref={(material) => { glass.current = material; }} color={sceneConfig.colors.cool} metalness={0.15} roughness={0.22} transparent opacity={sceneConfig.cards.fallbackOpacity} depthWrite={false} />
         )}
       </RoundedBox>
-      {active && <CardFace index={index} />}
+      <CardFace index={index} />
     </group>
   );
 }
@@ -161,7 +145,7 @@ export function Cards() {
   });
   return (
     <group ref={root}>
-      {featureLabels.map((label, index) => <Card key={label} index={index} active={active} buffer={active && quality === 'desktop' ? target.texture : undefined} />)}
+      {featureLabels.map((label, index) => <Card key={label} index={index} buffer={active && quality === 'desktop' ? target.texture : undefined} />)}
     </group>
   );
 }

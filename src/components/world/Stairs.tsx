@@ -2,9 +2,11 @@ import { useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { Color, InstancedMesh, Object3D } from 'three';
 import { useFrame } from '@react-three/fiber';
-import { sceneConfig } from '@/config/scene';
+import { chapters, sceneConfig } from '@/config/scene';
 import { ambientDelta, clamp, stairPosition } from '@/lib/scene-math';
 import { useJourneyStore } from '@/store/journey';
+
+const processChapter = chapters.findIndex((chapter) => chapter.id === 'how-it-works');
 
 export function Stairs() {
   const steps = useRef<InstancedMesh>(null);
@@ -40,7 +42,7 @@ export function Stairs() {
   useFrame((_, delta) => {
     const { activeStep, chapter, progress, motionPaused, visible } = useJourneyStore.getState();
     const elapsed = ambientDelta(delta, progress, motionPaused, visible);
-    const step = chapter === 2 ? activeStep : -1;
+    const step = chapter === processChapter ? activeStep : -1;
     if (!edges.current || (elapsed === 0 && lastStep.current === step)) return;
     time.current += elapsed;
     lastStep.current = step;

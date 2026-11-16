@@ -22,7 +22,7 @@ export const sceneConfig = {
     far: 420,
     smoothing: 5,
     keyframes: [
-      { at: 0, position: [-1, 5.8, 26], target: [0, 8, -35] },
+      { at: 0, position: [6.4, 5.8, 22], target: [9, 4, -28] },
       { at: 0.22, position: [3, 12, 7], target: [12, 15, -36] },
       { at: 0.4, position: [7, 17, -12], target: [15, 22, -48] },
       { at: 0.64, position: [13, 24, -36], target: [22, 29, -66] },
@@ -51,7 +51,6 @@ export const sceneConfig = {
   },
   world: {
     seed: 46,
-    loadAt: 0.025,
     stairCount: 94,
     stairWidth: 4.8,
     stairRise: 0.37,
@@ -65,6 +64,14 @@ export const sceneConfig = {
     cloudSpeed: 0.013,
     mountainSegments: 96,
     mountainDepthSegments: 48,
+    platformSteps: [12, 30, 46, 62, 78, 93],
+    platformRadius: 3.3,
+  },
+  figure: {
+    scale: 2.5,
+    capeSegments: { desktop: [30, 40], mobile: [22, 30], low: [16, 24] },
+    windResponse: 4.4,
+    windSensitivity: 7.5,
   },
   artwork: {
     src: '/fearlessu-civilian-cape.webp',
@@ -90,7 +97,8 @@ export const sceneConfig = {
   },
   cards: {
     size: [3.65, 2.04, 0.18],
-    heroAnchors: [[0.448, 0.169], [0.453, 0.309], [0.558, 0.391], [0.662, 0.49], [0.75, 0.52], [0.84, 0.5]],
+    heroCenter: [16, 8, -19],
+    heroRadius: 5.3,
     ringCenter: [18, 15, -27],
     ringRadius: 6.3,
     heroScale: 0.76,

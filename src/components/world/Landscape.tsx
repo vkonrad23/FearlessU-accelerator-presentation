@@ -11,6 +11,7 @@ import { Sky } from './Sky';
 import { Stairs } from './Stairs';
 import { HopefulRight } from './HopefulRight';
 import { RuinedLeft } from './RuinedLeft';
+import { Platforms } from './Platforms';
 
 const Effects = lazy(() => import('./Effects'));
 
@@ -25,9 +26,10 @@ export default function Landscape() {
     const group = root.current;
     if (!group) return;
     const controller = new AbortController();
-    void prepareShaders(gl, group, camera, controller.signal, scene).then(() => {
+    useJourneyStore.setState({ landscapeRequested: true });
+    void prepareShaders(gl, scene, camera, controller.signal).then(() => {
       if (controller.signal.aborted) return;
-      useJourneyStore.setState({ landscapeReady: true });
+      useJourneyStore.setState({ landscapeReady: true, mode: 'webgl' });
       invalidate();
     }).catch(() => {
       if (!controller.signal.aborted) useJourneyStore.setState({ mode: 'static' });
@@ -41,12 +43,13 @@ export default function Landscape() {
   return (
     <>
       <Atmosphere />
-      <group ref={root} visible={ready}>
+      <group ref={root} name="spatial-landscape" visible={ready}>
         <Sky />
         <Mountains />
         <RuinedLeft />
         <HopefulRight />
         <Stairs />
+        <Platforms />
         <Figure />
         <Cards />
       </group>

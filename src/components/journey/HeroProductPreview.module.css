@@ -1,4 +1,4 @@
-.preview { position: absolute; right: 0; bottom: 24px; width: 340px; padding: 21px; border: 1px solid color-mix(in srgb, var(--color-cream) 72%, transparent); border-radius: 12px; background: var(--color-cream); color: var(--color-deep); box-shadow: 0 18px 60px color-mix(in srgb, var(--color-background) 25%, transparent); }
+.preview { position: absolute; right: 0; bottom: 24px; width: 340px; padding: 21px; border: 1px solid color-mix(in srgb, var(--color-cream) 72%, transparent); border-radius: 14px; background: linear-gradient(145deg, #fffdf7, var(--color-cream)); color: var(--color-deep); box-shadow: var(--depth-shadow-light), 0 34px 80px -22px rgb(0 10 7 / 60%); }
 .preview :focus-visible { outline-color: var(--color-forest); outline-offset: 3px; }
 .heading { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 12px; }
 .eyebrow { display: flex; align-items: center; gap: 7px; margin: 0 0 5px; font-size: 10px; line-height: 1.5; color: var(--color-forest); }
