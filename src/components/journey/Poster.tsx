@@ -22,11 +22,14 @@ export function Poster() {
         <Image className="photo-poster" style={artworkStyle} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${sceneConfig.artwork.src}`} alt="" fill sizes="100vw" priority />
       </div>
       <div className="poster-ai-companion" aria-hidden="true">
-        <span className="poster-ai-hair" />
-        <span className="poster-ai-head" />
-        <span className="poster-ai-body" />
-        <span className="poster-ai-orbit" />
-        <span className="poster-ai-base" />
+        <Image
+          className="poster-ai-image"
+          src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/ai-companion-hologram.webp`}
+          alt=""
+          fill
+          sizes="(max-width: 560px) 100px, (max-width: 1200px) 17vw, 250px"
+          loading="eager"
+        />
       </div>
     </div>
   );
