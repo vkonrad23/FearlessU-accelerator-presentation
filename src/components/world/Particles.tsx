@@ -59,7 +59,7 @@ export function Particles() {
   }, []);
   const uniforms = useMemo(() => ({
     uTime: { value: 0 },
-    uColor: { value: new Color(sceneConfig.colors.gold).multiplyScalar(1.4) },
+    uColor: { value: new Color(sceneConfig.colors.cool).multiplyScalar(1.2) },
     uSize: { value: sceneConfig.particles.size },
     uDpr: { value: 1 },
     uOpacity: { value: sceneConfig.particles.opacity },

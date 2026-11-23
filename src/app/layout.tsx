@@ -37,8 +37,8 @@ const sans = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'FearlessU · Beyond fear. Beyond limits.',
-  description: 'An early-stage AI mental wellness concept exploring personalized, CBT-informed tools. Experimental prototype. Not clinically validated. Not medical advice.',
+  title: 'FearlessU · Psychological Science, Expanded',
+  description: 'An AI-powered platform exploring personalized psychological support and new evidence-informed CBT approaches. Early-stage research vision; the working demo uses local rules and is not clinically validated.',
   icons: { icon: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/favicon.svg` },
   robots: { index: true, follow: true },
 };

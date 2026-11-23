@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef } from 'react';
 import { sceneConfig } from '@/config/scene';
 import { useJourneyStore } from '@/store/journey';
 import { cameraCurveT } from '@/lib/scene-math';
-import { spatialFrameHeight } from '@/lib/spatial-math';
 import { usePointer } from './usePointer';
 
 export function CameraRig() {
@@ -50,16 +49,11 @@ export function CameraRig() {
       Math.min(delta, 0.05),
     );
     if (camera instanceof PerspectiveCamera) {
-      const frameHeight = spatialFrameHeight(size.width, size.height, current.current);
       const targetFov = sceneConfig.camera.fov + Math.sin(t * Math.PI) * 1.2;
       camera.fov = state.motionPaused ? targetFov : MathUtils.damp(camera.fov, targetFov, 2.5, dt);
-      if (frameHeight < size.height - 0.5) {
-        camera.setViewOffset(size.width, frameHeight, 0, 0, size.width, size.height);
-      } else {
-        camera.aspect = size.width / size.height;
-        if (camera.view?.enabled) camera.clearViewOffset();
-        camera.updateProjectionMatrix();
-      }
+      camera.aspect = size.width / size.height;
+      if (camera.view?.enabled) camera.clearViewOffset();
+      camera.updateProjectionMatrix();
     }
   });
 

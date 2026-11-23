@@ -60,8 +60,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.title = t('FearlessU · Beyond fear. Beyond limits.');
-    document.querySelector('meta[name="description"]')?.setAttribute('content', t('An early-stage mental wellness concept exploring future AI personalization of CBT-informed practice. Educational prototype. Not clinically validated. Not medical advice.'));
+    document.title = t('FearlessU · Psychological Science, Expanded');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t('An AI-powered platform exploring personalized psychological support and new evidence-informed CBT approaches. Early-stage research vision; the working demo uses local rules and is not clinically validated.'));
   }, [locale, t]);
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;

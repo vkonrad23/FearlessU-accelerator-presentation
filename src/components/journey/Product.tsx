@@ -6,6 +6,7 @@ import { featureLabels } from '@/config/scene';
 import { capabilities } from '@/data/content';
 import { useJourneyStore } from '@/store/journey';
 import { useLanguage } from '@/i18n/LanguageProvider';
+import { HeroProductPreview } from './HeroProductPreview';
 
 const features = [
   { icon: Sparkles, description: capabilities[2].text, boundary: capabilities[2].limit },
@@ -62,7 +63,7 @@ export function Product() {
         ))}
         <a href="#how-it-works" className="text-link">{t('How it works')} <ArrowUpRight size={17} aria-hidden="true" /></a>
       </div>
-      <p className="landscape-note" aria-hidden="true"><span />{t('A structured journey.')}<br /><em>{t('A pace you control.')}</em></p>
+      <div className="product-demo-slot"><HeroProductPreview /></div>
     </section>
   );
 }
