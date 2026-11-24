@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import Image from 'next/image';
 
 const nodes: [number, number][] = [
   [50, 7], [72, 13], [88, 29], [92, 51], [83, 73], [64, 88], [40, 91],
@@ -18,6 +19,7 @@ export function Poster() {
     <div className="world-poster research-poster" aria-hidden="true">
       <div className="research-poster-grid" />
       <div className="poster-core-ambient" />
+      <Image className="poster-guide" src="/ai-companion-hologram.webp" alt="" width={512} height={1184} />
       <div className="poster-core" role="presentation">
         <div className="poster-core-halo" />
         <div className="poster-core-orbit poster-core-orbit-a" />

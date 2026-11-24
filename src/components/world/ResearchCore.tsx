@@ -192,6 +192,12 @@ export function ResearchCore() {
   const elapsed = useRef(0);
   const evaluationLevelRef = useRef(0);
   const width = useThree((state) => state.size.width);
+  const mobile = width < 768;
+  const compact = width < 1100;
+  const targetX = mobile ? -1.05 : compact ? 2.1 : 3.1;
+  const targetY = mobile ? 4.2 : 0.18;
+  const targetScale = mobile ? 0.36 : compact ? 0.9 : 1.15;
+  const initialPosition = useMemo(() => [targetX, targetY, 0] as [number, number, number], [targetX, targetY]);
   const researchMode = useJourneyStore((state) => state.researchMode);
   const validationEvent = useJourneyStore((state) => state.validationEvent);
   const pointer = usePointer();
@@ -234,15 +240,12 @@ export function ResearchCore() {
     const progress = state.progress;
     const hero = 1 - MathUtils.smoothstep(progress, 0.17, 0.23);
     const research = MathUtils.smoothstep(progress, 0.25, 0.31) * (1 - MathUtils.smoothstep(progress, 0.42, 0.49));
-    const visibility = Math.max(hero, research) * (state.visible ? 1 : 0);
-    const mobile = width < 768;
-    const compact = width < 1100;
-    const targetX = mobile ? 0 : compact ? 4.2 : 5.5;
-    const targetY = mobile ? 3.9 : 0.18;
+    const heroVisibility = compact && !mobile ? 0 : hero;
+    const visibility = Math.max(heroVisibility, research) * (state.visible ? 1 : 0);
     const dt = moving ? Math.min(delta, 0.05) : 0;
     root.current.position.x = MathUtils.damp(root.current.position.x, targetX, 2.2, dt);
     root.current.position.y = MathUtils.damp(root.current.position.y, targetY + Math.sin(time * 0.45) * 0.12, 2, dt);
-    const targetScale = mobile ? 0.7 : compact ? 1.3 : 1.8;
+    const targetScale = mobile ? 0.38 : compact ? 0.9 : 1.15;
     const scale = MathUtils.damp(root.current.scale.x, targetScale, 2.3, dt);
     root.current.scale.setScalar(scale);
     root.current.visible = visibility > 0.006;
@@ -290,7 +293,7 @@ export function ResearchCore() {
   });
 
   return (
-    <group ref={root} name="fearlessu-research-core">
+    <group ref={root} name="fearlessu-research-core" position={initialPosition} scale={targetScale}>
       <mesh>
         <icosahedronGeometry args={[1.45, 4]} />
         <shaderMaterial ref={surface} vertexShader={surfaceVertex} fragmentShader={surfaceFragment} uniforms={surfaceUniforms} transparent depthWrite={false} blending={AdditiveBlending} side={DoubleSide} toneMapped={false} />

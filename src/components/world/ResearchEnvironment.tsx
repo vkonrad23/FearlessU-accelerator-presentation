@@ -30,7 +30,6 @@ export function ResearchEnvironment() {
 
   return (
     <>
-      <color attach="background" args={[sceneConfig.colors.background]} />
       <fog attach="fog" args={[sceneConfig.colors.skyTop, 42, 120]} />
       <Atmosphere />
       {chapter > 0 && quality !== 'low' && <Suspense fallback={null}><Effects /></Suspense>}
