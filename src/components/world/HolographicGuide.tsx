@@ -36,10 +36,11 @@ const fragmentShader = `
     float up = texture2D(uMap, uv + vec2(0.0, 0.002)).a;
     float down = texture2D(uMap, uv - vec2(0.0, 0.002)).a;
     float edge = max(max(image.a - right, image.a - left), max(image.a - up, image.a - down));
-    vec3 color = image.rgb * vec3(0.82, 0.92, 1.12);
-    color = mix(color, vec3(0.28, 0.77, 1.0), scan * 0.3);
-    color += vec3(0.12, 0.43, 1.0) * sweep * 0.24;
-    color += vec3(0.24, 0.65, 1.0) * edge * 0.52;
+    float luminance = dot(image.rgb, vec3(0.2126, 0.7152, 0.0722));
+    vec3 color = mix(vec3(0.08, 0.42, 0.2), vec3(0.6, 1.0, 0.7), luminance);
+    color = mix(color, vec3(0.24, 0.92, 0.48), scan * 0.3);
+    color += vec3(0.12, 0.62, 0.25) * sweep * 0.24;
+    color += vec3(0.24, 0.8, 0.42) * edge * 0.52;
     float alpha = image.a * uOpacity * (0.82 + scan * 0.16 + sweep * 0.12) + edge * uOpacity * 0.24;
     gl_FragColor = vec4(color, alpha);
     #include <colorspace_fragment>
@@ -90,7 +91,7 @@ export function HolographicGuide() {
     <group ref={root} position={initialPosition} scale={targetScale}>
       <mesh position={[0, 0, -0.055]} scale={1.035}>
         <planeGeometry args={[HERO_GUIDE_WIDTH, HERO_GUIDE_HEIGHT]} />
-        <meshBasicMaterial map={texture} color="#4f9fff" transparent opacity={0.12} depthWrite={false} side={DoubleSide} blending={AdditiveBlending} toneMapped={false} />
+        <meshBasicMaterial map={texture} color="#72e6ad" transparent opacity={0.12} depthWrite={false} side={DoubleSide} blending={AdditiveBlending} toneMapped={false} />
       </mesh>
       <mesh>
         <planeGeometry args={[HERO_GUIDE_WIDTH, HERO_GUIDE_HEIGHT, 16, 30]} />

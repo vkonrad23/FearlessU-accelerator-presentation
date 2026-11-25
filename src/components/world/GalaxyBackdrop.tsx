@@ -47,9 +47,9 @@ function makeGalaxy() {
   const colors = new Float32Array(count * 3);
   const sizes = new Float32Array(count);
   const phases = new Float32Array(count);
-  const inner = [0.54, 0.84, 1];
-  const blue = [0.22, 0.48, 1];
-  const violet = [0.58, 0.42, 1];
+  const inner = [0.58, 1, 0.72];
+  const emerald = [0.16, 0.78, 0.42];
+  const leaf = [0.66, 0.94, 0.3];
 
   for (let index = 0; index < count; index += 1) {
     const arm = index % 5;
@@ -63,8 +63,8 @@ function makeGalaxy() {
     positions[index * 3 + 2] = (random() - 0.5) * (0.3 + radius * 0.045);
 
     const blend = Math.min(1, radius / 14.5);
-    const source = blend < 0.45 ? inner : blue;
-    const target = blend < 0.45 ? blue : violet;
+    const source = blend < 0.45 ? inner : emerald;
+    const target = blend < 0.45 ? emerald : leaf;
     const mix = blend < 0.45 ? blend / 0.45 : (blend - 0.45) / 0.55;
     for (let channel = 0; channel < 3; channel += 1) {
       colors[index * 3 + channel] = source[channel] * (1 - mix) + target[channel] * mix;
@@ -110,7 +110,7 @@ export function GalaxyBackdrop() {
       </points>
       <mesh position={[0, 0, -0.55]}>
         <sphereGeometry args={[0.5, 12, 10]} />
-        <meshBasicMaterial color="#6388ff" transparent opacity={0.045} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
+        <meshBasicMaterial color="#72e6ad" transparent opacity={0.045} blending={AdditiveBlending} depthWrite={false} toneMapped={false} />
       </mesh>
     </group>
   );

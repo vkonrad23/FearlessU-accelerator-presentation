@@ -42,12 +42,12 @@ const surfaceFragment = `
     float fresnel = pow(1.0 - abs(dot(normalize(vNormal), viewDirection)), 2.2);
     float scan = pow(max(0.0, sin(vPoint.y * 68.0 + uTime * 0.35)), 15.0);
     float web = 0.5 + 0.5 * sin(vPoint.x * 17.0 + sin(vPoint.z * 15.0 + uTime * 0.12));
-    vec3 blue = vec3(0.17, 0.61, 1.0);
-    vec3 cyan = vec3(0.36, 0.91, 1.0);
-    vec3 violet = vec3(0.57, 0.43, 1.0);
-    vec3 color = mix(blue, violet, smoothstep(-0.75, 0.85, vPoint.y + vPoint.x * 0.25));
-    color = mix(color, cyan, fresnel * 0.52 + scan * 0.28 + uActivity * web * 0.18);
-    color = mix(color, vec3(0.43, 1.0, 0.75), uValidation * 0.8);
+    vec3 emerald = vec3(0.08, 0.52, 0.27);
+    vec3 leaf = vec3(0.62, 0.88, 0.28);
+    vec3 mint = vec3(0.38, 1.0, 0.66);
+    vec3 color = mix(emerald, leaf, smoothstep(-0.75, 0.85, vPoint.y + vPoint.x * 0.25));
+    color = mix(color, mint, fresnel * 0.52 + scan * 0.28 + uActivity * web * 0.18);
+    color = mix(color, vec3(0.72, 1.0, 0.53), uValidation * 0.8);
     float alpha = (0.12 + fresnel * 0.38 + scan * (0.06 + uActivity * 0.13) + web * 0.04) * uOpacity;
     gl_FragColor = vec4(color * (0.95 + fresnel * 1.4 + uActivity * 0.6), alpha);
     #include <colorspace_fragment>
@@ -78,10 +78,10 @@ const networkFragment = `
   varying float vAlpha;
   varying float vMode;
   void main() {
-    vec3 cyan = vec3(0.36, 0.88, 1.0);
-    vec3 violet = vec3(0.66, 0.56, 1.0);
-    vec3 color = mix(cyan, violet, vMode * 0.72);
-    color = mix(color, vec3(0.45, 1.0, 0.76), uValidation * 0.8);
+    vec3 mint = vec3(0.38, 1.0, 0.66);
+    vec3 leaf = vec3(0.75, 0.94, 0.35);
+    vec3 color = mix(mint, leaf, vMode * 0.72);
+    color = mix(color, vec3(0.72, 1.0, 0.53), uValidation * 0.8);
     gl_FragColor = vec4(color, vAlpha * (0.74 + vMode * 0.26));
     #include <colorspace_fragment>
   }
@@ -113,8 +113,8 @@ const pointFragment = `
   void main() {
     float radius = length(gl_PointCoord - 0.5) * 2.0;
     float glow = exp(-radius * radius * 5.0) * (1.0 - smoothstep(0.68, 1.0, radius));
-    vec3 color = mix(vec3(0.42, 0.84, 1.0), vec3(0.74, 0.63, 1.0), gl_PointCoord.x);
-    color = mix(color, vec3(0.47, 1.0, 0.77), uValidation * 0.8);
+    vec3 color = mix(vec3(0.48, 0.94, 0.62), vec3(0.82, 0.96, 0.43), gl_PointCoord.x);
+    color = mix(color, vec3(0.72, 1.0, 0.53), uValidation * 0.8);
     gl_FragColor = vec4(color, glow * vAlpha);
     #include <colorspace_fragment>
   }
@@ -298,13 +298,13 @@ export function ResearchCore() {
       </mesh>
       <mesh scale={1.04}>
         <icosahedronGeometry args={[1.45, 2]} />
-        <meshBasicMaterial ref={shellMaterial} color="#9adfff" wireframe transparent depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
+        <meshBasicMaterial ref={shellMaterial} color="#a9f5c2" wireframe transparent depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
       </mesh>
       <lineSegments geometry={network.lines}>
         <shaderMaterial ref={networkMaterial} vertexShader={networkVertex} fragmentShader={networkFragment} uniforms={networkUniforms} transparent depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
       </lineSegments>
       <points geometry={network.dots}>
-        <pointsMaterial color="#b9f2ff" size={0.055} sizeAttenuation transparent opacity={0.82} depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
+        <pointsMaterial color="#d2f58c" size={0.055} sizeAttenuation transparent opacity={0.82} depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
       </points>
       <points geometry={particles} frustumCulled={false}>
         <shaderMaterial ref={pointMaterial} vertexShader={pointVertex} fragmentShader={pointFragment} uniforms={pointUniforms} transparent depthWrite={false} blending={AdditiveBlending} toneMapped={false} />
@@ -312,7 +312,7 @@ export function ResearchCore() {
       <group ref={evaluation}>
         {layers.map((geometry, index) => (
           <mesh key={index} geometry={geometry} rotation={[Math.PI * (0.42 + index * 0.13), Math.PI * (index * 0.27), 0]}>
-            <meshBasicMaterial ref={(material) => { if (material) layerMaterials.current[index] = material; }} color={index === 1 ? '#ad9cff' : '#83e5ff'} transparent opacity={0.04} depthWrite={false} side={DoubleSide} toneMapped={false} />
+            <meshBasicMaterial ref={(material) => { if (material) layerMaterials.current[index] = material; }} color={index === 1 ? '#d2f58c' : '#72e6ad'} transparent opacity={0.04} depthWrite={false} side={DoubleSide} toneMapped={false} />
           </mesh>
         ))}
       </group>
@@ -327,7 +327,7 @@ export function ResearchCore() {
       </group>
       <mesh>
         <sphereGeometry args={[HERO_CORE_RADIUS, 48, 24]} />
-        <meshBasicMaterial color="#6e81ff" transparent opacity={0.012} side={DoubleSide} depthWrite={false} />
+        <meshBasicMaterial color="#c4f27a" transparent opacity={0.012} side={DoubleSide} depthWrite={false} />
       </mesh>
     </group>
   );

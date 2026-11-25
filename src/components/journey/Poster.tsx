@@ -26,20 +26,20 @@ export function Poster() {
         <div className="poster-core-orbit poster-core-orbit-b" />
         <svg className="poster-core-graph" viewBox="0 0 100 100">
           <defs>
-            <radialGradient id="poster-core-fill"><stop stopColor="#8CEAFF" stopOpacity=".36" /><stop offset=".62" stopColor="#5878FF" stopOpacity=".12" /><stop offset="1" stopColor="#17163E" stopOpacity=".06" /></radialGradient>
-            <linearGradient id="poster-core-line"><stop stopColor="#56E7FF" stopOpacity=".1" /><stop offset=".5" stopColor="#B7A3FF" stopOpacity=".9" /><stop offset="1" stopColor="#56E7FF" stopOpacity=".16" /></linearGradient>
+            <radialGradient id="poster-core-fill"><stop stopColor="#b9ffd0" stopOpacity=".36" /><stop offset=".62" stopColor="#60d990" stopOpacity=".12" /><stop offset="1" stopColor="#142d20" stopOpacity=".06" /></radialGradient>
+            <linearGradient id="poster-core-line"><stop stopColor="#72e6ad" stopOpacity=".1" /><stop offset=".5" stopColor="#d2f58c" stopOpacity=".9" /><stop offset="1" stopColor="#72e6ad" stopOpacity=".16" /></linearGradient>
           </defs>
-          <circle cx="50" cy="50" r="45" fill="url(#poster-core-fill)" stroke="#8FDFFF" strokeOpacity=".56" strokeWidth=".45" />
-          <ellipse cx="50" cy="50" rx="45" ry="17" fill="none" stroke="#9ECFFF" strokeOpacity=".36" strokeWidth=".35" transform="rotate(-26 50 50)" />
-          <ellipse cx="50" cy="50" rx="18" ry="45" fill="none" stroke="#8D9CFF" strokeOpacity=".28" strokeWidth=".35" transform="rotate(24 50 50)" />
+          <circle cx="50" cy="50" r="45" fill="url(#poster-core-fill)" stroke="#a9f5c2" strokeOpacity=".56" strokeWidth=".45" />
+          <ellipse cx="50" cy="50" rx="45" ry="17" fill="none" stroke="#9deab5" strokeOpacity=".36" strokeWidth=".35" transform="rotate(-26 50 50)" />
+          <ellipse cx="50" cy="50" rx="18" ry="45" fill="none" stroke="#d2f58c" strokeOpacity=".28" strokeWidth=".35" transform="rotate(24 50 50)" />
           {edges.map(([from, to]) => {
             const [x1, y1] = nodes[from];
             const [x2, y2] = nodes[to];
             return <line key={`${from}-${to}`} x1={x1} y1={y1} x2={x2} y2={y2} stroke="url(#poster-core-line)" strokeWidth=".48" />;
           })}
-          {nodes.map(([cx, cy], index) => <circle key={`node-${index}`} cx={cx} cy={cy} r={index > 10 ? 1.1 : 1.45} fill={index % 4 === 0 ? '#D2C7FF' : '#90E9FF'} fillOpacity={index % 3 === 0 ? '.92' : '.68'} />)}
-          <circle cx="50" cy="50" r="8" fill="#82E9FF" fillOpacity=".12" />
-          <circle cx="50" cy="50" r="4.6" fill="#D9F8FF" fillOpacity=".72" />
+          {nodes.map(([cx, cy], index) => <circle key={`node-${index}`} cx={cx} cy={cy} r={index > 10 ? 1.1 : 1.45} fill={index % 4 === 0 ? '#e0f79f' : '#a9f5c2'} fillOpacity={index % 3 === 0 ? '.92' : '.68'} />)}
+          <circle cx="50" cy="50" r="8" fill="#72e6ad" fillOpacity=".12" />
+          <circle cx="50" cy="50" r="4.6" fill="#eaf7ef" fillOpacity=".72" />
         </svg>
         <div className="poster-core-particles">
           {particles.map(([x, y], index) => <span key={index} style={{ '--particle-x': `${x}%`, '--particle-y': `${y}%`, '--particle-delay': `${(index % 9) * -0.47}s` } as CSSProperties} />)}
