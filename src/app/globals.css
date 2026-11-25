@@ -63,7 +63,7 @@ svg { flex-shrink: 0; }
 [data-render-mode="webgl"] .poster-core-ambient,
 [data-render-mode="webgl"] .poster-core-caption,
 [data-render-mode="webgl"] .poster-guide { display: none; }
-.world-scrim { z-index: 1; background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 90%, transparent), color-mix(in srgb, var(--color-background) 69%, transparent) max(38%, 530px), transparent 72%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 88%, transparent), transparent 40%); transition: opacity 1.8s ease; }
+.world-scrim { z-index: 1; background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 94%, transparent) 0%, color-mix(in srgb, var(--color-background) 92%, transparent) 53%, color-mix(in srgb, var(--color-background) 84%, transparent) 70%, transparent 88%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 92%, transparent), transparent 40%); transition: opacity 1.8s ease; }
 main { position: relative; z-index: 2; }
 .hero-section { min-height: 100svh; display: flex; flex-direction: column; padding-top: 140px; padding-bottom: 27px; }
 .hero-main { position: relative; display: flex; align-items: center; flex: 1; min-height: 510px; padding-block: 36px 46px; }
@@ -307,7 +307,7 @@ h1 em, h2 em { color: var(--color-gold); font-weight: 400; }
 
 @media (max-width: 1100px) {
   .page-width { width: calc(100% - 64px); }
-  .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 88%, transparent), color-mix(in srgb, var(--color-background) 76%, transparent) max(54%, 500px), transparent 90%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 94%, transparent), transparent 32%); }
+  .world-scrim { background: linear-gradient(90deg, color-mix(in srgb, var(--color-background) 94%, transparent) 0%, color-mix(in srgb, var(--color-background) 92%, transparent) 60%, color-mix(in srgb, var(--color-background) 84%, transparent) 78%, transparent 98%), linear-gradient(0deg, color-mix(in srgb, var(--color-background) 94%, transparent), transparent 32%); }
   .desktop-nav { gap: 23px; margin-right: 10px; }
   .nav-shell { gap: 15px; }
   .hero-copy { max-width: calc(100% - 320px); }

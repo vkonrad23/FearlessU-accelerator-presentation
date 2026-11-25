@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { PerspectiveCamera, Vector3 } from 'three';
+import { Euler, PerspectiveCamera, Vector3 } from 'three';
 import { sceneConfig } from '../src/config/scene.ts';
 import { artworkFrame } from '../src/lib/artwork-math.ts';
-import { stairPosition } from '../src/lib/scene-math.ts';
+import { HERO_CORE_RADIUS, HERO_GUIDE_HEIGHT, HERO_GUIDE_WIDTH, heroSceneLayout } from '../src/lib/hero-scene-layout.ts';
 import { capeVertex, cardWorldPosition, spatialFrameHeight, type SpatialPoint } from '../src/lib/spatial-math.ts';
 
 test('the real cloth remains attached to the shoulders at every wind strength', () => {
@@ -65,23 +65,54 @@ test('the mobile 3D viewport opens continuously into the full landscape', () => 
   assert.equal(spatialFrameHeight(1440, 774, 0.5), 774);
 });
 
-test('the 3D figure stays inside desktop and mobile hero framing', () => {
+test('the holographic guide and research core stay inside desktop and mobile hero framing', () => {
   const key = sceneConfig.camera.keyframes[0];
-  const base = stairPosition(sceneConfig.models.figureStep);
-  for (const [width, height] of [[1440, 774], [1280, 594], [390, 732], [320, 456]]) {
-    const frameHeight = spatialFrameHeight(width, height, 0);
+  for (const [width, height] of [[1440, 774], [1280, 594], [1024, 768], [390, 732], [320, 456], [667, 263]]) {
+    const { guide, core } = heroSceneLayout(width);
     for (const intro of [0, 1]) {
-      const camera = new PerspectiveCamera(sceneConfig.camera.fov, width / height, 0.1, 420);
+      const camera = new PerspectiveCamera(sceneConfig.camera.fov + 1.2, width / height, 0.1, 420);
       camera.position.set(...key.position);
       camera.position.z += (1 - intro) * sceneConfig.motion.introDolly;
       camera.lookAt(new Vector3(...key.target));
-      camera.setViewOffset(width, frameHeight, 0, 0, width, height);
+      camera.updateProjectionMatrix();
       camera.updateMatrixWorld();
-      for (const figureHeight of [0, 1, 1.98]) {
-        const point = new Vector3(base[0] - 0.3, base[1] + 0.2 + figureHeight * sceneConfig.figure.scale, base[2]).project(camera);
-        const y = (1 - point.y) * height / 2;
-        assert.ok(point.x > -1 && point.x < 1, `Figure outside ${width}px frame`);
-        assert.ok(y > 0 && y < frameHeight, `Figure cropped at ${width}px: ${y} / ${frameHeight}`);
+
+      const assertInside = (point: Vector3, object: string) => {
+        const projected = point.project(camera);
+        assert.ok(projected.x > -1 && projected.x < 1, `${object} outside ${width}x${height} frame`);
+        assert.ok(projected.y > -1 && projected.y < 1, `${object} cropped at ${width}x${height} frame`);
+      };
+
+      for (const cameraRoll of [-0.008, 0.008]) {
+        camera.rotation.z = cameraRoll;
+        camera.updateMatrixWorld();
+        for (const guideTiltX of [-0.018, 0.018]) {
+          for (const guideTiltY of [-0.063, 0.063]) {
+            const guideRotation = new Euler(guideTiltX, guideTiltY, 0);
+            const guideCenter = new Vector3(guide.position[0] + 0.1, guide.position[1] + 0.065, guide.position[2]);
+            for (const x of [-1, 1]) {
+              for (const y of [-1, 1]) {
+                const corner = new Vector3(
+                  x * (HERO_GUIDE_WIDTH * guide.scale / 2 + 0.08),
+                  y * (HERO_GUIDE_HEIGHT * guide.scale / 2 + 0.08),
+                  0,
+                ).applyEuler(guideRotation).add(guideCenter);
+                assertInside(corner, 'Holographic guide');
+              }
+            }
+          }
+        }
+      }
+
+      const coreRadius = HERO_CORE_RADIUS * core.scale + 0.2;
+      const coreCenter = new Vector3(core.position[0], core.position[1] + 0.12, core.position[2]);
+      const diagonal = 1 / Math.sqrt(3);
+      const coreDirections = [
+        [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1],
+        ...[-1, 1].flatMap((x) => [-1, 1].flatMap((y) => [-1, 1].map((z) => [x * diagonal, y * diagonal, z * diagonal]))),
+      ];
+      for (const direction of coreDirections) {
+        assertInside(coreCenter.clone().add(new Vector3(direction[0], direction[1], direction[2]).multiplyScalar(coreRadius)), 'Research core');
       }
     }
   }
@@ -98,8 +129,11 @@ test('glass cards occupy world depth and retrace their route exactly', () => {
   }
 });
 
-test('the primary WebGL scene uses the landscape rather than an image plane', () => {
+test('the primary WebGL scene mounts the galaxy and holographic research visualization', () => {
   const scene = readFileSync(new URL('../src/components/world/Scene.tsx', import.meta.url), 'utf8');
-  assert.match(scene, /<Landscape\s*\/>/);
+  for (const component of ['CameraRig', 'GalaxyBackdrop', 'ResearchCore', 'Particles', 'HolographicGuide', 'ResearchEnvironment']) {
+    assert.match(scene, new RegExp(`<${component}\\s*/>`));
+  }
+  assert.doesNotMatch(scene, /<Landscape\s*\/>/);
   assert.doesNotMatch(scene, /ArtworkBackdrop/);
 });

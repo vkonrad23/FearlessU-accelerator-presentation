@@ -5,10 +5,8 @@ import { useEffect, useMemo, useRef } from 'react';
 import { AdditiveBlending, DoubleSide, MathUtils, SRGBColorSpace, ShaderMaterial, TextureLoader } from 'three';
 import type { Group, Texture } from 'three';
 import { useJourneyStore } from '@/store/journey';
+import { HERO_GUIDE_HEIGHT, HERO_GUIDE_WIDTH, heroSceneLayout } from '@/lib/hero-scene-layout';
 import { usePointer } from './usePointer';
-
-const GUIDE_WIDTH = 3.4;
-const GUIDE_HEIGHT = GUIDE_WIDTH * 1184 / 512;
 
 const vertexShader = `
   uniform float uTime;
@@ -52,11 +50,9 @@ export function HolographicGuide() {
   const root = useRef<Group>(null);
   const material = useRef<ShaderMaterial>(null);
   const width = useThree((state) => state.size.width);
-  const mobile = width < 768;
-  const compact = width < 1100;
-  const targetX = mobile ? 0.75 : compact ? 4.9 : 7.3;
-  const targetY = mobile ? 4.4 : 0;
-  const targetScale = mobile ? 0.36 : compact ? 0.77 : 1.05;
+  const { mobile, guide } = heroSceneLayout(width);
+  const [targetX, targetY] = guide.position;
+  const targetScale = guide.scale;
   const initialPosition = useMemo(() => [targetX, targetY, -1.6] as [number, number, number], [targetX, targetY]);
   const pointer = usePointer();
   const loadedTexture = useLoader(TextureLoader, '/ai-companion-hologram.webp') as Texture;
@@ -93,11 +89,11 @@ export function HolographicGuide() {
   return (
     <group ref={root} position={initialPosition} scale={targetScale}>
       <mesh position={[0, 0, -0.055]} scale={1.035}>
-        <planeGeometry args={[GUIDE_WIDTH, GUIDE_HEIGHT]} />
+        <planeGeometry args={[HERO_GUIDE_WIDTH, HERO_GUIDE_HEIGHT]} />
         <meshBasicMaterial map={texture} color="#4f9fff" transparent opacity={0.12} depthWrite={false} side={DoubleSide} blending={AdditiveBlending} toneMapped={false} />
       </mesh>
       <mesh>
-        <planeGeometry args={[GUIDE_WIDTH, GUIDE_HEIGHT, 16, 30]} />
+        <planeGeometry args={[HERO_GUIDE_WIDTH, HERO_GUIDE_HEIGHT, 16, 30]} />
         <shaderMaterial ref={material} vertexShader={vertexShader} fragmentShader={fragmentShader} uniforms={uniforms} transparent depthWrite={false} side={DoubleSide} toneMapped={false} />
       </mesh>
     </group>

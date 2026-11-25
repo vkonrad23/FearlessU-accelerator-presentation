@@ -15,6 +15,7 @@ import { PitchVideo } from './PitchVideo';
 import { Founder } from './Founder';
 import { SiteFooter } from './SiteFooter';
 import { AIArchitecture } from './AIArchitecture';
+import { VisionFilm } from './VisionFilm';
 
 export function Journey() {
   useScrollJourney();
@@ -35,6 +36,7 @@ export function Journey() {
           <Safety />
           <FinalCTA />
         </div>
+        <VisionFilm />
         <Partnerships />
         <PitchVideo />
         <Founder />

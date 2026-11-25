@@ -17,6 +17,7 @@ import type { Group } from 'three';
 import { sceneConfig } from '@/config/scene';
 import { useJourneyStore } from '@/store/journey';
 import { seededRandom } from '@/lib/scene-math';
+import { HERO_CORE_RADIUS, heroSceneLayout } from '@/lib/hero-scene-layout';
 import { usePointer } from './usePointer';
 
 const surfaceVertex = `
@@ -192,11 +193,9 @@ export function ResearchCore() {
   const elapsed = useRef(0);
   const evaluationLevelRef = useRef(0);
   const width = useThree((state) => state.size.width);
-  const mobile = width < 768;
-  const compact = width < 1100;
-  const targetX = mobile ? -1.05 : compact ? 2.1 : 3.1;
-  const targetY = mobile ? 4.2 : 0.18;
-  const targetScale = mobile ? 0.36 : compact ? 0.9 : 1.15;
+  const { mobile, compact, core } = heroSceneLayout(width);
+  const [targetX, targetY] = core.position;
+  const targetScale = core.scale;
   const initialPosition = useMemo(() => [targetX, targetY, 0] as [number, number, number], [targetX, targetY]);
   const researchMode = useJourneyStore((state) => state.researchMode);
   const validationEvent = useJourneyStore((state) => state.validationEvent);
@@ -245,7 +244,6 @@ export function ResearchCore() {
     const dt = moving ? Math.min(delta, 0.05) : 0;
     root.current.position.x = MathUtils.damp(root.current.position.x, targetX, 2.2, dt);
     root.current.position.y = MathUtils.damp(root.current.position.y, targetY + Math.sin(time * 0.45) * 0.12, 2, dt);
-    const targetScale = mobile ? 0.38 : compact ? 0.9 : 1.15;
     const scale = MathUtils.damp(root.current.scale.x, targetScale, 2.3, dt);
     root.current.scale.setScalar(scale);
     root.current.visible = visibility > 0.006;
@@ -328,7 +326,7 @@ export function ResearchCore() {
         </mesh>
       </group>
       <mesh>
-        <sphereGeometry args={[2.18, 48, 24]} />
+        <sphereGeometry args={[HERO_CORE_RADIUS, 48, 24]} />
         <meshBasicMaterial color="#6e81ff" transparent opacity={0.012} side={DoubleSide} depthWrite={false} />
       </mesh>
     </group>

@@ -22,7 +22,7 @@ test('partner, evidence, and founder copy has complete Ukrainian translations', 
 });
 
 test('new and updated interface labels never fall back to English in Ukrainian', () => {
-  const components = ['Partnerships', 'AIArchitecture', 'HeroProductPreview', 'PreviewButton', 'Founder', 'PitchVideo', 'SiteFooter', 'Navigation', 'Hero', 'FinalCTA', 'JourneyPreview'];
+  const components = ['Partnerships', 'AIArchitecture', 'HeroProductPreview', 'PreviewButton', 'Founder', 'PitchVideo', 'VisionFilm', 'SiteFooter', 'Navigation', 'Hero', 'FinalCTA', 'JourneyPreview'];
   for (const name of components) {
     const path = new URL(`../src/components/journey/${name}.tsx`, import.meta.url);
     const source = ts.createSourceFile(path.pathname, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -35,6 +35,20 @@ test('new and updated interface labels never fall back to English in Ukrainian',
     };
     visit(source);
   }
+});
+
+test('cinematic concept film is local, deferred, and never autoplayed', () => {
+  const video = new URL('../public/media/fearlessu-life-beyond-fear.mp4', import.meta.url);
+  const videoBytes = readFileSync(video);
+  assert.equal(videoBytes.toString('ascii', 4, 8), 'ftyp');
+  assert.ok(videoBytes.length < 3_000_000);
+  const poster = new URL('../public/media/fearlessu-life-beyond-fear-poster.webp', import.meta.url);
+  assert.ok(statSync(poster).size < 100_000);
+  assert.equal(readFileSync(poster).toString('ascii', 8, 12), 'WEBP');
+  const component = readFileSync(new URL('../src/components/journey/VisionFilm.tsx', import.meta.url), 'utf8');
+  assert.match(component, /preload="none"/);
+  assert.match(component, /controls/);
+  assert.doesNotMatch(component, /autoPlay/);
 });
 
 test('built, planned, and research capabilities have distinct explicit limits', () => {

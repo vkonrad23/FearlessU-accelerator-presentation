@@ -3,6 +3,17 @@ import { partnersUk } from './partners.uk.ts';
 /** Ukrainian copy for the active website and its interactive prototype. */
 export const uk: Record<string, string> = {
   ...partnersUk,
+  'CINEMATIC VISION': 'КІНЕМАТОГРАФІЧНЕ БАЧЕННЯ',
+  'A world': 'Світ',
+  'beyond fear.': 'за межами страху.',
+  'A short cinematic vision of the possibility FearlessU hopes to explore through careful, evidence-informed research.': 'Коротке кінематографічне бачення можливостей, які FearlessU прагне досліджувати за допомогою ретельних досліджень, заснованих на доказах.',
+  'Concept film only · Not a product demo, treatment, or evidence of clinical benefit.': 'Лише концептуальний фільм · Не демонстрація продукту, лікування чи доказ клінічної користі.',
+  'Your browser does not support inline video. Download the concept film instead.': 'Ваш браузер не підтримує відтворення відео на сторінці. Завантажте концептуальний фільм.',
+  'Play the concept film': 'Відтворити концептуальний фільм',
+  'Play film': 'Відтворити фільм',
+  'Ten-second cinematic concept film. Playback begins only when you choose to play.': 'Десятисекундний концептуальний фільм. Відтворення почнеться лише після вашого натискання.',
+  'Download the concept film': 'Завантажити концептуальний фільм',
+  'The film could not start. Try the player controls or download the MP4.': 'Не вдалося відтворити фільм. Скористайтеся елементами керування або завантажте MP4.',
   'FearlessU · Psychological Science, Expanded': 'FearlessU · Нові горизонти психологічної науки',
   'An AI-powered platform exploring personalized psychological support and new evidence-informed CBT approaches. Early-stage research vision; the working demo uses local rules and is not clinically validated.': 'Платформа на основі ШІ досліджує персоналізовану психологічну підтримку та нові підходи КПТ, засновані на доказах. Це дослідницьке бачення на ранньому етапі; робоча демонстрація використовує локальні правила й не пройшла клінічну валідацію.',
   'AI-assisted CBT research · Early-stage concept': 'Дослідження КПТ за допомогою ШІ · рання концепція',
