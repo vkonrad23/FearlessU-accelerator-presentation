@@ -47,7 +47,9 @@ test('cinematic concept film is local, deferred, and never autoplayed', () => {
   assert.equal(readFileSync(poster).toString('ascii', 8, 12), 'WEBP');
   const component = readFileSync(new URL('../src/components/journey/VisionFilm.tsx', import.meta.url), 'utf8');
   assert.match(component, /preload="none"/);
-  assert.match(component, /controls/);
+  assert.match(component, /controls={started}/);
+  assert.match(component, /player\.src = videoPath/);
+  assert.doesNotMatch(component, /<source/);
   assert.doesNotMatch(component, /autoPlay/);
 });
 

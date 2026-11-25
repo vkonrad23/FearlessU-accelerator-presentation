@@ -16,8 +16,12 @@ export function VisionFilm() {
   const [failed, setFailed] = useState(false);
 
   const play = () => {
+    const player = video.current;
+    if (!player) return;
     setFailed(false);
-    void video.current?.play().catch(() => setFailed(true));
+    player.src = videoPath;
+    player.load();
+    void player.play().catch(() => setFailed(true));
   };
 
   return (
@@ -40,7 +44,7 @@ export function VisionFilm() {
             id="fearlessu-vision-film"
             width={1280}
             height={720}
-            controls
+            controls={started}
             playsInline
             preload="none"
             poster={posterPath}
@@ -49,7 +53,6 @@ export function VisionFilm() {
             onPlay={() => setStarted(true)}
             onError={() => setFailed(true)}
           >
-            <source src={videoPath} type="video/mp4" />
             {t('Your browser does not support inline video. Download the concept film instead.')}
           </video>
           {!started && (
