@@ -38,29 +38,31 @@ export function VisionFilm() {
           </div>
         </header>
 
-        <div className={styles.frame}>
-          <video
-            ref={video}
-            id="fearlessu-vision-film"
-            width={1280}
-            height={720}
-            controls={started}
-            playsInline
-            preload="none"
-            poster={posterPath}
-            aria-labelledby="vision-film-title"
-            aria-describedby="vision-film-description"
-            onPlay={() => setStarted(true)}
-            onError={() => setFailed(true)}
-          >
-            {t('Your browser does not support inline video. Download the concept film instead.')}
-          </video>
-          {!started && (
-            <button type="button" className={styles.play} onClick={play} aria-label={t('Play the concept film')} aria-controls="fearlessu-vision-film">
-              <span className={styles.playIcon}><Play size={25} fill="currentColor" aria-hidden="true" /></span>
-              <span className={styles.playLabel}>{t('Play film')} <small>00:10</small></span>
-            </button>
-          )}
+        <div className={styles.display}>
+          <div className={styles.frame}>
+            <video
+              ref={video}
+              id="fearlessu-vision-film"
+              width={1280}
+              height={720}
+              controls={started}
+              playsInline
+              preload="none"
+              poster={posterPath}
+              aria-labelledby="vision-film-title"
+              aria-describedby="vision-film-description"
+              onPlay={() => setStarted(true)}
+              onError={() => setFailed(true)}
+            >
+              {t('Your browser does not support inline video. Download the concept film instead.')}
+            </video>
+            {!started && (
+              <button type="button" className={styles.play} onClick={play} aria-label={t('Play the concept film')} aria-controls="fearlessu-vision-film">
+                <span className={styles.playIcon}><Play size={25} fill="currentColor" aria-hidden="true" /></span>
+                <span className={styles.playLabel}>{t('Play film')} <small>00:10</small></span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className={styles.footer}>
