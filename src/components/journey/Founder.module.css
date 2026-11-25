@@ -1,7 +1,7 @@
-.section { padding-block: 100px; background: radial-gradient(ellipse at 15% 35%, rgb(230 197 138 / 9%), transparent 55%), var(--color-deep); color: var(--color-cream); }
+.section { padding-block: 100px; background: radial-gradient(ellipse at 15% 35%, color-mix(in srgb, var(--color-cool) 12%, transparent), transparent 55%), linear-gradient(145deg, var(--color-deep), var(--color-background)); color: var(--color-cream); }
 .layout { display: grid; grid-template-columns: minmax(240px, 420px) minmax(0, 1fr); align-items: start; gap: 80px; }
 .portrait { margin: 0; }
-.portrait img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--color-cream) 25%, transparent); box-shadow: 0 0 0 7px #183b30, 0 0 0 8px rgb(230 197 138 / 20%), var(--depth-shadow-dark); }
+.portrait img { display: block; width: 100%; height: auto; object-fit: contain; border-radius: 18px; border: 1px solid color-mix(in srgb, var(--color-cool) 36%, transparent); box-shadow: 0 0 0 7px rgb(16 59 41 / 65%), 0 0 0 8px color-mix(in srgb, var(--color-cool) 22%, transparent), var(--depth-shadow-dark); }
 .portrait figcaption { display: flex; flex-direction: column; gap: 6px; padding-top: 27px; font-size: 14px; line-height: 1.6; }
 .portrait figcaption span { color: var(--color-muted); font-size: 12px; }
 .copy { max-width: 720px; }
@@ -15,7 +15,7 @@
 .contact h3 { margin: 0 0 14px; font-size: 22px; font-weight: 500; line-height: 1.5; }
 .contact > p:not(.note) { color: var(--color-muted); font-size: 14px; line-height: 1.8; }
 .links { display: grid; grid-template-columns: 1.25fr 1fr; gap: 14px; margin-block: 22px; }
-.links a { display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 96px; padding: 18px; border: 1px solid color-mix(in srgb, var(--color-gold) 32%, transparent); border-radius: 9px; background: linear-gradient(145deg, #0c2c23, var(--color-background)); box-shadow: var(--depth-shadow-dark); }
+.links a { display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 96px; padding: 18px; border: 1px solid color-mix(in srgb, var(--color-cool) 28%, transparent); border-radius: 16px; background: linear-gradient(145deg, rgb(15 66 40 / 60%), rgb(4 27 17 / 70%)); box-shadow: var(--depth-shadow-dark), inset 0 1px 0 rgb(232 255 239 / 8%); backdrop-filter: blur(20px) saturate(145%); -webkit-backdrop-filter: blur(20px) saturate(145%); }
 .links a:hover { border-color: var(--color-gold); }
 .links span:not(:global(.sr-only)) { display: inline-flex; align-items: center; gap: 9px; font-size: 12px; line-height: 1.5; color: var(--color-gold); }
 .links strong { font-size: 14px; font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }

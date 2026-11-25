@@ -39,8 +39,8 @@ function ResearchCorePreview({ mode, validated, caption }: { mode: ResearchMode;
       <div className={`${styles.previewOrbit} ${styles.previewOrbitA}`} />
       <div className={`${styles.previewOrbit} ${styles.previewOrbitB}`} />
       <svg className={styles.previewGraph} viewBox="0 0 100 100">
-        <defs><radialGradient id="research-core-light"><stop stopColor="#9befff" stopOpacity=".32" /><stop offset=".58" stopColor="#697dff" stopOpacity=".12" /><stop offset="1" stopColor="#151b4b" stopOpacity=".02" /></radialGradient></defs>
-        <circle cx="50" cy="50" r="44" fill="url(#research-core-light)" stroke="#8fe4ff" strokeOpacity=".47" strokeWidth=".5" />
+        <defs><radialGradient id="research-core-light"><stop stopColor="#b9ffd0" stopOpacity=".32" /><stop offset=".58" stopColor="#60d990" stopOpacity=".12" /><stop offset="1" stopColor="#102d1b" stopOpacity=".02" /></radialGradient></defs>
+        <circle cx="50" cy="50" r="44" fill="url(#research-core-light)" stroke="#a9f5c2" strokeOpacity=".47" strokeWidth=".5" />
         <g className={styles.previewBaseLinks}>{previewEdges.map(([from, to]) => <line key={`${from}-${to}`} x1={previewNodes[from][0]} y1={previewNodes[from][1]} x2={previewNodes[to][0]} y2={previewNodes[to][1]} />)}</g>
         <g className={styles.previewHypothesisLinks}>{hypothesisEdges.map(([from, to]) => <line key={`${from}-${to}`} x1={previewNodes[from][0]} y1={previewNodes[from][1]} x2={previewNodes[to][0]} y2={previewNodes[to][1]} />)}</g>
         <g className={styles.previewEvaluationLayers}><ellipse cx="50" cy="50" rx="35" ry="17" /><ellipse cx="50" cy="50" rx="22" ry="34" /><ellipse cx="50" cy="50" rx="12" ry="41" /></g>

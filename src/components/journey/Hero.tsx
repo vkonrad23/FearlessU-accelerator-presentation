@@ -17,6 +17,10 @@ export function Hero() {
             <a className="text-link" href="#ai-architecture">{t('Research & Innovation')} <ArrowRight size={17} strokeWidth={1.4} aria-hidden="true" /></a>
           </div>
         </div>
+        <p className="world-caption">
+          <span className="caption-line" aria-hidden="true" />
+          <span><span>{t('Beyond fear.')}</span><br /><strong>{t('Beyond limits.')}</strong></span>
+        </p>
       </div>
       <div className="hero-bottom">
         <div className="hero-meta">
