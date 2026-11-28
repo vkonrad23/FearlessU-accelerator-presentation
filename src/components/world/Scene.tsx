@@ -1,10 +1,11 @@
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { CameraRig } from './CameraRig';
 import { GalaxyBackdrop } from './GalaxyBackdrop';
 import { HolographicGuide } from './HolographicGuide';
 import { Particles } from './Particles';
 import { ResearchCore } from './ResearchCore';
-import { ResearchEnvironment } from './ResearchEnvironment';
+
+const Landscape = lazy(() => import('./Landscape'));
 
 export function Scene() {
   return (
@@ -14,7 +15,7 @@ export function Scene() {
       <ResearchCore />
       <Particles />
       <Suspense fallback={null}><HolographicGuide /></Suspense>
-      <ResearchEnvironment />
+      <Suspense fallback={null}><Landscape /></Suspense>
     </>
   );
 }
