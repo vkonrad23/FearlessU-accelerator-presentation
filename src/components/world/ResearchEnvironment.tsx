@@ -6,11 +6,13 @@ import { useJourneyStore } from '@/store/journey';
 import { Atmosphere } from './Atmosphere';
 
 const Effects = lazy(() => import('./Effects'));
+const Landscape = lazy(() => import('./Landscape'));
 
 export function ResearchEnvironment() {
   const { gl, scene, camera, invalidate } = useThree();
   const chapter = useJourneyStore((state) => state.chapter);
   const quality = useJourneyStore((state) => state.quality);
+  const landscapeReady = useJourneyStore((state) => state.landscapeReady);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -32,6 +34,7 @@ export function ResearchEnvironment() {
     <>
       <fog attach="fog" args={[sceneConfig.colors.skyTop, 42, 120]} />
       <Atmosphere />
+      {landscapeReady && <Suspense fallback={null}><Landscape /></Suspense>}
       {chapter > 0 && quality !== 'low' && <Suspense fallback={null}><Effects /></Suspense>}
     </>
   );
